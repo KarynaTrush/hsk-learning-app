@@ -7,7 +7,6 @@ const tones = [
   { mark: "ǎ", number: 3, label: "III ton", desc: "opadająco-wznoszący", color: "#D4A843", example: "mǎ (koń)" },
   { mark: "à", number: 4, label: "IV ton", desc: "opadający", color: "#C83E34", example: "mà (besztać)" },
 ];
-
 function getTonePath(tone, w, h) {
   const pad = 30;
   const bottom = h - pad;
@@ -23,7 +22,6 @@ function getTonePath(tone, w, h) {
     default: return "";
   }
 }
-
 function getUserPath(w, h) {
   const pad = 30;
   const top = pad;
@@ -62,14 +60,8 @@ export default function ToneVisualizerScreen() {
 
   return (
     <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-
-      {/* Split layout: left controls + right canvas */}
       <div className="grid gap-8" style={{ gridTemplateColumns: "380px 1fr" }}>
-
-        {/* ── LEFT: Target syllable + tone selector + mic ── */}
         <div className="flex flex-col gap-5">
-
-          {/* Target syllable card */}
           <div
             className="rounded-2xl border border-border bg-card p-7 flex flex-col items-center text-center"
             style={{ boxShadow: "0 2px 24px rgba(26,26,26,0.07)" }}
@@ -77,8 +69,6 @@ export default function ToneVisualizerScreen() {
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.08em", marginBottom: "16px" }}>
               DOCELOWA SYLABA
             </p>
-
-            {/* Large syllable display */}
             <div className="flex items-center gap-4 mb-4">
               <span
                 style={{
@@ -98,8 +88,6 @@ export default function ToneVisualizerScreen() {
                 <Volume2 size={20} color="var(--primary)" strokeWidth={1.5} />
               </button>
             </div>
-
-            {/* Tone info */}
             <div
               className="px-4 py-2 rounded-xl mb-2"
               style={{ backgroundColor: `${activeToneData.color}12`, border: `1px solid ${activeToneData.color}30` }}
@@ -112,8 +100,6 @@ export default function ToneVisualizerScreen() {
               Przykład: <em>{activeToneData.example}</em>
             </p>
           </div>
-
-          {/* Tone selector */}
           <div className="grid grid-cols-2 gap-3">
             {tones.map((t) => (
               <button
@@ -159,8 +145,6 @@ export default function ToneVisualizerScreen() {
               </button>
             ))}
           </div>
-
-          {/* Mic button */}
           <div className="flex flex-col items-center gap-3 py-4">
             <button
               onMouseDown={handleMicPress}
@@ -194,16 +178,11 @@ export default function ToneVisualizerScreen() {
             </button>
           </div>
         </div>
-
-        {/* ── RIGHT: Pitch canvas + analysis ── */}
         <div className="flex flex-col gap-5">
-
-          {/* Canvas card */}
           <div
             className="rounded-2xl border border-border bg-card overflow-hidden"
             style={{ boxShadow: "0 2px 24px rgba(26,26,26,0.07)" }}
           >
-            {/* Canvas header */}
             <div
               className="flex items-center justify-between px-6 py-4"
               style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--secondary)" }}
@@ -245,8 +224,6 @@ export default function ToneVisualizerScreen() {
                 )}
               </div>
             </div>
-
-            {/* SVG canvas */}
             <div className="p-6">
               <svg
                 width="100%"
@@ -254,7 +231,6 @@ export default function ToneVisualizerScreen() {
                 preserveAspectRatio="xMidYMid meet"
                 style={{ display: "block", maxHeight: "220px" }}
               >
-                {/* Grid lines */}
                 {[0.25, 0.5, 0.75].map((frac) => (
                   <line
                     key={frac}
@@ -267,12 +243,8 @@ export default function ToneVisualizerScreen() {
                     opacity={0.6}
                   />
                 ))}
-
-                {/* Y-axis labels */}
                 <text x={8} y={36} fontSize={9} fill="var(--muted-foreground)" fontFamily="Inter, sans-serif">Wysoko</text>
                 <text x={8} y={canvasH - 18} fontSize={9} fill="var(--muted-foreground)" fontFamily="Inter, sans-serif">Nisko</text>
-
-                {/* Reference curves — all 4 tones */}
                 {tones.map((t) => (
                   <path
                     key={t.number}
@@ -285,8 +257,6 @@ export default function ToneVisualizerScreen() {
                     strokeLinecap="round"
                   />
                 ))}
-
-                {/* Active tone — prominent */}
                 <path
                   d={getTonePath(activeTone, canvasW, canvasH)}
                   stroke={activeToneData.color}
@@ -295,8 +265,6 @@ export default function ToneVisualizerScreen() {
                   opacity={0.7}
                   strokeLinecap="round"
                 />
-
-                {/* User pitch — ink brush */}
                 {(recording || hasDone) && (
                   <path
                     d={getUserPath(canvasW, canvasH)}
@@ -308,15 +276,11 @@ export default function ToneVisualizerScreen() {
                     strokeLinejoin="round"
                   />
                 )}
-
-                {/* Recording dot */}
                 {recording && (
                   <circle cx={canvasW - 20} cy={22} r={6} fill="var(--primary)" opacity={0.9}>
                     <animate attributeName="opacity" values="0.9;0.2;0.9" dur="0.7s" repeatCount="indefinite" />
                   </circle>
                 )}
-
-                {/* Tone labels on right */}
                 {tones.map((t) => {
                   const endY = [canvasH * 0.15, canvasH * 0.13, canvasH * 0.38, canvasH * 0.85][t.number - 1];
                   return (
@@ -335,8 +299,6 @@ export default function ToneVisualizerScreen() {
                   );
                 })}
               </svg>
-
-              {/* Legend */}
               <div className="flex items-center gap-6 mt-3">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-0.5 rounded" style={{ backgroundColor: activeToneData.color, opacity: 0.7 }} />
@@ -353,8 +315,6 @@ export default function ToneVisualizerScreen() {
               </div>
             </div>
           </div>
-
-          {/* Feedback panel */}
           {hasDone && score !== null && (
             <div
               className="rounded-2xl p-5"
@@ -384,8 +344,6 @@ export default function ToneVisualizerScreen() {
               </div>
             </div>
           )}
-
-          {/* HSK tone distribution info */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}

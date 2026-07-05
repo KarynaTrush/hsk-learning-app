@@ -36,14 +36,8 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
 
   return (
     <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-
-      {/* Two-column layout: sidebar filters + main list */}
       <div className="grid gap-8" style={{ gridTemplateColumns: "260px 1fr" }}>
-
-        {/* ── LEFT: Filter sidebar ── */}
         <div className="flex flex-col gap-4">
-
-          {/* Error summary */}
           <div
             className="rounded-2xl p-5"
             style={{
@@ -64,8 +58,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
               {filtered.length} słów wymaga powtórzenia w ostatnich 7 dniach.
             </p>
           </div>
-
-          {/* Category filters */}
           <div
             className="rounded-2xl border border-border bg-card p-4"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
@@ -107,8 +99,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
               })}
             </div>
           </div>
-
-          {/* Practice CTA */}
           {filtered.length > 0 && (
             <button
               onClick={() => onPractice(filtered)}
@@ -127,10 +117,7 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
             </button>
           )}
         </div>
-
-        {/* ── RIGHT: Error word cards ── */}
         <div>
-          {/* Column headers */}
           <div
             className="grid gap-4 px-4 py-2.5 mb-3 rounded-xl"
             style={{ gridTemplateColumns: "56px 1fr 1fr auto auto", backgroundColor: "var(--muted)", border: "1px solid var(--border)" }}
@@ -162,7 +149,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                         className="grid items-center gap-4 px-4 py-4 rounded-2xl border bg-card"
                         style={{ gridTemplateColumns: "56px 1fr 1fr auto auto", borderColor: "var(--border)", boxShadow: "0 1px 8px rgba(26,26,26,0.04)" }}
                       >
-                        {/* Hanzi */}
                         <div
                           className="w-14 h-14 rounded-xl flex items-center justify-center"
                           style={{ backgroundColor: "var(--secondary)", border: "1px solid var(--border)" }}
@@ -171,8 +157,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                             {word.hanzi}
                           </span>
                         </div>
-
-                        {/* Pinyin + Polish */}
                         <div>
                           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "15px", fontWeight: 500, color: "var(--foreground)", marginBottom: "2px" }}>
                             {word.pinyin}
@@ -184,8 +168,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                             Ostatni błąd: {word.lastError}
                           </p>
                         </div>
-
-                        {/* Category */}
                         <div>
                           <div
                             className="inline-block px-2.5 py-1 rounded-full"
@@ -194,8 +176,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                             <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>{word.category}</span>
                           </div>
                         </div>
-
-                        {/* Error count badge */}
                         <div className="flex justify-center">
                           <div
                             className="px-3 py-1.5 rounded-full flex items-center gap-1.5"
@@ -204,8 +184,6 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                             <span style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 700, color: badge.text }}>×{word.errorCount}</span>
                           </div>
                         </div>
-
-                        {/* Dismiss */}
                         <button
                           onClick={() => handleDismiss(word.id)}
                           className="w-8 h-8 rounded-full flex items-center justify-center border border-border transition-all hover:border-accent/40 hover:bg-accent/5 active:scale-90"

@@ -75,7 +75,6 @@ function NodeCard({ node, onSelect }) {
         minWidth: 0,
       }}
     >
-      {/* Hanzi circle */}
       <div
         className="w-14 h-14 rounded-full flex items-center justify-center relative"
         style={{
@@ -105,7 +104,6 @@ function NodeCard({ node, onSelect }) {
             {node.hanzi[0]}
           </span>
         )}
-        {/* Status indicator */}
         {isDone && (
           <div
             className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
@@ -169,12 +167,9 @@ function NodeCard({ node, onSelect }) {
     </button>
   );
 }
-
 export default function LearningPathScreen({ onNodeSelect }) {
   return (
     <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-
-      {/* Page intro */}
       <div className="flex items-start justify-between mb-8">
         <div>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.07em", marginBottom: "4px" }}>
@@ -186,7 +181,6 @@ export default function LearningPathScreen({ onNodeSelect }) {
           </p>
         </div>
 
-        {/* Legend */}
         <div className="flex gap-5 flex-none mt-1">
           {[
             { color: "var(--accent)", label: "Ukończono" },
@@ -202,11 +196,9 @@ export default function LearningPathScreen({ onNodeSelect }) {
         </div>
       </div>
 
-      {/* HSK levels — vertical stack with wide node rows */}
       <div className="flex flex-col gap-6">
         {hskLevels.map((level, li) => (
           <div key={level.level}>
-            {/* Level header banner */}
             <div
               className="flex items-center justify-between px-6 py-4 rounded-2xl mb-4"
               style={{
@@ -215,7 +207,6 @@ export default function LearningPathScreen({ onNodeSelect }) {
               }}
             >
               <div className="flex items-center gap-4">
-                {/* Level badge */}
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center flex-none"
                   style={{
@@ -283,8 +274,6 @@ export default function LearningPathScreen({ onNodeSelect }) {
                 </div>
               )}
             </div>
-
-            {/* Node grid — 4 cols */}
             <div
               className="grid gap-4"
               style={{ gridTemplateColumns: "repeat(4, 1fr)", opacity: level.status === "locked" ? 0.55 : 1 }}
@@ -295,8 +284,6 @@ export default function LearningPathScreen({ onNodeSelect }) {
                 </div>
               ))}
             </div>
-
-            {/* Connector between levels */}
             {li < hskLevels.length - 1 && (
               <div className="flex justify-center mt-4">
                 <div

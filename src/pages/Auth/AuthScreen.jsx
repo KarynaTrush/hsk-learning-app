@@ -7,7 +7,6 @@ export default function AuthScreen({ onAuth }) {
 
   return (
     <div className="flex w-full min-h-screen">
-      {/* ── Left panel: artistic watermark side ── */}
       <div
         className="flex-none hidden lg:flex flex-col justify-between"
         style={{
@@ -17,7 +16,6 @@ export default function AuthScreen({ onAuth }) {
           overflow: "hidden",
         }}
       >
-        {/* Large decorative ink-wash background characters */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
           style={{ opacity: 0.055 }}
@@ -36,8 +34,6 @@ export default function AuthScreen({ onAuth }) {
             學
           </span>
         </div>
-
-        {/* Secondary character — top right */}
         <div
           className="absolute top-16 right-16 pointer-events-none"
           style={{ opacity: 0.04 }}
@@ -54,8 +50,6 @@ export default function AuthScreen({ onAuth }) {
             語
           </span>
         </div>
-
-        {/* Bottom-left character */}
         <div
           className="absolute bottom-10 left-10 pointer-events-none"
           style={{ opacity: 0.04 }}
@@ -72,16 +66,11 @@ export default function AuthScreen({ onAuth }) {
             道
           </span>
         </div>
-
-        {/* Thin vertical red accent line */}
         <div
           className="absolute right-0 top-0 bottom-0 w-px"
           style={{ backgroundColor: "rgba(200,62,52,0.15)" }}
         />
-
-        {/* Content */}
         <div className="relative z-10 px-16 pt-16">
-          {/* Seal stamp */}
           <div className="flex items-center gap-4 mb-16">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center"
@@ -125,7 +114,6 @@ export default function AuthScreen({ onAuth }) {
             </div>
           </div>
 
-          {/* Marketing headline */}
           <h2
             style={{
               fontFamily: "'Noto Serif SC', serif",
@@ -155,7 +143,6 @@ export default function AuthScreen({ onAuth }) {
           </p>
         </div>
 
-        {/* Feature pills */}
         <div className="relative z-10 px-16 pb-16 flex flex-col gap-3">
           {[
             { hanzi: "声", label: "Wizualizator tonów w czasie rzeczywistym" },
@@ -191,13 +178,10 @@ export default function AuthScreen({ onAuth }) {
           ))}
         </div>
       </div>
-
-      {/* ── Right panel: form ── */}
       <div
         className="flex-1 flex flex-col items-center justify-center px-8 py-16"
         style={{ backgroundColor: "var(--background)", minHeight: "100vh" }}
       >
-        {/* Mobile-only logo */}
         <div className="lg:hidden flex items-center gap-3 mb-10">
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center"
@@ -209,7 +193,6 @@ export default function AuthScreen({ onAuth }) {
         </div>
 
         <div style={{ width: "100%", maxWidth: "400px" }}>
-          {/* Heading */}
           <div className="mb-8">
             <h1
               style={{
@@ -234,8 +217,6 @@ export default function AuthScreen({ onAuth }) {
                 : "Zacznij swoją przygodę z językiem chińskim"}
             </p>
           </div>
-
-          {/* Mode toggle */}
           <div
             className="flex mb-7 rounded-xl p-1 gap-1"
             style={{ backgroundColor: "var(--muted)" }}
@@ -258,8 +239,6 @@ export default function AuthScreen({ onAuth }) {
               </button>
             ))}
           </div>
-
-          {/* Fields */}
           <div className="flex flex-col gap-4 mb-6">
             <div>
               <label
@@ -319,7 +298,6 @@ export default function AuthScreen({ onAuth }) {
             </div>
           </div>
 
-          {/* Forgot password */}
           {mode === "login" && (
             <div className="flex justify-end mb-5">
               <button
@@ -334,7 +312,6 @@ export default function AuthScreen({ onAuth }) {
             </div>
           )}
 
-          {/* Primary CTA */}
           <button
             onClick={onAuth}
             className="w-full py-4 rounded-xl transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
@@ -351,14 +328,12 @@ export default function AuthScreen({ onAuth }) {
             {mode === "register" ? "Zarejestruj się →" : "Zaloguj się →"}
           </button>
 
-          {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
             <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "16px", color: "var(--muted-foreground)", opacity: 0.5 }}>或</span>
             <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
           </div>
 
-          {/* Secondary */}
           <button
             onClick={onAuth}
             className="w-full py-3.5 rounded-xl border border-border bg-transparent transition-all duration-200 hover:bg-secondary active:scale-[0.98]"

@@ -4,8 +4,6 @@
 
 :root {
   --font-size: 16px;
-
-  /* Chinese Aesthetics Palette */
   --background: #FBF9F1;
   --foreground: #1A1A1A;
   --card: #FEFCF5;
@@ -22,7 +20,7 @@
   --accent-foreground: #FEFCF5;
   --destructive: #C83E34;
   --destructive-foreground: #FEFCF5;
-  --border: rgba(26, 26, 26, 0.12);
+  --border: #D1C9B3; 
   --input: transparent;
   --input-background: #F3EFE3;
   --switch-background: #C8C0A8;
@@ -30,7 +28,19 @@
   --font-weight-normal: 400;
   --ring: rgba(200, 62, 52, 0.3);
   --radius: 0.75rem;
-
+  --chart-1: #C83E34;
+  --chart-2: #4F7942;
+  --chart-3: #8B7355;
+  --chart-4: #D4A843;
+  --chart-5: #6B8CAE;
+  --sidebar: #F3EFE3;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #C83E34;
+  --sidebar-primary-foreground: #FEFCF5;
+  --sidebar-accent: #EDE9DC;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #D1C9B3; 
+  --sidebar-ring: rgba(200, 62, 52, 0.3);
   --chart-1: #C83E34;
   --chart-2: #4F7942;
   --chart-3: #8B7355;
@@ -143,7 +153,4 @@
     font-size: var(--font-size, 16px);
     scroll-behavior: smooth;
   }
-
-  /* Удаляем принудительные стили для h1, h2, button, input отсюда, 
-     чтобы классы Tailwind внутри компонентов начали работать в полную силу! */
 }

@@ -9,7 +9,6 @@ const flashcards = [
   { id: 4, hanzi: "便宜", pinyin: "piányí", polish: "tani", example: "这件衣服很便宜。", exampleTranslation: "To ubranie jest bardzo tanie.", hsk: 2, dueIn: "za 10 min" },
   { id: 5, hanzi: "漂亮", pinyin: "piàoliang", polish: "piękny/ładny", example: "she很漂亮。", exampleTranslation: "Ona jest bardzo piękna.", hsk: 2, dueIn: "jutro" },
 ];
-
 function MiZiGeGrid({ hanzi, size = 220 }) {
   const s = size; const half = s / 2; const pad = 12;
   return (
@@ -28,7 +27,6 @@ function MiZiGeGrid({ hanzi, size = 220 }) {
     </svg>
   );
 }
-
 export default function PowtorkiScreen({ onBack }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardState, setCardState] = useState("hidden");
@@ -82,8 +80,6 @@ export default function PowtorkiScreen({ onBack }) {
 
   return (
     <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-
-      {/* Progress */}
       <div className="flex items-center justify-between mb-7">
         <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.06em" }}>
           FISZKA {currentIndex + 1} Z {flashcards.length}
@@ -103,11 +99,7 @@ export default function PowtorkiScreen({ onBack }) {
           </div>
         </div>
       </div>
-
-      {/* 2-column: card + queue */}
       <div className="grid gap-8" style={{ gridTemplateColumns: "1fr 320px" }}>
-
-        {/* ── LEFT: Active flashcard ── */}
         <div className="flex flex-col gap-5">
           <AnimatePresence mode="wait">
             <motion.div
@@ -121,7 +113,6 @@ export default function PowtorkiScreen({ onBack }) {
                 className="rounded-2xl border border-border bg-card overflow-hidden"
                 style={{ boxShadow: "0 6px 40px rgba(26,26,26,0.12)" }}
               >
-                {/* Card header */}
                 <div
                   className="flex items-center justify-between px-6 pt-5 pb-0"
                   style={{ borderBottom: "none" }}
@@ -136,13 +127,9 @@ export default function PowtorkiScreen({ onBack }) {
                     <Volume2 size={15} color="var(--primary)" strokeWidth={1.5} />
                   </button>
                 </div>
-
-                {/* Mi-zi-ge grid */}
                 <div className="flex justify-center py-8">
                   <MiZiGeGrid hanzi={card.hanzi} size={220} />
                 </div>
-
-                {/* Revealed content */}
                 <AnimatePresence>
                   {cardState === "revealed" ? (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
@@ -164,8 +151,6 @@ export default function PowtorkiScreen({ onBack }) {
               </div>
             </motion.div>
           </AnimatePresence>
-
-          {/* Action buttons */}
           <div>
             {cardState === "hidden" ? (
               <button
@@ -217,7 +202,6 @@ export default function PowtorkiScreen({ onBack }) {
           </div>
         </div>
 
-        {/* ── RIGHT: Queue list ── */}
         <div className="flex flex-col gap-4">
           <div
             className="rounded-2xl border border-border bg-card p-5"
@@ -257,7 +241,6 @@ export default function PowtorkiScreen({ onBack }) {
             </div>
           </div>
 
-          {/* Session stats */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}

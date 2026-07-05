@@ -33,12 +33,10 @@ const questions = [
     correct: 2,
   },
 ];
-
 export default function PlacementTestScreen({ onComplete }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
-
   const q = questions[current];
   const progress = (current / questions.length) * 100;
 
@@ -58,13 +56,10 @@ export default function PlacementTestScreen({ onComplete }) {
 
   return (
     <div className="min-h-screen flex" style={{ backgroundColor: "var(--background)" }}>
-
-      {/* ── Left decorative panel ── */}
       <div
         className="hidden lg:flex flex-col justify-between flex-none"
         style={{ width: "380px", backgroundColor: "#F0ECE2", borderRight: "1px solid var(--border)", position: "relative", overflow: "hidden" }}
       >
-        {/* Large ink background character */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: 0.055 }}>
           <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "340px", fontWeight: 700, color: "#1A1A1A", lineHeight: 1 }}>
             {q.hanzi[0]}
@@ -100,12 +95,8 @@ export default function PlacementTestScreen({ onComplete }) {
           </p>
         </div>
       </div>
-
-      {/* ── Right: Question area ── */}
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-12">
         <div style={{ width: "100%", maxWidth: "560px" }}>
-
-          {/* Mobile progress */}
           <div className="lg:hidden mb-8">
             <div className="flex justify-between mb-2">
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)" }}>Pytanie {current + 1} z {questions.length}</span>
@@ -114,13 +105,9 @@ export default function PlacementTestScreen({ onComplete }) {
               <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: "var(--primary)" }} />
             </div>
           </div>
-
-          {/* Question label */}
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.07em", marginBottom: "24px" }}>
             {q.question}
           </p>
-
-          {/* Large Hanzi card */}
           <div
             className="rounded-2xl border border-border bg-card flex flex-col items-center py-10 mb-8"
             style={{ boxShadow: "0 4px 32px rgba(26,26,26,0.09)" }}
@@ -132,8 +119,6 @@ export default function PlacementTestScreen({ onComplete }) {
               {q.pinyin}
             </span>
           </div>
-
-          {/* Options grid 2×2 */}
           <div className="grid grid-cols-2 gap-3 mb-7">
             {q.options.map((opt, i) => {
               const isSelected = selected === i;
@@ -151,7 +136,6 @@ export default function PlacementTestScreen({ onComplete }) {
                     boxShadow: isSelected && !confirmed ? "0 0 0 2px rgba(200,62,52,0.15)" : "none",
                   }}
                 >
-                  {/* Letter badge */}
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center flex-none border"
                     style={{
@@ -178,8 +162,6 @@ export default function PlacementTestScreen({ onComplete }) {
               );
             })}
           </div>
-
-          {/* Confirm button */}
           <button
             onClick={handleConfirm}
             disabled={selected === null}

@@ -46,7 +46,6 @@ export default function LessonScreen({ onComplete }) {
   return (
     <div className="p-8" style={{ maxWidth: "1000px", margin: "0 auto" }}>
 
-      {/* Progress header */}
       <div className="flex items-center justify-between mb-7">
         <div>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.06em" }}>
@@ -69,10 +68,8 @@ export default function LessonScreen({ onComplete }) {
         </div>
       </div>
 
-      {/* 2-column layout: left word card + right exercise */}
       <div className="grid gap-8" style={{ gridTemplateColumns: "420px 1fr" }}>
 
-        {/* ── LEFT: Vocabulary card ── */}
         <div className="flex flex-col gap-5">
           <AnimatePresence mode="wait">
             <motion.div
@@ -86,7 +83,6 @@ export default function LessonScreen({ onComplete }) {
                 className="rounded-2xl border border-border bg-card overflow-hidden"
                 style={{ boxShadow: "0 4px 32px rgba(26,26,26,0.09)" }}
               >
-                {/* Hanzi + speaker */}
                 <div
                   className="flex flex-col items-center py-10 px-8"
                   style={{ backgroundColor: "var(--secondary)", borderBottom: "1px solid var(--border)" }}
@@ -130,7 +126,6 @@ export default function LessonScreen({ onComplete }) {
                   </div>
                 </div>
 
-                {/* Example sentence */}
                 <div className="p-6">
                   <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.07em", marginBottom: "8px" }}>
                     ZDANIE PRZYKŁADOWE
@@ -146,7 +141,6 @@ export default function LessonScreen({ onComplete }) {
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation between words */}
           <div className="flex gap-3">
             <button
               onClick={() => { if (vocabIndex > 0) { setVocabIndex((v) => v - 1); setAnswered(false); setSelected(null); } }}
@@ -174,7 +168,6 @@ export default function LessonScreen({ onComplete }) {
           </div>
         </div>
 
-        {/* ── RIGHT: Exercise area ── */}
         <div className="flex flex-col gap-5">
           <div
             className="rounded-2xl border border-border bg-card p-6"
@@ -188,7 +181,6 @@ export default function LessonScreen({ onComplete }) {
               <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "16px", color: "var(--primary)", fontWeight: 700 }}>{word.hanzi}</span>
             </p>
 
-            {/* Options grid */}
             <div className="grid grid-cols-2 gap-3 mb-6">
               {matchItems.map((item) => {
                 const isSelected = selected === item.polish;
@@ -225,7 +217,6 @@ export default function LessonScreen({ onComplete }) {
               })}
             </div>
 
-            {/* Feedback */}
             <AnimatePresence>
               {answered && (
                 <motion.div
@@ -254,7 +245,6 @@ export default function LessonScreen({ onComplete }) {
               )}
             </AnimatePresence>
 
-            {/* Check / Continue button */}
             {!answered ? (
               <button
                 onClick={handleCheck}
@@ -290,8 +280,6 @@ export default function LessonScreen({ onComplete }) {
               </button>
             )}
           </div>
-
-          {/* Mini vocabulary list for context */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}

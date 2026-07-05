@@ -30,7 +30,6 @@ function MiZiGeGrid({ hanzi, size = 200, highlight }) {
     </svg>
   );
 }
-
 const STROKES_SHI = [
   { label: "1", desc: "Prawa kreska ukośna (点) — skos w prawo-dół", path: "M 106 22 C 110 26, 116 34, 118 42", type: "diǎn" },
   { label: "2", desc: "Pozioma kreska (横 héng) — od lewej do prawej", path: "M 76 46 L 128 46", type: "héng" },
@@ -98,13 +97,8 @@ export default function CharacterDetailScreen({ onBack }) {
 
   return (
     <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-      {/* 2-column layout */}
       <div className="grid gap-8" style={{ gridTemplateColumns: "380px 1fr" }}>
-
-        {/* ── LEFT: Main grid + actions ── */}
         <div className="flex flex-col gap-5">
-
-          {/* Large practice grid */}
           <div
             className="rounded-2xl border border-border bg-card p-8 flex flex-col items-center"
             style={{ boxShadow: "0 4px 32px rgba(26,26,26,0.09)" }}
@@ -123,8 +117,6 @@ export default function CharacterDetailScreen({ onBack }) {
               </div>
             </div>
           </div>
-
-          {/* Action buttons */}
           <div className="flex gap-3">
             <button
               onClick={handleAnimate}
@@ -148,8 +140,6 @@ export default function CharacterDetailScreen({ onBack }) {
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "var(--foreground)" }}>Pobierz PDF</span>
             </button>
           </div>
-
-          {/* Metadata card */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
@@ -173,11 +163,7 @@ export default function CharacterDetailScreen({ onBack }) {
             </div>
           </div>
         </div>
-
-        {/* ── RIGHT: Stroke order ── */}
         <div className="flex flex-col gap-5">
-
-          {/* Stroke animation canvas */}
           <div
             className="rounded-2xl border border-border bg-card overflow-hidden"
             style={{ boxShadow: "0 2px 20px rgba(26,26,26,0.07)" }}
@@ -251,8 +237,6 @@ export default function CharacterDetailScreen({ onBack }) {
               ))}
             </div>
           </div>
-
-          {/* Related words */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}

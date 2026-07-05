@@ -6,11 +6,7 @@ const accuracyData = [{ name: "Celność", value: 78, fill: "#4F7942" }];
 export default function ProfileScreen({ onMenuSelect }) {
   return (
     <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-
-      {/* Top row: avatar + bio + exam banner */}
       <div className="grid gap-6 mb-7" style={{ gridTemplateColumns: "1fr 340px" }}>
-
-        {/* Bio card */}
         <div
           className="rounded-2xl border border-border bg-card p-7 flex items-center gap-6"
           style={{ boxShadow: "0 2px 20px rgba(26,26,26,0.07)" }}
@@ -46,8 +42,6 @@ export default function ProfileScreen({ onMenuSelect }) {
             </button>
           </div>
         </div>
-
-        {/* HSK exam date banner */}
         <div
           className="rounded-2xl p-6 flex flex-col justify-between"
           style={{
@@ -73,13 +67,8 @@ export default function ProfileScreen({ onMenuSelect }) {
           </div>
         </div>
       </div>
-
-      {/* Main content grid */}
       <div className="grid gap-6" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
-
-        {/* Stats grid */}
         <div className="flex flex-col gap-4">
-          {/* Words learned */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
@@ -90,8 +79,6 @@ export default function ProfileScreen({ onMenuSelect }) {
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--accent)", marginBottom: "6px" }}>↑ +12 ten tydzień</p>
             </div>
           </div>
-
-          {/* Accuracy */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
@@ -111,8 +98,6 @@ export default function ProfileScreen({ onMenuSelect }) {
               </div>
             </div>
           </div>
-
-          {/* Study time */}
           <div
             className="rounded-2xl border border-border bg-card p-5"
             style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
@@ -122,8 +107,6 @@ export default function ProfileScreen({ onMenuSelect }) {
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)", marginTop: "4px" }}>ten tydzień</p>
           </div>
         </div>
-
-        {/* Weekly bar chart */}
         <div
           className="rounded-2xl border border-border bg-card p-6"
           style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
@@ -146,8 +129,6 @@ export default function ProfileScreen({ onMenuSelect }) {
               );
             })}
           </div>
-
-          {/* Progress by category */}
           <div className="mt-6 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.06em", marginBottom: "12px" }}>POSTĘP PO KATEGORIACH</p>
             <div className="flex flex-col gap-3">
@@ -168,8 +149,6 @@ export default function ProfileScreen({ onMenuSelect }) {
             </div>
           </div>
         </div>
-
-        {/* Menu items */}
         <div className="flex flex-col gap-4">
           {[
             {
@@ -236,8 +215,6 @@ export default function ProfileScreen({ onMenuSelect }) {
               </div>
             </button>
           ))}
-
-          {/* Settings */}
           <button
             className="w-full py-4 text-center rounded-2xl border border-border bg-card mt-auto transition-all hover:border-foreground/15"
           >
