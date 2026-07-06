@@ -1,3 +1,4 @@
+import logo from '../../assets/images/logo.png';
 export default function Sidebar({ isMain, activeTab, goMain }) {
   const menuItems = [
     { id: "dashboard", label: "Panel główny", hanzi: "主", sublabel: "Twój dzień nauki" },
@@ -21,28 +22,14 @@ export default function Sidebar({ isMain, activeTab, goMain }) {
         boxSizing: "border-box" 
       }}
     >
-      <div className="flex flex-col flex-1">
-        <div className="flex items-center gap-3 px-6 py-6" style={{ borderBottom: "1px solid var(--border)" }}>
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center flex-none"
-            style={{
-              border: "1.5px solid var(--primary)",
-              backgroundColor: "rgba(200,62,52,0.06)",
-            }}
-          >
-            <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "18px", fontWeight: 700, color: "var(--primary)", lineHeight: 1 }}>
-              漢
-            </span>
+        <div className="flex flex-col flex-1">
+          <div className="flex items-center justify-center px-2 py-2" style={{ borderBottom: "1px solid var(--border)" }}>
+            <img 
+              src={logo} 
+              alt="HSK Platform Logo" 
+              className="w-full h-auto max-h-25 object-contain" 
+            />
           </div>
-          <div>
-            <p style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "15px", fontWeight: 700, color: "var(--foreground)", lineHeight: 1.2 }}>
-              漢語學習
-            </p>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.06em" }}>
-              PLATFORMA HSK
-            </p>
-          </div>
-        </div>
         <nav className="flex flex-col gap-1 px-3 py-4 flex-1">
           {menuItems.map((tab) => {
             const isActive = isMain && activeTab === tab.id;
