@@ -1,236 +1,102 @@
 import { useState } from "react";
+import styles from "./Auth.module.css";
 
 export default function AuthScreen({ onAuth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("login");
 
+  const handleInputFocus = (e) => {
+    e.target.style.borderColor = "var(--primary)";
+    e.target.style.boxShadow = "0 0 0 3px rgba(200,62,52,0.08)";
+  };
+
+  const handleInputBlur = (e) => {
+    e.target.style.borderColor = "var(--border)";
+    e.target.style.boxShadow = "none";
+  };
+
   return (
-    <div className="flex w-full min-h-screen">
-      <div
-        className="flex-none hidden lg:flex flex-col justify-between"
-        style={{
-          width: "52%",
-          backgroundColor: "#F0ECE2",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{ opacity: 0.055 }}
-        >
-          <span
-            style={{
-              fontFamily: "'Noto Serif SC', serif",
-              fontSize: "clamp(280px, 30vw, 420px)",
-              fontWeight: 700,
-              color: "#1A1A1A",
-              lineHeight: 1,
-              userSelect: "none",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            學
-          </span>
+    <div className={styles.container}>
+      <div className={styles.leftPanel}>
+        <div className={styles.bgCharacterXue}>
+          <span>學</span>
         </div>
-        <div
-          className="absolute top-16 right-16 pointer-events-none"
-          style={{ opacity: 0.04 }}
-        >
-          <span
-            style={{
-              fontFamily: "'Noto Serif SC', serif",
-              fontSize: "180px",
-              fontWeight: 700,
-              color: "#1A1A1A",
-              lineHeight: 1,
-            }}
-          >
-            語
-          </span>
+        <div className={styles.bgCharacterYu}>
+          <span>語</span>
         </div>
-        <div
-          className="absolute bottom-10 left-10 pointer-events-none"
-          style={{ opacity: 0.04 }}
-        >
-          <span
-            style={{
-              fontFamily: "'Noto Serif SC', serif",
-              fontSize: "140px",
-              fontWeight: 700,
-              color: "#1A1A1A",
-              lineHeight: 1,
-            }}
-          >
-            道
-          </span>
+        <div className={styles.bgCharacterDao}>
+          <span>道</span>
         </div>
-        <div
-          className="absolute right-0 top-0 bottom-0 w-px"
-          style={{ backgroundColor: "rgba(200,62,52,0.15)" }}
-        />
-        <div className="relative z-10 px-16 pt-16">
+        <div className={styles.panelBorder} />
+        
+        <div className={styles.leftHeader}>
           <div className="flex items-center gap-4 mb-16">
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center"
-              style={{
-                border: "2px solid var(--primary)",
-                backgroundColor: "rgba(200,62,52,0.06)",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "'Noto Serif SC', serif",
-                  fontSize: "24px",
-                  fontWeight: 700,
-                  color: "var(--primary)",
-                }}
-              >
-                漢
-              </span>
+            <div className={styles.logoBox}>
+              <span className={styles.logoHanzi}>漢</span>
             </div>
             <div>
-              <p
-                style={{
-                  fontFamily: "'Noto Serif SC', serif",
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  color: "var(--foreground)",
-                }}
-              >
-                漢語學習
-              </p>
-              <p
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "10px",
-                  color: "var(--muted-foreground)",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                PLATFORMA JĘZYKA CHIŃSKIEGO
-              </p>
+              <p className={styles.logoTitle}>漢語學習</p>
+              <p className={styles.logoSubtitle}>PLATFORMA JĘZYKA CHIŃSKIEGO</p>
             </div>
           </div>
 
-          <h2
-            style={{
-              fontFamily: "'Noto Serif SC', serif",
-              fontSize: "42px",
-              fontWeight: 700,
-              color: "var(--foreground)",
-              lineHeight: 1.25,
-              maxWidth: "460px",
-            }}
-          >
+          <h2 className={styles.mainHeading}>
             Opanuj mandaryński
             <br />
-            <span style={{ color: "var(--primary)" }}>krok po kroku.</span>
+            <span className={styles.headingAccent}>krok po kroku.</span>
           </h2>
-          <p
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "16px",
-              color: "var(--muted-foreground)",
-              lineHeight: 1.7,
-              maxWidth: "400px",
-              marginTop: "20px",
-            }}
-          >
+          <p className={styles.description}>
             Ucz się opartą na standardach HSK ścieżką — z wizualizatorem
             tonów, AI-rekomendowanymi lekcjami i piśmiennictwem kaligrafia.
           </p>
         </div>
 
-        <div className="relative z-10 px-16 pb-16 flex flex-col gap-3">
+        <div className={styles.leftFeatures}>
           {[
             { hanzi: "声", label: "Wizualizator tonów w czasie rzeczywistym" },
             { hanzi: "智", label: "Lekcje rekomendowane przez AI" },
             { hanzi: "字", label: "Kaligraficzne ćwiczenia pisania" },
           ].map((f) => (
             <div key={f.hanzi} className="flex items-center gap-3">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-none"
-                style={{ backgroundColor: "rgba(200,62,52,0.08)", border: "1px solid rgba(200,62,52,0.2)" }}
-              >
-                <span
-                  style={{
-                    fontFamily: "'Noto Serif SC', serif",
-                    fontSize: "14px",
-                    fontWeight: 700,
-                    color: "var(--primary)",
-                  }}
-                >
-                  {f.hanzi}
-                </span>
+              <div className={styles.featureIconBox}>
+                <span className={styles.featureHanzi}>{f.hanzi}</span>
               </div>
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "13px",
-                  color: "var(--muted-foreground)",
-                }}
-              >
-                {f.label}
-              </span>
+              <span className={styles.featureLabel}>{f.label}</span>
             </div>
           ))}
         </div>
       </div>
-      <div
-        className="flex-1 flex flex-col items-center justify-center px-8 py-16"
-        style={{ backgroundColor: "var(--background)", minHeight: "100vh" }}
-      >
+
+      <div className={styles.rightPanel}>
         <div className="lg:hidden flex items-center gap-3 mb-10">
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center"
-            style={{ border: "1.5px solid var(--primary)", backgroundColor: "rgba(200,62,52,0.06)" }}
-          >
-            <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "20px", fontWeight: 700, color: "var(--primary)" }}>漢</span>
+          <div className={styles.mobileLogoBox}>
+            <span className={styles.mobileLogoHanzi}>漢</span>
           </div>
-          <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "18px", fontWeight: 700, color: "var(--foreground)" }}>漢語學習</span>
+          <span className={styles.mobileLogoTitle}>漢語學習</span>
         </div>
 
-        <div style={{ width: "100%", maxWidth: "400px" }}>
+        <div className={styles.formWrapper}>
           <div className="mb-8">
-            <h1
-              style={{
-                fontFamily: "'Noto Serif SC', serif",
-                fontSize: "30px",
-                fontWeight: 700,
-                color: "var(--foreground)",
-                marginBottom: "6px",
-              }}
-            >
+            <h1 className={styles.formTitle}>
               {mode === "login" ? "Witaj z powrotem" : "Utwórz konto"}
             </h1>
-            <p
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontSize: "14px",
-                color: "var(--muted-foreground)",
-              }}
-            >
+            <p className={styles.formSubtitle}>
               {mode === "login"
                 ? "Zaloguj się i kontynuuj naukę"
                 : "Zacznij swoją przygodę z językiem chińskim"}
             </p>
           </div>
-          <div
-            className="flex mb-7 rounded-xl p-1 gap-1"
-            style={{ backgroundColor: "var(--muted)" }}
-          >
+
+          <div className={styles.modeToggleContainer}>
             {["login", "register"].map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className="flex-1 py-2.5 rounded-lg text-sm transition-all duration-200"
+                className={styles.modeButton}
                 style={{
                   backgroundColor: mode === m ? "var(--card)" : "transparent",
                   color: mode === m ? "var(--foreground)" : "var(--muted-foreground)",
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "13px",
                   fontWeight: mode === m ? 600 : 400,
                   boxShadow: mode === m ? "0 1px 4px rgba(26,26,26,0.08)" : "none",
                 }}
@@ -239,74 +105,37 @@ export default function AuthScreen({ onAuth }) {
               </button>
             ))}
           </div>
-          <div className="flex flex-col gap-4 mb-6">
+
+          <div className={styles.inputFieldContainer}>
             <div>
-              <label
-                className="block mb-1.5"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "11px",
-                  color: "var(--muted-foreground)",
-                  letterSpacing: "0.07em",
-                }}
-              >
-                ADRES E-MAIL
-              </label>
+              <label className={styles.inputLabel}>ADRES E-MAIL</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="twoj@email.com"
-                className="w-full px-4 py-3.5 rounded-xl border border-border focus:outline-none transition-all"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "14px",
-                  color: "var(--foreground)",
-                  backgroundColor: "var(--secondary)",
-                }}
-                onFocus={(e) => { e.target.style.borderColor = "var(--primary)"; e.target.style.boxShadow = "0 0 0 3px rgba(200,62,52,0.08)"; }}
-                onBlur={(e)  => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
+                className={styles.inputElement}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
               />
             </div>
             <div>
-              <label
-                className="block mb-1.5"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "11px",
-                  color: "var(--muted-foreground)",
-                  letterSpacing: "0.07em",
-                }}
-              >
-                HASŁO
-              </label>
+              <label className={styles.inputLabel}>HASŁO</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3.5 rounded-xl border border-border focus:outline-none transition-all"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "14px",
-                  color: "var(--foreground)",
-                  backgroundColor: "var(--secondary)",
-                }}
-                onFocus={(e) => { e.target.style.borderColor = "var(--primary)"; e.target.style.boxShadow = "0 0 0 3px rgba(200,62,52,0.08)"; }}
-                onBlur={(e)  => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
+                className={styles.inputElement}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
               />
             </div>
           </div>
 
           {mode === "login" && (
-            <div className="flex justify-end mb-5">
-              <button
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "13px",
-                  color: "var(--primary)",
-                }}
-              >
+            <div className={styles.forgotPasswordRow}>
+              <button className={styles.forgotPasswordButton}>
                 Zapomniałeś hasła?
               </button>
             </div>
@@ -314,51 +143,29 @@ export default function AuthScreen({ onAuth }) {
 
           <button
             onClick={onAuth}
-            className="w-full py-4 rounded-xl transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-            style={{
-              backgroundColor: "var(--primary)",
-              color: "var(--primary-foreground)",
-              fontFamily: "Inter, sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              letterSpacing: "0.01em",
-              boxShadow: "0 3px 20px rgba(200,62,52,0.28)",
-            }}
+            className={`hover:opacity-90 active:scale-[0.98] ${styles.submitButton}`}
           >
             {mode === "register" ? "Zarejestruj się →" : "Zaloguj się →"}
           </button>
 
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
-            <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "16px", color: "var(--muted-foreground)", opacity: 0.5 }}>或</span>
-            <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
+          <div className={styles.dividerRow}>
+            <div className={styles.dividerLine} />
+            <span className={styles.dividerText}>或</span>
+            <div className={styles.dividerLine} />
           </div>
 
           <button
             onClick={onAuth}
-            className="w-full py-3.5 rounded-xl border border-border bg-transparent transition-all duration-200 hover:bg-secondary active:scale-[0.98]"
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "14px",
-              color: "var(--foreground)",
-            }}
+            className={`active:scale-[0.98] ${styles.guestButton}`}
           >
             Kontynuuj bez konta
           </button>
 
-          <p
-            className="text-center mt-6"
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "11px",
-              color: "var(--muted-foreground)",
-              lineHeight: 1.6,
-            }}
-          >
+          <p className={styles.legalText}>
             Rejestrując się, akceptujesz{" "}
-            <span style={{ color: "var(--primary)", cursor: "pointer" }}>Warunki korzystania</span>{" "}
+            <span className={styles.legalLink}>Warunki korzystania</span>{" "}
             i{" "}
-            <span style={{ color: "var(--primary)", cursor: "pointer" }}>Politykę prywatności</span>.
+            <span className={styles.legalLink}>Politykę prywatności</span>.
           </p>
         </div>
       </div>

@@ -1,0 +1,106 @@
+/* Основной контейнер хедера */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+  height: 70px;
+  box-sizing: border-box;
+}
+
+/* Левая часть: заголовки и хлебные крошки */
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.mainTitle {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+/* Правая часть: кнопки действий и профиль */
+.actionsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Круглые функциональные кнопки (Поиск, Уведомления) */
+.iconButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background-color: var(--secondary);
+  border-color: rgba(var(--foreground), 0.15);
+}
+
+.iconButton:active {
+  transform: scale(0.95);
+}
+
+/* Красная точка-индикатор для уведомлений */
+.notificationDot {
+  position: absolute;
+  top: 0.125rem;
+  right: 0.125rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  border: 1.5px solid var(--card);
+}
+
+/* Аватарка пользователя */
+.profileAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--primary);
+  background-color: rgba(200, 62, 52, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.profileAvatar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 2px 8px rgba(200, 62, 52, 0.15);
+}
+
+.profileAvatar:active {
+  transform: scale(0.97);
+}
+
+.avatarHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}

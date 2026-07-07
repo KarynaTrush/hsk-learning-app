@@ -1,4 +1,5 @@
 import { Lock, AlertTriangle, Star, CheckCircle2, ChevronRight } from "lucide-react";
+import styles from "./LearningPath.module.css"; // Подключаем стили
 
 const hskLevels = [
   {
@@ -50,165 +51,117 @@ function NodeCard({ node, onSelect }) {
   const isActive = node.status === "active";
   const isLocked = node.status === "locked";
 
+  // Динамически выбираем классы в зависимости от состояния ноды
+  let cardStyle = styles.nodeCardButtonLocked;
+  let avatarStyle = styles.nodeAvatarLocked;
+  let hanziStyle = styles.nodeHanziLocked;
+  let labelStyle = styles.nodeLabelLocked;
+
+  if (isActive) {
+    cardStyle = `${styles.nodeCardButton} ${styles.nodeCardButtonActive}`;
+    avatarStyle = `${styles.nodeAvatarBox} ${styles.nodeAvatarActive}`;
+    hanziStyle = `${styles.nodeHanzi} ${styles.nodeHanziActive}`;
+    labelStyle = `${styles.nodeLabel} ${styles.nodeLabelActive}`;
+  } else if (isDone) {
+    cardStyle = `${styles.nodeCardButton} ${styles.nodeCardButtonDone}`;
+    avatarStyle = `${styles.nodeAvatarBox} ${styles.nodeAvatarDone}`;
+    hanziStyle = `${styles.nodeHanzi} ${styles.nodeHanziDone}`;
+    labelStyle = `${styles.nodeLabel} ${styles.nodeLabelDone}`;
+  } else {
+    cardStyle = `${styles.nodeCardButton} ${styles.nodeCardButtonLocked}`;
+    avatarStyle = `${styles.nodeAvatarBox} ${styles.nodeAvatarLocked}`;
+    hanziStyle = `${styles.nodeHanzi} ${styles.nodeHanziLocked}`;
+  }
+
   return (
-    <button
-      onClick={() => !isLocked && onSelect()}
-      className="flex flex-col items-center gap-3 p-4 rounded-2xl border transition-all duration-200 group text-center"
-      style={{
-        backgroundColor: isActive
-          ? "var(--card)"
-          : isDone
-          ? "rgba(79,121,66,0.04)"
-          : "var(--muted)",
-        borderColor: isActive
-          ? "var(--primary)"
-          : isDone
-          ? "rgba(79,121,66,0.28)"
-          : "var(--border)",
-        boxShadow: isActive
-          ? "0 0 0 3px rgba(200,62,52,0.12), 0 4px 20px rgba(200,62,52,0.10)"
-          : isDone
-          ? "0 1px 8px rgba(26,26,26,0.04)"
-          : "none",
-        opacity: isLocked ? 0.5 : 1,
-        cursor: isLocked ? "not-allowed" : "pointer",
-        minWidth: 0,
-      }}
-    >
-      <div
-        className="w-14 h-14 rounded-full flex items-center justify-center relative"
-        style={{
-          backgroundColor: isActive
-            ? "rgba(200,62,52,0.08)"
-            : isDone
-            ? "rgba(79,121,66,0.1)"
-            : "var(--secondary)",
-          border: isActive
-            ? "2px solid var(--primary)"
-            : isDone
-            ? "2px solid var(--accent)"
-            : "1.5px solid var(--border)",
-        }}
-      >
+    <button onClick={() => !isLocked && onSelect()} className={cardStyle}>
+      <div className={avatarStyle}>
         {isLocked ? (
           <Lock size={18} color="var(--muted-foreground)" strokeWidth={1.5} />
         ) : (
-          <span
-            style={{
-              fontFamily: "'Noto Serif SC', serif",
-              fontSize: "22px",
-              fontWeight: 700,
-              color: isActive ? "var(--primary)" : isDone ? "var(--accent)" : "var(--muted-foreground)",
-            }}
-          >
+          <span className={hanziStyle}>
             {node.hanzi[0]}
           </span>
         )}
+        
+        {/* Маленькие бейджи-индикаторы на кружках */}
         {isDone && (
-          <div
-            className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "var(--accent)" }}
-          >
-            <span style={{ fontSize: "10px", color: "white", lineHeight: 1 }}>✓</span>
+          <div className={styles.badgeDone}>
+            <span className={styles.badgeDoneText}>✓</span>
           </div>
         )}
         {isActive && (
-          <div
-            className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "var(--primary)" }}
-          >
+          <div className={styles.badgeActive}>
             <Star size={10} color="white" fill="white" />
           </div>
         )}
         {node.mistakes && (
-          <div
-            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "#D4A843" }}
-          >
+          <div className={styles.badgeMistakes}>
             <AlertTriangle size={9} color="white" strokeWidth={2.5} />
           </div>
         )}
       </div>
 
       <div>
-        <p
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "13px",
-            fontWeight: isActive ? 600 : 500,
-            color: isLocked ? "var(--muted-foreground)" : "var(--foreground)",
-            lineHeight: 1.2,
-          }}
-        >
-          {node.label}
-        </p>
-        <p
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "10px",
-            color: "var(--muted-foreground)",
-            marginTop: "2px",
-          }}
-        >
-          {node.sublabel}
-        </p>
+        <p className={labelStyle}>{node.label}</p>
+        <p className={styles.nodeSublabel}>{node.sublabel}</p>
       </div>
 
       {isActive && (
-        <div
-          className="px-3 py-1 rounded-full"
-          style={{ backgroundColor: "rgba(200,62,52,0.1)" }}
-        >
-          <span style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--primary)", fontWeight: 700, letterSpacing: "0.04em" }}>
-            TERAZ
-          </span>
+        <div className={styles.nowBadge}>
+          <span className={styles.nowBadgeText}>TERAZ</span>
         </div>
       )}
     </button>
   );
 }
+
 export default function LearningPathScreen({ onNodeSelect }) {
   return (
-    <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-      <div className="flex items-start justify-between mb-8">
+    <div className={styles.container}>
+      {/* Верхний заголовок и легенда */}
+      <div className={styles.headerRow}>
         <div>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.07em", marginBottom: "4px" }}>
-            学习路径 · TWOJA ŚCIEŻKA HSK
-          </p>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "var(--muted-foreground)", maxWidth: "480px", lineHeight: 1.6 }}>
+          <p className={styles.metaTitle}>学习路径 · TWOJA ŚCIEŻKA HSK</p>
+          <p className={styles.description}>
             Ucz się krok po kroku. Każdy poziom odblokuje się po ukończeniu poprzedniego.
             Węzły z ikoną ⚠ zawierają tematy, w których popełniłaś błędy.
           </p>
         </div>
 
-        <div className="flex gap-5 flex-none mt-1">
+        <div className={styles.legendList}>
           {[
             { color: "var(--accent)", label: "Ukończono" },
             { color: "var(--primary)", label: "Aktywne" },
             { color: "#D4A843", label: "Błędy" },
             { color: "var(--muted-foreground)", label: "Zablokowane", opacity: 0.4 },
           ].map((item) => (
-            <div key={item.label} className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color, opacity: item.opacity || 1 }} />
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>{item.label}</span>
+            <div key={item.label} className={styles.legendItem}>
+              <div className={styles.legendDot} style={{ backgroundColor: item.color, opacity: item.opacity || 1 }} />
+              <span className={styles.legendLabel}>{item.label}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex flex-col gap-6">
+      {/* Список уровней */}
+      <div className={styles.pathSection}>
         {hskLevels.map((level, li) => (
           <div key={level.level}>
+            
+            {/* Шапка уровня */}
             <div
-              className="flex items-center justify-between px-6 py-4 rounded-2xl mb-4"
+              className={styles.levelHeaderCard}
               style={{
                 backgroundColor: level.bgColor,
-                border: `1.5px solid ${level.borderColor}`,
+                borderColor: level.borderColor,
+                borderStyle: "solid",
+                borderWidth: "1.5px"
               }}
             >
-              <div className="flex items-center gap-4">
+              <div className={styles.levelInfoBlock}>
                 <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center flex-none"
+                  className={styles.levelIconBox}
                   style={{
                     backgroundColor: level.status === "completed" ? "var(--accent)" : level.status === "active" ? "rgba(200,62,52,0.15)" : "var(--muted)",
                     border: `2px solid ${level.color}`,
@@ -217,16 +170,14 @@ export default function LearningPathScreen({ onNodeSelect }) {
                   {level.status === "completed" ? (
                     <CheckCircle2 size={18} color="white" strokeWidth={2} />
                   ) : (
-                    <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "14px", fontWeight: 700, color: level.color }}>
+                    <span className={styles.levelIconText} style={{ color: level.color }}>
                       {level.level}
                     </span>
                   )}
                 </div>
                 <div>
-                  <p style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "18px", fontWeight: 700, color: "var(--foreground)", lineHeight: 1.1 }}>
-                    {level.label}
-                  </p>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>
+                  <p className={styles.levelTitle}>{level.label}</p>
+                  <p className={styles.levelStatusText}>
                     {level.status === "completed"
                       ? "Ukończono · 4 / 4 lekcji"
                       : level.status === "active"
@@ -237,28 +188,14 @@ export default function LearningPathScreen({ onNodeSelect }) {
               </div>
 
               {level.status !== "locked" && (
-                <div className="flex items-center gap-2">
+                <div className={styles.actionsBlock}>
                   {level.status === "active" && (
-                    <button
-                      onClick={onNodeSelect}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl transition-all hover:opacity-90 active:scale-95"
-                      style={{
-                        backgroundColor: "var(--primary)",
-                        color: "var(--primary-foreground)",
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                        boxShadow: "0 2px 10px rgba(200,62,52,0.2)",
-                      }}
-                    >
+                    <button onClick={onNodeSelect} className={styles.continueButton}>
                       Kontynuuj <ChevronRight size={14} strokeWidth={2} />
                     </button>
                   )}
                   {level.status === "completed" && (
-                    <button
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-card transition-all hover:border-accent/30 active:scale-95"
-                      style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)" }}
-                    >
+                    <button className={styles.reviewButton}>
                       Powtórz lekcje
                     </button>
                   )}
@@ -266,36 +203,40 @@ export default function LearningPathScreen({ onNodeSelect }) {
               )}
 
               {level.status === "locked" && (
-                <div className="flex items-center gap-2">
+                <div className={styles.lockedInfoBlock}>
                   <Lock size={14} color="var(--muted-foreground)" strokeWidth={1.5} />
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)" }}>
+                  <span className={styles.lockedLevelText}>
                     Ukończ HSK {level.level - 1}, aby odblokować
                   </span>
                 </div>
               )}
             </div>
-            <div
-              className="grid gap-4"
-              style={{ gridTemplateColumns: "repeat(4, 1fr)", opacity: level.status === "locked" ? 0.55 : 1 }}
+
+            {/* Сетка с карточками */}
+            <div 
+              className={styles.nodesGrid}
+              style={{ opacity: level.status === "locked" ? 0.55 : 1 }}
             >
-              {level.nodes.map((node, ni) => (
-                <div key={node.id} className="flex flex-col items-center gap-0">
+              {level.nodes.map((node) => (
+                <div key={node.id} className={styles.nodeWrapper}>
                   <NodeCard node={node} onSelect={onNodeSelect} />
                 </div>
               ))}
             </div>
+
+            {/* Соединительная стрелочка вниз между уровнями */}
             {li < hskLevels.length - 1 && (
-              <div className="flex justify-center mt-4">
+              <div className={styles.separatorContainer}>
                 <div
-                  className="flex flex-col items-center gap-0"
+                  className={styles.separatorFlex}
                   style={{ opacity: hskLevels[li + 1].status === "locked" ? 0.25 : 0.6 }}
                 >
-                  <div className="w-px h-4" style={{ backgroundColor: "var(--border)" }} />
+                  <div className={styles.separatorLine} />
                   <ChevronRight
                     size={16}
                     color="var(--muted-foreground)"
                     strokeWidth={1.5}
-                    style={{ transform: "rotate(90deg)" }}
+                    className={styles.separatorIcon}
                   />
                 </div>
               </div>

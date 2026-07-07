@@ -1,0 +1,103 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: var(--secondary);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 30;
+  box-sizing: border-box;
+}
+
+.logoWrapper {
+  border-bottom: 1px solid var(--border);
+}
+
+.navButton {
+  background-color: transparent;
+  border: 1px solid transparent;
+}
+
+.navButtonActive {
+  background-color: rgba(200, 62, 52, 0.08);
+  border: 1px solid rgba(200, 62, 52, 0.18);
+}
+
+.hanziBox {
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.hanziBoxActive {
+  background-color: rgba(200, 62, 52, 0.1);
+  border: 1px solid rgba(200, 62, 52, 0.2);
+}
+
+.hanziText {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+
+.hanziTextActive {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  line-height: 1.2;
+}
+
+.labelActive {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.sublabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: transparent;
+  transition: color 0.2s;
+}
+
+.sublabelActive {
+  color: var(--primary);
+}
+
+.activeDot {
+  background-color: var(--primary);
+}
+
+.forecastWidget {
+  background-color: rgba(79, 121, 66, 0.08);
+  border: 1px solid rgba(79, 121, 66, 0.2);
+}
+
+.forecastTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+}
+
+.forecastValue {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.forecastDate {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-top: 1px;
+}

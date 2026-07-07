@@ -1,0 +1,619 @@
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.welcomeText {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.streakBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 1rem;
+  background-color: rgba(212, 168, 67, 0.06);
+  border: 1px solid rgba(212, 168, 67, 0.3);
+}
+
+.streakNumber {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 22px;
+  font-weight: 700;
+  color: #a07820;
+  line-height: 1;
+}
+
+.streakLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted-foreground);
+}
+
+.dashboardGrid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr 300px;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dailyGoalCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.5rem;
+  box-shadow: 0 1px 20px rgba(26, 26, 26, 0.05);
+}
+
+.goalCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.goalMeta {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+}
+
+.goalTitle {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-top: 2px;
+}
+
+.goalBadge {
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  background-color: rgba(79, 121, 66, 0.08);
+  border: 1px solid rgba(79, 121, 66, 0.25);
+}
+
+.goalBadgeText {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.weekCalendar {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.dayColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.dayBox {
+  width: 100%;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0;
+  gap: 0.375rem;
+  transition: all 0.2s;
+}
+
+.doneMark {
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.dayLetter {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+}
+
+.dayLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.statCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1rem;
+  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
+}
+
+.statHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.statLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.05em;
+}
+
+.statIconBox {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary);
+}
+
+.statValue {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statUnit {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-top: 3px;
+}
+
+.chartCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.25rem;
+  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
+}
+
+.chartTitle {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+}
+
+.chartCanvas {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  height: 64px;
+}
+
+.chartBarColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.chartBar {
+  width: 100%;
+  border-top-left-radius: 0.125rem;
+  border-top-right-radius: 0.125rem;
+  min-height: 4px;
+}
+
+.chartDayLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 9px;
+}
+
+.recommendationLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+}
+
+.aiLiveBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.aiLiveText {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.lessonCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-shadow: 0 4px 32px rgba(26, 26, 26, 0.09);
+}
+
+.lessonCardLine {
+  height: 1.5px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #e8534a 70%, rgba(200, 62, 52, 0.15) 100%);
+}
+
+.lessonCardContent {
+  padding: 1.75rem;
+}
+
+.lessonMainInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.lessonHanziIcon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: rgba(200, 62, 52, 0.07);
+  border: 1px solid rgba(200, 62, 52, 0.15);
+}
+
+.lessonHanziText {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.lessonMetaText {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+
+.lessonTitle {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.lessonDuration {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+}
+
+.reasonCallout {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--secondary);
+  border-left: 3px solid var(--primary);
+}
+
+.reasonMeta {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.reasonText {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: var(--foreground);
+  line-height: 1.65;
+}
+
+.progressSection {
+  margin-bottom: 1.75rem;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.progressLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.progressCount {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.progressBarContainer {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--muted);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 9999px;
+  background-color: var(--accent);
+}
+
+.previewWordsList {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.moreWordsRow {
+  text-align: center;
+  padding: 0.375rem 0;
+  border-radius: 0.75rem;
+  border: 1px dashed var(--border);
+  background-color: rgba(var(--secondary), 0.3);
+}
+
+.moreWordsText {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.startButton {
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  transition: all 0.2s;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 3px 20px rgba(200, 62, 52, 0.28);
+}
+
+.forecastCard {
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(79, 121, 66, 0.06) 0%, rgba(79, 121, 66, 0.02) 100%);
+  border-color: rgba(79, 121, 66, 0.25);
+  box-shadow: 0 1px 16px rgba(79, 121, 66, 0.08);
+}
+
+.forecastMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.forecastMetaText {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+}
+
+.forecastValue {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.forecastDate {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
+
+.forecastProgressContainer {
+  margin-top: 1rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-color: var(--muted);
+  overflow: hidden;
+}
+
+.forecastProgressBar {
+  height: 100%;
+  border-radius: 9999px;
+  background-color: var(--accent);
+}
+
+.forecastStatusText {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--accent);
+  margin-top: 5px;
+}
+
+.todoCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.25rem;
+  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
+}
+
+.todoTitle {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.todoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.todoCheckbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.todoCheckboxMark {
+  font-size: 10px;
+  color: white;
+}
+
+.todoLabel {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--foreground);
+  font-weight: 400;
+}
+
+.todoTime {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted-foreground);
+}
+
+.errorsCard {
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  padding: 1.25rem;
+  background-color: rgba(200, 62, 52, 0.03);
+  border-color: rgba(200, 62, 52, 0.18);
+  box-shadow: 0 1px 12px rgba(200, 62, 52, 0.04);
+}
+
+.errorsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.errorsTitle {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+}
+
+.errorsBadge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: rgba(200, 62, 52, 0.1);
+}
+
+.errorsBadgeText {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.errorsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quoteCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.25rem;
+  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
+}
+
+.quoteDecoration {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 32px;
+  opacity: 0.1;
+  display: block;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.quoteHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 15px;
+  color: var(--foreground);
+  line-height: 1.6;
+}
+
+.quoteTranslation {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-top: 8px;
+  line-height: 1.5;
+}

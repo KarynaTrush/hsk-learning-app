@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Play, Pause, FileText, Volume2 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import styles from "./CharacterDetail.module.css";
 
 function MiZiGeGrid({ hanzi, size = 200, highlight }) {
   const s = size;
@@ -30,6 +30,7 @@ function MiZiGeGrid({ hanzi, size = 200, highlight }) {
     </svg>
   );
 }
+
 const STROKES_SHI = [
   { label: "1", desc: "Prawa kreska ukośna (点) — skos w prawo-dół", path: "M 106 22 C 110 26, 116 34, 118 42", type: "diǎn" },
   { label: "2", desc: "Pozioma kreska (横 héng) — od lewej do prawej", path: "M 76 46 L 128 46", type: "héng" },
@@ -96,55 +97,39 @@ export default function CharacterDetailScreen({ onBack }) {
   }
 
   return (
-    <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-      <div className="grid gap-8" style={{ gridTemplateColumns: "380px 1fr" }}>
-        <div className="flex flex-col gap-5">
-          <div
-            className="rounded-2xl border border-border bg-card p-8 flex flex-col items-center"
-            style={{ boxShadow: "0 4px 32px rgba(26,26,26,0.09)" }}
-          >
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.08em", marginBottom: "16px" }}>
+    <div className={styles.container}>
+      <div className={styles.mainGrid}>
+        <div className={styles.flexCol}>
+          <div className={styles.mizigeCard}>
+            <p className={styles.mizigeLabel}>
               SIATKA KALIGRAFII · 米字格
             </p>
             <MiZiGeGrid hanzi="食" size={240} />
-            <div className="mt-6 flex items-center gap-3">
-              <button className="w-11 h-11 rounded-full border border-border bg-secondary flex items-center justify-center transition-all hover:scale-105 active:scale-90">
+            <div className={styles.pinyinSection}>
+              <button className={styles.audioButton}>
                 <Volume2 size={18} color="var(--primary)" strokeWidth={1.5} />
               </button>
               <div>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "20px", fontWeight: 600, color: "var(--primary)", letterSpacing: "0.05em" }}>shí</p>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)" }}>Wymów głośno</p>
+                <p className={styles.pinyinValue}>shí</p>
+                <p className={styles.pinyinLabel}>Wymów głośno</p>
               </div>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className={styles.actionsRow}>
             <button
               onClick={handleAnimate}
-              className="flex-1 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.98]"
-              style={{
-                backgroundColor: "var(--primary)",
-                color: "var(--primary-foreground)",
-                fontFamily: "Inter, sans-serif",
-                fontSize: "14px",
-                fontWeight: 600,
-                boxShadow: "0 2px 12px rgba(200,62,52,0.22)",
-              }}
+              className={styles.animateButton}
             >
               {animating ? <Pause size={16} strokeWidth={2} /> : <Play size={16} strokeWidth={2} />}
               <span>{animating ? "Pauza" : "Uruchom animację"}</span>
             </button>
-            <button
-              className="px-5 py-3.5 rounded-xl border border-border bg-card flex items-center justify-center gap-2 transition-all hover:border-foreground/20 active:scale-95"
-            >
+            <button className={styles.pdfButton}>
               <FileText size={16} color="var(--foreground)" strokeWidth={1.5} />
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "var(--foreground)" }}>Pobierz PDF</span>
+              <span className={styles.pdfButtonText}>Pobierz PDF</span>
             </button>
           </div>
-          <div
-            className="rounded-2xl border border-border bg-card p-5"
-            style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
-          >
-            <div className="grid grid-cols-2 gap-4">
+          <div className={styles.metaCard}>
+            <div className={styles.metaGrid}>
               {[
                 { label: "PINYIN", value: "shí", isPin: true },
                 { label: "RADYKAŁ", value: "食 (shí)" },
@@ -154,8 +139,8 @@ export default function CharacterDetailScreen({ onBack }) {
                 { label: "TONY", value: "2. ton (wznoszący)" },
               ].map((item) => (
                 <div key={item.label}>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "var(--muted-foreground)", letterSpacing: "0.08em", marginBottom: "3px" }}>{item.label}</p>
-                  <p style={{ fontFamily: item.isPin ? "Inter, sans-serif" : "'Noto Serif SC', serif", fontSize: item.isPin ? "20px" : "14px", color: item.isPin ? "var(--primary)" : "var(--foreground)", fontWeight: item.isPin ? 600 : 500 }}>
+                  <p className={styles.metaLabel}>{item.label}</p>
+                  <p className={item.isPin ? styles.metaValuePinyin : styles.metaValueHanzi}>
                     {item.value}
                   </p>
                 </div>
@@ -163,73 +148,63 @@ export default function CharacterDetailScreen({ onBack }) {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-5">
-          <div
-            className="rounded-2xl border border-border bg-card overflow-hidden"
-            style={{ boxShadow: "0 2px 20px rgba(26,26,26,0.07)" }}
-          >
-            <div
-              className="flex items-center justify-between px-6 py-4"
-              style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--secondary)" }}
-            >
+        <div className={styles.flexCol}>
+          <div className={styles.visualizerCard}>
+            <div className={styles.visualizerHeader}>
               <div>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600, color: "var(--foreground)" }}>Kolejność kresek</p>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>
+                <p className={styles.visTitle}>Kolejność kresek</p>
+                <p className={styles.visSub}>
                   {STROKES_SHI.length} kresek łącznie · {strokeVisible > 0 ? `Kreska ${strokeVisible} z ${STROKES_SHI.length}` : "Naciśnij animuj"}
                 </p>
               </div>
               {strokeVisible > 0 && strokeVisible <= STROKES_SHI.length && (
-                <div
-                  className="px-3 py-1.5 rounded-full"
-                  style={{ backgroundColor: "rgba(200,62,52,0.1)", border: "1px solid rgba(200,62,52,0.2)" }}
-                >
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "var(--primary)", fontWeight: 600 }}>
+                <div className={styles.typeBadge}>
+                  <span className={styles.typeBadgeText}>
                     {STROKES_SHI[strokeVisible - 1].type}
                   </span>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-center p-8">
+            <div className={styles.canvasWrapper}>
               <StrokeCanvas visible={strokeVisible} />
             </div>
 
             {strokeVisible > 0 && strokeVisible <= STROKES_SHI.length && (
-              <div
-                className="px-6 py-4"
-                style={{ borderTop: "1px solid var(--border)", backgroundColor: "var(--secondary)" }}
-              >
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "var(--foreground)" }}>
-                  <span style={{ color: "var(--primary)", fontWeight: 600 }}>Kreska {strokeVisible}:</span>{" "}
+              <div className={styles.descriptionRow}>
+                <p className={styles.descriptionText}>
+                  <span className={styles.stepNumberAccent}>Kreska {strokeVisible}:</span>{" "}
                   {STROKES_SHI[strokeVisible - 1].desc}
                 </p>
               </div>
             )}
           </div>
 
-          {/* Stroke step grid */}
-          <div
-            className="rounded-2xl border border-border bg-card p-5"
-            style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
-          >
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.06em", marginBottom: "14px" }}>
+          <div className={styles.stepsCard}>
+            <p className={styles.stepsTitle}>
               KROKI ANIMACJI
             </p>
-            <div className="grid grid-cols-9 gap-2">
+            <div className={styles.stepsGrid}>
               {STROKES_SHI.map((stroke, i) => (
                 <button
                   key={i}
                   onClick={() => { setStrokeVisible(i + 1); setAnimating(false); if (intervalRef) clearInterval(intervalRef); }}
-                  className="flex flex-col items-center gap-1.5"
+                  className={styles.stepButton}
                 >
                   <div
-                    className="w-full aspect-square rounded-lg flex items-center justify-center border transition-all duration-200 hover:scale-105"
+                    className={styles.stepBox}
                     style={{
                       backgroundColor: i < strokeVisible ? (i === strokeVisible - 1 ? "rgba(200,62,52,0.1)" : "rgba(79,121,66,0.08)") : "var(--secondary)",
                       borderColor: i < strokeVisible ? (i === strokeVisible - 1 ? "var(--primary)" : "rgba(79,121,66,0.3)") : "var(--border)",
                     }}
                   >
-                    <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "18px", fontWeight: 700, color: i < strokeVisible ? (i === strokeVisible - 1 ? "var(--primary)" : "var(--accent)") : "var(--muted-foreground)", opacity: i < strokeVisible ? 1 : 0.35 }}>
+                    <span
+                      className={styles.stepBoxHanzi}
+                      style={{
+                        color: i < strokeVisible ? (i === strokeVisible - 1 ? "var(--primary)" : "var(--accent)") : "var(--muted-foreground)",
+                        opacity: i < strokeVisible ? 1 : 0.35
+                      }}
+                    >
                       {stroke.label}
                     </span>
                   </div>
@@ -237,26 +212,20 @@ export default function CharacterDetailScreen({ onBack }) {
               ))}
             </div>
           </div>
-          <div
-            className="rounded-2xl border border-border bg-card p-5"
-            style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
-          >
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.06em", marginBottom: "14px" }}>
+          <div className={styles.relatedCard}>
+            <p className={styles.relatedTitle}>
               POWIĄZANE SŁOWA
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className={styles.relatedFlex}>
               {[
                 { word: "食物", meaning: "jedzenie" },
                 { word: "食堂", meaning: "stołówka" },
                 { word: "饮食", meaning: "żywienie" },
                 { word: "食谱", meaning: "przepis" },
               ].map((item) => (
-                <div
-                  key={item.word}
-                  className="px-3 py-2 rounded-xl border border-border bg-secondary"
-                >
-                  <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "16px", fontWeight: 700, color: "var(--foreground)", display: "block" }}>{item.word}</span>
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)" }}>{item.meaning}</span>
+                <div key={item.word} className={styles.relatedItem}>
+                  <span className={styles.relatedHanzi}>{item.word}</span>
+                  <span className={styles.relatedMeaning}>{item.meaning}</span>
                 </div>
               ))}
             </div>

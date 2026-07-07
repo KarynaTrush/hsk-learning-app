@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
+import styles from "./PlacementTest.module.css";
 
 const questions = [
   {
@@ -33,6 +34,7 @@ const questions = [
     correct: 2,
   },
 ];
+
 export default function PlacementTestScreen({ onComplete }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -55,71 +57,63 @@ export default function PlacementTestScreen({ onComplete }) {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: "var(--background)" }}>
-      <div
-        className="hidden lg:flex flex-col justify-between flex-none"
-        style={{ width: "380px", backgroundColor: "#F0ECE2", borderRight: "1px solid var(--border)", position: "relative", overflow: "hidden" }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: 0.055 }}>
-          <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "340px", fontWeight: 700, color: "#1A1A1A", lineHeight: 1 }}>
-            {q.hanzi[0]}
-          </span>
+    <div className={styles.container}>
+      <div className={styles.leftPanel}>
+        <div className={styles.bgCharacter}>
+          <span>{q.hanzi[0]}</span>
         </div>
 
-        <div className="relative z-10 px-12 pt-16">
+        <div className={styles.leftHeader}>
           <div className="flex items-center gap-3 mb-12">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ border: "1.5px solid var(--primary)", backgroundColor: "rgba(200,62,52,0.06)" }}>
-              <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "20px", fontWeight: 700, color: "var(--primary)" }}>漢</span>
+            <div className={styles.logoBox}>
+              <span className={styles.logoHanzi}>漢</span>
             </div>
             <div>
-              <p style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "16px", fontWeight: 700, color: "var(--foreground)" }}>漢語學習</p>
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.08em" }}>TEST POZIOMUJĄCY</p>
+              <p className={styles.logoTitle}>漢語學習</p>
+              <p className={styles.logoSubtitle}>TEST POZIOMUJĄCY</p>
             </div>
           </div>
 
-          <h2 style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "32px", fontWeight: 700, color: "var(--foreground)", lineHeight: 1.3, marginBottom: "12px" }}>
-            Sprawdźmy Twój<br /><span style={{ color: "var(--primary)" }}>poziom języka</span>
+          <h2 className={styles.mainHeading}>
+            Sprawdźmy Twój<br />
+            <span className={styles.headingAccent}>poziom języka</span>
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "var(--muted-foreground)", lineHeight: 1.65 }}>
+          <p className={styles.description}>
             Krótki test, który pomoże nam dopasować ścieżkę nauki do Twoich umiejętności.
           </p>
         </div>
 
-        <div className="relative z-10 px-12 pb-14">
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.06em", marginBottom: "8px" }}>POSTĘP</p>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(200,62,52,0.15)" }}>
-            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: "var(--primary)" }} />
+        <div className={styles.progressSection}>
+          <p className={styles.progressLabel}>POSTĘP</p>
+          <div className={styles.progressBarTrack}>
+            <div className={styles.progressBarFill} style={{ width: `${progress}%` }} />
           </div>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--primary)", marginTop: "6px" }}>
+          <p className={styles.progressText}>
             Pytanie {current + 1} z {questions.length}
           </p>
         </div>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center px-8 py-12">
-        <div style={{ width: "100%", maxWidth: "560px" }}>
-          <div className="lg:hidden mb-8">
-            <div className="flex justify-between mb-2">
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)" }}>Pytanie {current + 1} z {questions.length}</span>
+      <div className={styles.rightContent}>
+        <div className={styles.formWrapper}>
+          <div className={styles.mobileProgressSection}>
+            <div className={styles.mobileProgressHeader}>
+              <span className={styles.mobileProgressText}>
+                Pytanie {current + 1} z {questions.length}
+              </span>
             </div>
-            <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
-              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: "var(--primary)" }} />
+            <div className={styles.mobileTrack}>
+              <div className={styles.progressBarFill} style={{ width: `${progress}%` }} />
             </div>
           </div>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.07em", marginBottom: "24px" }}>
-            {q.question}
-          </p>
-          <div
-            className="rounded-2xl border border-border bg-card flex flex-col items-center py-10 mb-8"
-            style={{ boxShadow: "0 4px 32px rgba(26,26,26,0.09)" }}
-          >
-            <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "100px", fontWeight: 700, color: "var(--foreground)", lineHeight: 1 }}>
-              {q.hanzi}
-            </span>
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "20px", color: "var(--primary)", letterSpacing: "0.05em", marginTop: "12px" }}>
-              {q.pinyin}
-            </span>
+
+          <p className={styles.questionMeta}>{q.question}</p>
+          
+          <div className={styles.promptCard}>
+            <span className={styles.hanziText}>{q.hanzi}</span>
+            <span className={styles.pinyinText}>{q.pinyin}</span>
           </div>
-          <div className="grid grid-cols-2 gap-3 mb-7">
+
+          <div className={styles.optionsGrid}>
             {q.options.map((opt, i) => {
               const isSelected = selected === i;
               const isCorrect  = confirmed && i === q.correct;
@@ -129,7 +123,7 @@ export default function PlacementTestScreen({ onComplete }) {
                 <button
                   key={i}
                   onClick={() => !confirmed && setSelected(i)}
-                  className="flex items-center gap-4 px-5 py-4 rounded-xl border text-left transition-all hover:scale-[1.01] active:scale-[0.99]"
+                  className={styles.optionButton}
                   style={{
                     backgroundColor: isCorrect ? "rgba(79,121,66,0.07)" : isWrong ? "rgba(200,62,52,0.05)" : isSelected ? "rgba(200,62,52,0.04)" : "var(--card)",
                     borderColor: isCorrect ? "var(--accent)" : isWrong ? "var(--primary)" : isSelected ? "var(--primary)" : "var(--border)",
@@ -137,26 +131,34 @@ export default function PlacementTestScreen({ onComplete }) {
                   }}
                 >
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center flex-none border"
+                    className={styles.radioIndicator}
                     style={{
                       borderColor: isCorrect ? "var(--accent)" : isSelected ? "var(--primary)" : "var(--border)",
                       backgroundColor: isCorrect ? "var(--accent)" : isSelected && !confirmed ? "var(--primary)" : "transparent",
                     }}
                   >
-                    {isCorrect
-                      ? <Check size={14} color="white" strokeWidth={2.5} />
-                      : <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: isSelected && !confirmed ? "white" : "var(--muted-foreground)" }}>
-                          {String.fromCharCode(65 + i)}
-                        </span>
-                    }
+                    {isCorrect ? (
+                      <Check size={14} color="white" strokeWidth={2.5} />
+                    ) : (
+                      <span 
+                        className={styles.radioLabel}
+                        style={{ color: isSelected && !confirmed ? "white" : "var(--muted-foreground)" }}
+                      >
+                        {String.fromCharCode(65 + i)}
+                      </span>
+                    )}
                   </div>
                   <div>
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: isSelected || isCorrect ? "var(--foreground)" : "var(--muted-foreground)", fontWeight: isSelected ? 500 : 400, display: "block" }}>
+                    <span 
+                      className={styles.optPinyin}
+                      style={{ 
+                        color: isSelected || isCorrect ? "var(--foreground)" : "var(--muted-foreground)", 
+                        fontWeight: isSelected ? 500 : 400 
+                      }}
+                    >
                       {opt.pinyin}
                     </span>
-                    <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "16px", color: "var(--foreground)", fontWeight: 600, display: "block" }}>
-                      {opt.polish}
-                    </span>
+                    <span className={styles.optPolish}>{opt.polish}</span>
                   </div>
                 </button>
               );
@@ -165,7 +167,7 @@ export default function PlacementTestScreen({ onComplete }) {
           <button
             onClick={handleConfirm}
             disabled={selected === null}
-            className="w-full py-4 rounded-xl transition-all hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed"
+            className={`disabled:cursor-not-allowed ${styles.submitButton}`}
             style={{
               backgroundColor: selected !== null ? "var(--primary)" : "var(--muted)",
               color: selected !== null ? "var(--primary-foreground)" : "var(--muted-foreground)",

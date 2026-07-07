@@ -1,0 +1,277 @@
+.container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.counterText {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+}
+
+.mainGrid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 420px 1fr;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wordCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(26,26,26,0.09);
+}
+
+.wordHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 2rem;
+  background-color: var(--secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.hanziText {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 96px;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1;
+}
+
+.pinyinText {
+  margin-top: 0.75rem;
+  font-family: "Inter", sans-serif;
+  font-size: 22px;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+}
+
+.polishText {
+  margin-top: 0.25rem;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  color: var(--muted-foreground);
+}
+
+.audioButton {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.audioButton:hover {
+  transform: scale(1.05);
+}
+
+.audioButton:active {
+  transform: scale(0.9);
+}
+
+.exampleBlock {
+  padding: 1.5rem;
+}
+
+.exampleMeta {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.exampleHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 20px;
+  color: var(--foreground);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.exampleTranslation {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.navButtonPrev {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.navButtonNext {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+}
+
+.matchCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.5rem;
+  box-shadow: 0 2px 20px rgba(26,26,26,0.06);
+}
+
+.matchTitle {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 6px;
+}
+
+.matchSubtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin-bottom: 20px;
+}
+
+.targetHanziInline {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 16px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.answersGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.answerButton {
+  padding: 1.25rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.answerButton:hover {
+  transform: scale(1.01);
+}
+
+.answerButton:active {
+  transform: scale(0.98);
+}
+
+.answerHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 24px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.answerPolish {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.feedbackAlert {
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.feedbackText {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.checkButton {
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+}
+
+.actionButton {
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 3px 16px rgba(79,121,66,0.25);
+}
+
+.vocabularyListCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.25rem;
+  box-shadow: 0 1px 12px rgba(26,26,26,0.04);
+}
+
+.vocabListTitle {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.vocabRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.vocabRowHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.vocabRowPinyin {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.vocabRowPolish {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  opacity: 0.7;
+  margin-left: 8px;
+}

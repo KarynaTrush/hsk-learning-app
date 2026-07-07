@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Mic, Volume2, Info } from "lucide-react";
+import styles from "./ToneVisualizer.module.css";
 
 const tones = [
   { mark: "ā", number: 1, label: "I ton", desc: "płaski wysoki", color: "#6B8CAE", example: "māma (mama)" },
@@ -59,93 +60,67 @@ export default function ToneVisualizerScreen() {
   const canvasH = 200;
 
   return (
-    <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-      <div className="grid gap-8" style={{ gridTemplateColumns: "380px 1fr" }}>
-        <div className="flex flex-col gap-5">
-          <div
-            className="rounded-2xl border border-border bg-card p-7 flex flex-col items-center text-center"
-            style={{ boxShadow: "0 2px 24px rgba(26,26,26,0.07)" }}
-          >
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.08em", marginBottom: "16px" }}>
-              DOCELOWA SYLABA
-            </p>
+    <div className={styles.container}>
+      <div className={styles.gridMain}>
+        <div className={styles.flexCol}>
+          <div className={styles.targetCard}>
+            <p className={styles.labelSubtitle}>DOCELOWA SYLABA</p>
             <div className="flex items-center gap-4 mb-4">
-              <span
-                style={{
-                  fontFamily: "'Noto Serif SC', serif",
-                  fontSize: "88px",
-                  fontWeight: 700,
-                  color: activeToneData.color,
-                  lineHeight: 1,
-                }}
-              >
+              <span className={styles.hanziBig} style={{ color: activeToneData.color }}>
                 {currentSyllable}
               </span>
-              <button
-                className="w-12 h-12 rounded-full border flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-                style={{ borderColor: "var(--border)", backgroundColor: "var(--secondary)" }}
-              >
+              <button className={styles.audioButton}>
                 <Volume2 size={20} color="var(--primary)" strokeWidth={1.5} />
               </button>
             </div>
-            <div
-              className="px-4 py-2 rounded-xl mb-2"
+            
+            <div 
+              className={styles.toneDescription}
               style={{ backgroundColor: `${activeToneData.color}12`, border: `1px solid ${activeToneData.color}30` }}
             >
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", fontWeight: 600, color: activeToneData.color }}>
+              <p className={styles.toneDescriptionText} style={{ color: activeToneData.color }}>
                 {activeToneData.label} — {activeToneData.desc}
               </p>
             </div>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)" }}>
+            <p className={styles.exampleText}>
               Przykład: <em>{activeToneData.example}</em>
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className={styles.tonesGrid}>
             {tones.map((t) => (
               <button
                 key={t.number}
                 onClick={() => { setActiveTone(t.number); setHasDone(false); setScore(null); }}
-                className="py-4 rounded-xl border flex flex-col items-center gap-1.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className={styles.toneSelectButton}
                 style={{
                   backgroundColor: activeTone === t.number ? `${t.color}10` : "var(--card)",
                   borderColor: activeTone === t.number ? t.color : "var(--border)",
                   boxShadow: activeTone === t.number ? `0 2px 12px ${t.color}20` : "none",
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: "'Noto Serif SC', serif",
-                    fontSize: "28px",
+                <span 
+                  className={styles.btnHanzi}
+                  style={{ 
                     fontWeight: activeTone === t.number ? 700 : 400,
-                    color: activeTone === t.number ? t.color : "var(--foreground)",
-                    lineHeight: 1,
+                    color: activeTone === t.number ? t.color : "var(--foreground)"
                   }}
                 >
                   {t.mark}
                 </span>
-                <span
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "11px",
+                <span 
+                  className={styles.btnLabel}
+                  style={{ 
                     color: activeTone === t.number ? t.color : "var(--muted-foreground)",
-                    fontWeight: activeTone === t.number ? 600 : 400,
+                    fontWeight: activeTone === t.number ? 600 : 400 
                   }}
                 >
                   {t.label}
                 </span>
-                <span
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "9px",
-                    color: "var(--muted-foreground)",
-                  }}
-                >
-                  {t.desc}
-                </span>
+                <span className={styles.btnDesc}>{t.desc}</span>
               </button>
             ))}
           </div>
-          <div className="flex flex-col items-center gap-3 py-4">
+          <div className={styles.micWrapper}>
             <button
               onMouseDown={handleMicPress}
               onTouchStart={handleMicPress}
@@ -153,7 +128,7 @@ export default function ToneVisualizerScreen() {
               style={{ cursor: recording ? "not-allowed" : "pointer" }}
             >
               <div
-                className="w-24 h-24 rounded-full flex items-center justify-center transition-all duration-200"
+                className={styles.micButton}
                 style={{
                   backgroundColor: recording ? "rgba(200,62,52,0.12)" : "var(--primary)",
                   border: recording ? "2.5px solid var(--primary)" : "3px solid transparent",
@@ -166,9 +141,8 @@ export default function ToneVisualizerScreen() {
                 <Mic size={36} color={recording ? "var(--primary)" : "white"} strokeWidth={1.5} />
               </div>
               <span
+                className={styles.micStatusText}
                 style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "14px",
                   color: recording ? "var(--primary)" : "var(--muted-foreground)",
                   fontWeight: recording ? 500 : 400,
                 }}
@@ -178,48 +152,34 @@ export default function ToneVisualizerScreen() {
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-5">
-          <div
-            className="rounded-2xl border border-border bg-card overflow-hidden"
-            style={{ boxShadow: "0 2px 24px rgba(26,26,26,0.07)" }}
-          >
-            <div
-              className="flex items-center justify-between px-6 py-4"
-              style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--secondary)" }}
-            >
+        <div className={styles.flexCol}>
+          <div className={styles.visualizerCard}>
+            <div className={styles.visualizerHeader}>
               <div>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600, color: "var(--foreground)" }}>
-                  Wizualizacja tonu głosowego
-                </p>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>
-                  Twój głos (czarna linia) vs. wzorzec (kolorowe linie)
-                </p>
+                <p className={styles.visTitle}>Wizualizacja tonu głosowego</p>
+                <p className={styles.visSub}>Twój głos (czarna linia) vs. wzorzec (kolorowe linie)</p>
               </div>
               <div className="flex items-center gap-2">
                 {hasDone && score !== null && (
                   <div
-                    className="px-4 py-1.5 rounded-full"
+                    className={styles.scoreBadge}
                     style={{
                       backgroundColor: score >= 80 ? "rgba(79,121,66,0.1)" : "rgba(200,62,52,0.08)",
                       border: `1px solid ${score >= 80 ? "rgba(79,121,66,0.3)" : "rgba(200,62,52,0.25)"}`,
                     }}
                   >
-                    <span
-                      style={{
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        color: score >= 80 ? "var(--accent)" : "var(--primary)",
-                      }}
+                    <span 
+                      className={styles.scoreText}
+                      style={{ color: score >= 80 ? "var(--accent)" : "var(--primary)" }}
                     >
                       {score}% zgodności
                     </span>
                   </div>
                 )}
                 {recording && (
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--primary)", animation: "pulse 0.8s infinite" }} />
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--primary)", fontWeight: 500 }}>NAGRYWAM</span>
+                  <div className={styles.recordingBadge}>
+                    <div className="w-2 h-2 rounded-full bg-[var(--primary)] animate-pulse" />
+                    <span className={styles.recordingText}>NAGRYWAM</span>
                   </div>
                 )}
               </div>
@@ -229,7 +189,7 @@ export default function ToneVisualizerScreen() {
                 width="100%"
                 viewBox={`0 0 ${canvasW} ${canvasH}`}
                 preserveAspectRatio="xMidYMid meet"
-                style={{ display: "block", maxHeight: "220px" }}
+                className={styles.svgCanvas}
               >
                 {[0.25, 0.5, 0.75].map((frac) => (
                   <line
@@ -299,42 +259,45 @@ export default function ToneVisualizerScreen() {
                   );
                 })}
               </svg>
-              <div className="flex items-center gap-6 mt-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-0.5 rounded" style={{ backgroundColor: activeToneData.color, opacity: 0.7 }} />
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>Wzorzec ({activeToneData.label})</span>
+              <div className={styles.legendWrapper}>
+                <div className={styles.legendItem}>
+                  <div className="w-8 h-0.5 rounded opacity-70" style={{ backgroundColor: activeToneData.color }} />
+                  <span className={styles.legendLabel}>Wzorzec ({activeToneData.label})</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-0.5 rounded" style={{ backgroundColor: "var(--muted-foreground)", opacity: 0.4 }} />
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>Inne tony (odniesienie)</span>
+                <div className={styles.legendItem}>
+                  <div className="w-8 h-0.5 rounded opacity-40 bg-[var(--muted-foreground)]" />
+                  <span className={styles.legendLabel}>Inne tony (odniesienie)</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-0.5 rounded" style={{ backgroundColor: "var(--foreground)", opacity: 0.7 }} />
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>Twój głos</span>
+                <div className={styles.legendItem}>
+                  <div className="w-8 h-0.5 rounded opacity-70 bg-[var(--foreground)]" />
+                  <span className={styles.legendLabel}>Twój głos</span>
                 </div>
               </div>
             </div>
           </div>
           {hasDone && score !== null && (
             <div
-              className="rounded-2xl p-5"
+              className={styles.feedbackCard}
               style={{
                 backgroundColor: score >= 80 ? "rgba(79,121,66,0.06)" : "rgba(200,62,52,0.05)",
-                border: `1.5px solid ${score >= 80 ? "rgba(79,121,66,0.25)" : "rgba(200,62,52,0.22)"}`,
+                borderColor: score >= 80 ? "rgba(79,121,66,0.25)" : "rgba(200,62,52,0.22)",
               }}
             >
-              <div className="flex items-start gap-4">
+              <div className={styles.feedbackContent}>
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-none"
+                  className={styles.feedbackIconBox}
                   style={{ backgroundColor: score >= 80 ? "rgba(79,121,66,0.1)" : "rgba(200,62,52,0.08)" }}
                 >
                   <Info size={18} color={score >= 80 ? "var(--accent)" : "var(--primary)"} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", fontWeight: 600, color: score >= 80 ? "var(--accent)" : "var(--primary)", marginBottom: "4px" }}>
+                  <p 
+                    className={styles.feedbackTitle}
+                    style={{ color: score >= 80 ? "var(--accent)" : "var(--primary)" }}
+                  >
                     {score >= 80 ? "Doskonale! Ton rozpoznany poprawnie." : "Prawie! Małe korekty potrzebne."}
                   </p>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "var(--muted-foreground)", lineHeight: 1.6 }}>
+                  <p className={styles.feedbackDesc}>
                     {score >= 80
                       ? `Twój głos zgodny ze wzorcem ${activeToneData.label} w ${score}%. Linia głosowa przebiega poprawnie.`
                       : `Spróbuj ${activeTone === 1 ? "utrzymać ton na stałym, wysokim poziomie przez całą sylabę" : activeTone === 2 ? "zacząć niżej i wyraźniej wznosić ton" : activeTone === 3 ? "wyraźniej opaść, a potem wznieść głos" : "zacząć wyżej i zdecydowanie opaść"}.`
@@ -344,46 +307,26 @@ export default function ToneVisualizerScreen() {
               </div>
             </div>
           )}
-          <div
-            className="rounded-2xl border border-border bg-card p-5"
-            style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
-          >
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)", letterSpacing: "0.06em", marginBottom: "14px" }}>
-              TWOJA CELNOŚĆ TONÓW
-            </p>
+          <div className={styles.accuracyCard}>
+            <p className={styles.accuracyTitle}>TWOJA CELNOŚĆ TONÓW</p>
             <div className="flex flex-col gap-3">
               {tones.map((t, i) => {
                 const accuracies = [85, 72, 61, 90];
                 const acc = accuracies[i];
                 return (
-                  <div key={t.number} className="flex items-center gap-4">
-                    <span
-                      style={{
-                        fontFamily: "'Noto Serif SC', serif",
-                        fontSize: "18px",
-                        color: t.color,
-                        fontWeight: 600,
-                        width: "28px",
-                        textAlign: "center",
-                      }}
-                    >
+                  <div key={t.number} className={styles.accuracyRow}>
+                    <span className={styles.accuracyMark} style={{ color: t.color }}>
                       {t.mark}
                     </span>
-                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
+                    <div className={styles.progressBarContainer}>
                       <div
-                        className="h-full rounded-full"
-                        style={{ width: `${acc}%`, backgroundColor: t.color, opacity: 0.7 }}
+                        className={styles.progressBar}
+                        style={{ width: `${acc}%`, backgroundColor: t.color }}
                       />
                     </div>
                     <span
-                      style={{
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: "12px",
-                        color: acc >= 80 ? "var(--accent)" : "var(--primary)",
-                        fontWeight: 600,
-                        width: "36px",
-                        textAlign: "right",
-                      }}
+                      className={styles.accuracyPercent}
+                      style={{ color: acc >= 80 ? "var(--accent)" : "var(--primary)" }}
                     >
                       {acc}%
                     </span>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RotateCcw, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import styles from "./Mistakes.module.css";
 
 const errorWords = [
   { id: 1, hanzi: "饺子", pinyin: "jiǎozi", polish: "pierożki", category: "Jedzenie", errorCount: 5, lastError: "2 godz. temu", mastered: false },
@@ -35,37 +36,27 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
   }
 
   return (
-    <div className="p-8" style={{ maxWidth: "1100px", margin: "0 auto" }}>
-      <div className="grid gap-8" style={{ gridTemplateColumns: "260px 1fr" }}>
-        <div className="flex flex-col gap-4">
-          <div
-            className="rounded-2xl p-5"
-            style={{
-              background: "rgba(200,62,52,0.04)",
-              border: "1.5px solid rgba(200,62,52,0.18)",
-            }}
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(200,62,52,0.1)" }}>
+    <div className={styles.container}>
+      <div className={styles.mainGrid}>
+        <div className={styles.flexCol}>
+          <div className={styles.summaryCard}>
+            <div className={styles.summaryHeader}>
+              <div className={styles.iconBox}>
                 <AlertCircle size={18} color="var(--primary)" strokeWidth={1.5} />
               </div>
               <div>
-                <p style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "28px", fontWeight: 700, color: "var(--primary)", lineHeight: 1 }}>{totalErrors}</p>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>błędów łącznie</p>
+                <p className={styles.totalCount}>{totalErrors}</p>
+                <p className={styles.totalLabel}>błędów łącznie</p>
               </div>
             </div>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "var(--muted-foreground)", lineHeight: 1.5 }}>
+            <p className={styles.summaryDesc}>
               {filtered.length} słów wymaga powtórzenia w ostatnich 7 dniach.
             </p>
           </div>
-          <div
-            className="rounded-2xl border border-border bg-card p-4"
-            style={{ boxShadow: "0 1px 12px rgba(26,26,26,0.04)" }}
-          >
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.07em", marginBottom: "12px" }}>
-              KATEGORIE
-            </p>
-            <div className="flex flex-col gap-1.5">
+
+          <div className={styles.categoriesCard}>
+            <p className={styles.categoriesTitle}>KATEGORIE</p>
+            <div className={styles.categoriesList}>
               {categories.map((cat) => {
                 const count = cat === "Wszystkie"
                   ? errorWords.filter((w) => !dismissedIds.includes(w.id)).length
@@ -75,21 +66,30 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left transition-all"
+                    className={styles.categoryButton}
                     style={{
                       backgroundColor: isActive ? "rgba(200,62,52,0.07)" : "transparent",
                       border: isActive ? "1px solid rgba(200,62,52,0.2)" : "1px solid transparent",
                     }}
                   >
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: isActive ? 600 : 400, color: isActive ? "var(--foreground)" : "var(--muted-foreground)" }}>
+                    <span 
+                      className={styles.categoryLabel}
+                      style={{
+                        fontWeight: isActive ? 600 : 400,
+                        color: isActive ? "var(--foreground)" : "var(--muted-foreground)"
+                      }}
+                    >
                       {cat}
                     </span>
                     {count > 0 && (
                       <div
-                        className="px-2 py-0.5 rounded-full"
+                        className={styles.badgeCount}
                         style={{ backgroundColor: isActive ? "rgba(200,62,52,0.1)" : "var(--muted)" }}
                       >
-                        <span style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: isActive ? "var(--primary)" : "var(--muted-foreground)", fontWeight: 600 }}>
+                        <span 
+                          className={styles.badgeCountText}
+                          style={{ color: isActive ? "var(--primary)" : "var(--muted-foreground)" }}
+                        >
                           {count}
                         </span>
                       </div>
@@ -99,42 +99,30 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
               })}
             </div>
           </div>
+
           {filtered.length > 0 && (
-            <button
-              onClick={() => onPractice(filtered)}
-              className="w-full py-4 rounded-xl flex items-center justify-center gap-2.5 transition-all hover:opacity-90 active:scale-[0.98]"
-              style={{
-                backgroundColor: "var(--primary)",
-                color: "var(--primary-foreground)",
-                fontFamily: "Inter, sans-serif",
-                fontSize: "14px",
-                fontWeight: 600,
-                boxShadow: "0 3px 16px rgba(200,62,52,0.28)",
-              }}
-            >
+            <button onClick={() => onPractice(filtered)} className={styles.practiceButton}>
               <RotateCcw size={16} strokeWidth={2} />
               <span>Przećwicz ({filtered.length} słów)</span>
             </button>
           )}
         </div>
+
         <div>
-          <div
-            className="grid gap-4 px-4 py-2.5 mb-3 rounded-xl"
-            style={{ gridTemplateColumns: "56px 1fr 1fr auto auto", backgroundColor: "var(--muted)", border: "1px solid var(--border)" }}
-          >
+          <div className={styles.tableHeader}>
             {["Znak", "Wymowa / Znaczenie", "Kategoria", "Błędy", ""].map((h) => (
-              <span key={h} style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", letterSpacing: "0.06em" }}>{h}</span>
+              <span key={h} className={styles.tableHeaderCell}>{h}</span>
             ))}
           </div>
 
           <AnimatePresence initial={false}>
             {filtered.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 gap-3">
-                <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "60px", opacity: 0.12 }}>✓</span>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "15px", color: "var(--muted-foreground)" }}>Brak błędów w tej kategorii!</p>
+              <div className={styles.emptyState}>
+                <span className={styles.emptyStateIcon}>✓</span>
+                <p className={styles.emptyStateText}>Brak błędów w tej kategorii!</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-2.5">
+              <div className={styles.wordsList}>
                 {filtered.map((word, i) => {
                   const badge = badgeColor(word.errorCount);
                   return (
@@ -145,52 +133,39 @@ export default function MojeBledyScreen({ onBack, onPractice }) {
                       exit={{ opacity: 0, x: -30, height: 0, marginBottom: 0 }}
                       transition={{ duration: 0.2, delay: i * 0.03 }}
                     >
-                      <div
-                        className="grid items-center gap-4 px-4 py-4 rounded-2xl border bg-card"
-                        style={{ gridTemplateColumns: "56px 1fr 1fr auto auto", borderColor: "var(--border)", boxShadow: "0 1px 8px rgba(26,26,26,0.04)" }}
-                      >
-                        <div
-                          className="w-14 h-14 rounded-xl flex items-center justify-center"
-                          style={{ backgroundColor: "var(--secondary)", border: "1px solid var(--border)" }}
-                        >
-                          <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: word.hanzi.length === 1 ? "30px" : "22px", fontWeight: 700, color: "var(--foreground)" }}>
+                      <div className={styles.wordRow}>
+                        <div className={styles.hanziBox}>
+                          <span 
+                            className={styles.hanziText}
+                            style={{ fontSize: word.hanzi.length === 1 ? "30px" : "22px" }}
+                          >
                             {word.hanzi}
                           </span>
                         </div>
                         <div>
-                          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "15px", fontWeight: 500, color: "var(--foreground)", marginBottom: "2px" }}>
-                            {word.pinyin}
-                          </p>
-                          <p style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "14px", color: "var(--muted-foreground)" }}>
-                            {word.polish}
-                          </p>
-                          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "var(--muted-foreground)", marginTop: "2px", opacity: 0.7 }}>
-                            Ostatni błąd: {word.lastError}
-                          </p>
+                          <p className={styles.pinyinText}>{word.pinyin}</p>
+                          <p className={styles.polishText}>{word.polish}</p>
+                          <p className={styles.timeText}>Ostatni błąd: {word.lastError}</p>
                         </div>
                         <div>
-                          <div
-                            className="inline-block px-2.5 py-1 rounded-full"
-                            style={{ backgroundColor: "var(--secondary)", border: "1px solid var(--border)" }}
-                          >
-                            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "var(--muted-foreground)" }}>{word.category}</span>
+                          <div className={styles.categoryBadge}>
+                            <span className={styles.categoryBadgeText}>{word.category}</span>
                           </div>
                         </div>
-                        <div className="flex justify-center">
+                        <div className={styles.errorBadgeBox}>
                           <div
-                            className="px-3 py-1.5 rounded-full flex items-center gap-1.5"
+                            className={styles.errorBadge}
                             style={{ backgroundColor: badge.bg, border: `1px solid ${badge.border}` }}
                           >
-                            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 700, color: badge.text }}>×{word.errorCount}</span>
+                            <span className={styles.errorBadgeText} style={{ color: badge.text }}>×{word.errorCount}</span>
                           </div>
                         </div>
                         <button
                           onClick={() => handleDismiss(word.id)}
-                          className="w-8 h-8 rounded-full flex items-center justify-center border border-border transition-all hover:border-accent/40 hover:bg-accent/5 active:scale-90"
-                          style={{ backgroundColor: "var(--secondary)" }}
+                          className={styles.dismissButton}
                           title="Oznacz jako opanowane"
                         >
-                          <span style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "14px", color: "var(--muted-foreground)" }}>✓</span>
+                          <span className={styles.dismissIconText}>✓</span>
                         </button>
                       </div>
                     </motion.div>
