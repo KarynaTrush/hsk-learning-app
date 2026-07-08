@@ -101,3 +101,11 @@
   color: var(--muted-foreground);
   margin-top: 1px;
 }
+
+.navScrollable {
+  overflow-y: auto;
+  max-height: calc(100vh - 180px);
+}
+.navScrollable::-webkit-scrollbar {
+  width: 0px; 
+}

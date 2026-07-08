@@ -82,6 +82,16 @@ const hskData = {
     { label: "Metafizyka", pct: 0, color: "var(--muted)" },
     { label: "Sztuka tradycyjna", pct: 0, color: "var(--muted)" },
     { label: "Lingwistyka porównawcza", pct: 0, color: "var(--muted)" },
+  ],
+  "7-9": [
+    { label: "Medycyna sądowa", pct: 0, color: "var(--muted)" },
+    { label: "Ekonomia behawioralna", pct: 0, color: "var(--muted)" },
+    { label: "Stosunki dyplomatyczne", pct: 0, color: "var(--muted)" },
+    { label: "Literatura współczesna", pct: 0, color: "var(--muted)" },
+    { label: "Cyberbezpieczeństwo", pct: 0, color: "var(--muted)" },
+    { label: "Sztuczna inteligencja", pct: 0, color: "var(--muted)" },
+    { label: "Socjologia kultury", pct: 0, color: "var(--muted)" },
+    { label: "Makroekonomia", pct: 0, color: "var(--muted)" }
   ]
 };
 
@@ -96,7 +106,7 @@ export default function ProfileScreen({ onMenuSelect }) {
             <span className={styles.avatarText}>安</span>
           </div>
           <div>
-            <h2 className={styles.profileName}>Карина Труш</h2>
+            <h2 className={styles.profileName}>Karina Trush</h2>
             <p className={styles.profileMetaText}>
               Uczy się od 14 tygodni · HSK 3 → 4 · 5-dniowa passa 🔥
             </p>
@@ -178,7 +188,7 @@ export default function ProfileScreen({ onMenuSelect }) {
           <div className={styles.chartHeaderColumn}>
             <p className={styles.chartTitle}>POSTĘP PO KATEGORIACH</p>
             <div className={styles.hskTabsWrapper}>
-              {[1, 2, 3, 4, 5, 6].map((level) => (
+              {[1, 2, 3, 4, 5, 6, "7-9"].map((level) => (
                 <button
                   key={level}
                   onClick={() => setActiveHsk(level)}
@@ -221,7 +231,7 @@ export default function ProfileScreen({ onMenuSelect }) {
             {
               icon: <RefreshCw size={20} color="#D4A843" strokeWidth={1.5} />,
               iconBg: "rgba(212,168,67,0.1)",
-              label: "Powtórki (SRS)",
+              label: "Powtórki",
               sublabel: "Spaced Repetition System",
               badge: "47",
               badgeColor: "#A07820",

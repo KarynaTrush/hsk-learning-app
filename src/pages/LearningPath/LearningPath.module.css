@@ -166,7 +166,6 @@
   color: var(--muted-foreground);
 }
 
-/* Сетка карточек на всю ширину под плашкой уровня */
 .nodesGrid {
   display: grid;
   gap: 1.5rem;
@@ -203,23 +202,25 @@
   transform: rotate(90deg);
 }
 
-/* Кнопка-карточка ноды */
-.nodeCardButton {
+.nodeCardButton, 
+.nodeCardButtonLocked {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
   padding: 1.5rem 1rem;
   border-radius: 1rem;
-  border: 1px solid transparent;
   text-align: center;
-  transition: all 0.2s;
   width: 100%;
+  box-sizing: border-box;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+  transition: all 0.2s;
+  min-height: 155px; 
 }
 
-/* Варианты состояний карточки */
 .nodeCardButtonActive {
-  background-color: var(--card);
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(200, 62, 52, 0.12), 0 4px 20px rgba(200, 62, 52, 0.10);
   cursor: pointer;
@@ -233,13 +234,17 @@
 }
 
 .nodeCardButtonLocked {
-  background-color: var(--muted);
-  border-color: var(--border);
-  opacity: 0.5;
+  background-color: #f7f5f0 !important;
+  border-color: var(--border) !important;
+  opacity: 0.85;
   cursor: not-allowed;
 }
 
-/* Круглый аватар для китайского символа */
+.nodeAvatarNormal {
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+}
+
 .nodeAvatarBox {
   width: 3.5rem;
   height: 3.5rem;
@@ -283,7 +288,6 @@
   color: var(--muted-foreground);
 }
 
-/* Индикаторы в углах кружка */
 .badgeDone {
   position: absolute;
   top: -0.25rem;
@@ -329,7 +333,6 @@
   background-color: #d4a843;
 }
 
-/* Текстовые элементы */
 .nodeLabel {
   font-family: "Inter", sans-serif;
   font-size: 13px;
@@ -371,4 +374,126 @@
   color: var(--primary);
   font-weight: 700;
   letter-spacing: 0.04em;
+}
+
+.tabsContainer {
+  display: flex;
+  background-color: var(--secondary);
+  padding: 6px;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tabButton {
+  flex: 1;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  padding: 0.65rem 0rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tabButton:hover {
+  color: var(--foreground);
+  background-color: rgba(var(--foreground), 0.02);
+}
+
+.activeTab {
+  background-color: var(--card);
+  color: var(--foreground);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border) !important;
+}
+
+.tabDotDone {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.tabDotLocked {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.nodesGrid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.subcategoryHeaderCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  margin-top: 0.4rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.subcategoryInfoBlock {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.subcategoryIconNumber {
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.subcategoryTitleText {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subcategoryMetaText {
+  font-family: "Inter", sans-serif;
+  font-size: 10.5px;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
+.subcategoriesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.subcategoryBlock {
+  display: flex;
+  flex-direction: column;
 }

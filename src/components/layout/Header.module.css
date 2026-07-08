@@ -10,10 +10,18 @@
   box-sizing: border-box;
 }
 
-/* Левая часть: заголовки и хлебные крошки */
 .titleWrapper {
   display: flex;
   flex-direction: column;
+  min-width: 280px; 
+  flex-shrink: 0; 
+}
+
+.actionsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
 }
 
 .mainTitle {
@@ -32,14 +40,12 @@
   margin-top: 2px;
 }
 
-/* Правая часть: кнопки действий и профиль */
 .actionsWrapper {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-/* Круглые функциональные кнопки (Поиск, Уведомления) */
 .iconButton {
   width: 2.5rem;
   height: 2.5rem;
@@ -63,7 +69,6 @@
   transform: scale(0.95);
 }
 
-/* Красная точка-индикатор для уведомлений */
 .notificationDot {
   position: absolute;
   top: 0.125rem;
@@ -75,7 +80,6 @@
   border: 1.5px solid var(--card);
 }
 
-/* Аватарка пользователя */
 .profileAvatar {
   width: 2.5rem;
   height: 2.5rem;
@@ -103,4 +107,38 @@
   font-size: 15px;
   font-weight: 700;
   color: var(--primary);
+}
+
+.langSelector {
+  display: flex;
+  background-color: var(--secondary);
+  padding: 3px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+}
+
+.langButton {
+  font-family: "Inter", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.langButtonActive {
+  background-color: var(--card);
+  color: var(--primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border);
+  margin: 0 4px;
 }

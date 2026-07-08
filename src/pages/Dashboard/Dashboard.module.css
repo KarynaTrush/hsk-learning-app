@@ -1,6 +1,6 @@
 .container {
-  padding: 2rem;
-  max-width: 1200px;
+  padding: 2.5rem 2rem;
+  max-width: 1250px;
   margin: 0 auto;
 }
 
@@ -13,7 +13,7 @@
 
 .welcomeText {
   font-family: "Inter", sans-serif;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--muted-foreground);
   letter-spacing: 0.06em;
   margin-bottom: 4px;
@@ -30,15 +30,15 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1.25rem;
+  padding: 0.625rem 1.25rem;
   border-radius: 1rem;
-  background-color: rgba(212, 168, 67, 0.06);
-  border: 1px solid rgba(212, 168, 67, 0.3);
+  background-color: rgba(212, 168, 67, 0.04);
+  border: 1px solid rgba(212, 168, 67, 0.22);
 }
 
 .streakNumber {
   font-family: "'Noto Serif SC', serif";
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: #a07820;
   line-height: 1;
@@ -52,200 +52,36 @@
 
 .dashboardGrid {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr 1fr 300px;
+  gap: 2rem;
+  grid-template-columns: 7fr 4fr;
+  align-items: stretch;
 }
 
-.flexCol {
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sideColumn {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  height: 100%;
 }
 
-.dailyGoalCard {
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  padding: 1.5rem;
-  box-shadow: 0 1px 20px rgba(26, 26, 26, 0.05);
-}
-
-.goalCardHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
-}
-
-.goalMeta {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--muted-foreground);
-  letter-spacing: 0.06em;
-}
-
-.goalTitle {
-  font-family: "'Noto Serif SC', serif";
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-top: 2px;
-}
-
-.goalBadge {
-  padding: 0.375rem 0.75rem;
-  border-radius: 9999px;
-  background-color: rgba(79, 121, 66, 0.08);
-  border: 1px solid rgba(79, 121, 66, 0.25);
-}
-
-.goalBadgeText {
-  font-family: "Inter", sans-serif;
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.weekCalendar {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.dayColumn {
+.lessonSectionWrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.dayBox {
-  width: 100%;
-  border-radius: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.75rem 0;
-  gap: 0.375rem;
-  transition: all 0.2s;
-}
-
-.doneMark {
-  font-size: 16px;
-  color: var(--accent);
-}
-
-.dayLetter {
-  font-family: "Inter", sans-serif;
-  font-size: 12px;
-}
-
-.dayLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 10px;
-}
-
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.statCard {
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  padding: 1rem;
-  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
-}
-
-.statHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.statLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 10px;
-  color: var(--muted-foreground);
-  letter-spacing: 0.05em;
-}
-
-.statIconBox {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--secondary);
-}
-
-.statValue {
-  font-family: "'Noto Serif SC', serif";
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.statUnit {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--muted-foreground);
-  margin-top: 3px;
-}
-
-.chartCard {
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  padding: 1.25rem;
-  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
-}
-
-.chartTitle {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--muted-foreground);
-  letter-spacing: 0.06em;
-  margin-bottom: 1rem;
-}
-
-.chartCanvas {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.75rem;
-  height: 64px;
-}
-
-.chartBarColumn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.chartBar {
-  width: 100%;
-  border-top-left-radius: 0.125rem;
-  border-top-right-radius: 0.125rem;
-  min-height: 4px;
-}
-
-.chartDayLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 9px;
+  height: 100%;
 }
 
 .recommendationLabel {
   font-family: "Inter", sans-serif;
   font-size: 11px;
   color: var(--muted-foreground);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
+  font-weight: 600;
 }
 
 .aiLiveBadge {
@@ -268,37 +104,69 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
   flex: 1;
-  box-shadow: 0 4px 32px rgba(26, 26, 26, 0.09);
 }
 
 .lessonCardLine {
-  height: 1.5px;
+  height: 2px;
   width: 100%;
-  background: linear-gradient(90deg, var(--primary) 0%, #e8534a 70%, rgba(200, 62, 52, 0.15) 100%);
+  background: linear-gradient(90deg, var(--primary) 0%, #e8534a 60%, rgba(200, 62, 52, 0.1) 100%);
 }
 
 .lessonCardContent {
   padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.lectureTagsRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.lectureTagUrgent {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  background-color: rgba(200, 62, 52, 0.05);
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(200, 62, 52, 0.12);
+}
+
+.lectureTagMatch {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background-color: rgba(79, 121, 66, 0.05);
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(79, 121, 66, 0.12);
 }
 
 .lessonMainInfo {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .lessonHanziIcon {
   width: 4rem;
   height: 4rem;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: rgba(200, 62, 52, 0.07);
-  border: 1px solid rgba(200, 62, 52, 0.15);
+  background-color: rgba(200, 62, 52, 0.04);
+  border: 1px solid rgba(200, 62, 52, 0.12);
 }
 
 .lessonHanziText {
@@ -312,8 +180,8 @@
   font-family: "Inter", sans-serif;
   font-size: 11px;
   color: var(--muted-foreground);
-  letter-spacing: 0.05em;
-  margin-bottom: 3px;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
 }
 
 .lessonTitle {
@@ -321,7 +189,6 @@
   font-size: 24px;
   font-weight: 700;
   color: var(--foreground);
-  line-height: 1.2;
 }
 
 .lessonDuration {
@@ -333,8 +200,8 @@
 
 .reasonCallout {
   border-radius: 0.75rem;
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
+  padding: 1.15rem;
+  margin-bottom: 1.25rem;
   background-color: var(--secondary);
   border-left: 3px solid var(--primary);
 }
@@ -343,19 +210,19 @@
   font-family: "Inter", sans-serif;
   font-size: 10px;
   color: var(--muted-foreground);
-  letter-spacing: 0.07em;
-  margin-bottom: 8px;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
 }
 
 .reasonText {
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--foreground);
-  line-height: 1.65;
+  line-height: 1.6;
 }
 
 .progressSection {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .progressHeader {
@@ -378,7 +245,7 @@
 }
 
 .progressBarContainer {
-  height: 0.5rem;
+  height: 0.45rem;
   border-radius: 9999px;
   background-color: var(--muted);
   overflow: hidden;
@@ -390,19 +257,19 @@
   background-color: var(--accent);
 }
 
-.previewWordsList {
+.previewWordsGrid {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .moreWordsRow {
-  text-align: center;
-  padding: 0.375rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 0.75rem;
   border: 1px dashed var(--border);
-  background-color: rgba(var(--secondary), 0.3);
 }
 
 .moreWordsText {
@@ -422,78 +289,91 @@
   gap: 0.625rem;
   transition: all 0.2s;
   background-color: var(--primary);
-  color: var(--primary-foreground);
+  color: white;
   font-family: "Inter", sans-serif;
   font-size: 15px;
   font-weight: 600;
-  box-shadow: 0 3px 20px rgba(200, 62, 52, 0.28);
+  box-shadow: 0 4px 16px rgba(200, 62, 52, 0.15);
+  border: none;
 }
 
-.forecastCard {
-  border-radius: 1rem;
-  border: 1px solid transparent;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, rgba(79, 121, 66, 0.06) 0%, rgba(79, 121, 66, 0.02) 100%);
-  border-color: rgba(79, 121, 66, 0.25);
-  box-shadow: 0 1px 16px rgba(79, 121, 66, 0.08);
-}
-
-.forecastMeta {
+.miniStatHeader {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
-.forecastMetaText {
+.miniStatLabel {
   font-family: "Inter", sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   color: var(--muted-foreground);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
-.forecastValue {
+.miniStatValue {
   font-family: "'Noto Serif SC', serif";
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
-  color: var(--accent);
   line-height: 1;
 }
 
-.forecastDate {
+.miniStatUnit {
   font-family: "Inter", sans-serif;
-  font-size: 12px;
+  font-size: 10.5px;
   color: var(--muted-foreground);
   margin-top: 4px;
 }
 
-.forecastProgressContainer {
-  margin-top: 1rem;
-  height: 0.375rem;
-  border-radius: 9999px;
-  background-color: var(--muted);
-  overflow: hidden;
+.quoteCard {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  flex: 0.9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.forecastProgressBar {
-  height: 100%;
-  border-radius: 9999px;
-  background-color: var(--accent);
-}
-
-.forecastStatusText {
+.quoteTitle {
   font-family: "Inter", sans-serif;
-  font-size: 10px;
-  color: var(--accent);
-  margin-top: 5px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
+.quoteHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--foreground);
+  line-height: 1.4;
+}
+
+.quoteTranslation {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--muted-foreground);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Д) Стили кликабельных тасок */
 .todoCard {
   border-radius: 1rem;
   border: 1px solid var(--border);
   background-color: var(--card);
   padding: 1.25rem;
-  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  flex: 1.1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .todoTitle {
@@ -501,7 +381,7 @@
   font-size: 11px;
   color: var(--muted-foreground);
   letter-spacing: 0.06em;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .todoList {
@@ -514,6 +394,18 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.todoItem:hover {
+  opacity: 0.85;
+}
+
+.todoItemDone .todoLabel {
+  text-decoration: line-through;
+  color: var(--muted-foreground);
+  opacity: 0.6;
 }
 
 .todoCheckbox {
@@ -524,40 +416,43 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: all 0.2s;
 }
 
 .todoCheckboxMark {
   font-size: 10px;
   color: white;
+  font-weight: 700;
 }
 
 .todoLabel {
   font-family: "Inter", sans-serif;
   font-size: 13px;
   color: var(--foreground);
-  font-weight: 400;
 }
 
 .todoTime {
   font-family: "Inter", sans-serif;
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--muted-foreground);
 }
 
 .errorsCard {
   border-radius: 1rem;
-  border: 1px solid transparent;
+  border: 1px solid rgba(200, 62, 52, 0.15);
   padding: 1.25rem;
-  background-color: rgba(200, 62, 52, 0.03);
-  border-color: rgba(200, 62, 52, 0.18);
-  box-shadow: 0 1px 12px rgba(200, 62, 52, 0.04);
+  background-color: rgba(200, 62, 52, 0.01);
+  box-shadow: 0 4px 16px rgba(200, 62, 52, 0.01);
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .errorsHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
 }
 
 .errorsTitle {
@@ -565,12 +460,13 @@
   font-size: 11px;
   color: var(--muted-foreground);
   letter-spacing: 0.06em;
+  font-weight: 600;
 }
 
 .errorsBadge {
   padding: 0.125rem 0.5rem;
   border-radius: 9999px;
-  background-color: rgba(200, 62, 52, 0.1);
+  background-color: rgba(200, 62, 52, 0.08);
 }
 
 .errorsBadgeText {
@@ -584,36 +480,218 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
-.quoteCard {
-  border-radius: 1rem;
-  border: 1px solid var(--border);
+.reviewAllButton {
+  width: 100%;
+  padding: 0.7rem 0;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   background-color: var(--card);
-  padding: 1.25rem;
-  box-shadow: 0 1px 12px rgba(26, 26, 26, 0.04);
-}
-
-.quoteDecoration {
-  font-family: "'Noto Serif SC', serif";
-  font-size: 32px;
-  opacity: 0.1;
-  display: block;
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.quoteHanzi {
-  font-family: "'Noto Serif SC', serif";
-  font-size: 15px;
-  color: var(--foreground);
-  line-height: 1.6;
-}
-
-.quoteTranslation {
+  border: 1px solid rgba(200, 62, 52, 0.22);
+  color: var(--primary);
   font-family: "Inter", sans-serif;
-  font-size: 11px;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.reviewAllButton:hover {
+  background-color: rgba(200, 62, 52, 0.04);
+}
+
+.todoItemDone .todoTime {
   color: var(--muted-foreground);
-  margin-top: 8px;
-  line-height: 1.5;
+  opacity: 0.4;
+  text-decoration: none !important; 
+}
+
+.errorsScrollContainer {
+  max-height: 165px; 
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-right: 4px;
+}
+
+.errorsScrollContainer::-webkit-scrollbar {
+  width: 4px;
+}
+.errorsScrollContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+.errorsScrollContainer::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+.errCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.errIconBox {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.errIconBoxLong {
+  width: 4.8rem;
+  min-width: 5.8rem;
+  padding: 0 4px;
+}
+
+.errHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.errHanziLong {
+  font-size: 20px;
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+}
+
+.errContentBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-w: 0;
+  flex: 1;
+}
+
+.errPinyin {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.errPinyinLong {
+  white-space: nowrap;
+  font-size: 13.5px;
+}
+
+.errTranslation {
+  font-family: "Inter", sans-serif;
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+  margin: 2px 0 0 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* СЕТКА СЛОВ ПОСЕРЕДИНЕ ЛЕКЦИИ */
+.previewWordsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Ровная сетка из двух колонок */
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.previewWordCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.previewIconBox {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центрируем иероглиф горизонтально */
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+}
+
+.previewIconBoxLong {
+  width: 6.8rem;
+  min-width: 6.8rem;
+  padding: 0 6px;
+}
+
+.previewHanzi {
+  font-family: "'Noto Serif SC', serif";
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--foreground);
+  text-align: center; /* Центрируем текст */
+}
+
+.previewHanziLong {
+  font-size: 18px;
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+}
+
+.previewContentBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.previewPinyin {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.previewPinyinLong {
+  white-space: nowrap;
+  font-size: 13.5px;
+}
+
+.previewTranslation {
+  font-family: "Inter", sans-serif;
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+  margin: 2px 0 0 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
