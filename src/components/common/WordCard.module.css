@@ -29,7 +29,7 @@
 }
 
 .hanziText {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--foreground);

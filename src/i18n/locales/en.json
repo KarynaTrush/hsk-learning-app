@@ -1,0 +1,799 @@
+{
+  "header": {
+    "changeTheme": "Change theme",
+    "search": "Search",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "userProfile": "User profile"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "dashboardSub": "Your study day",
+    "path": "Knowledge map",
+    "pathSub": "HSK path",
+    "tones": "Tones",
+    "tonesSub": "Visualizer",
+    "stories": "Reading and culture",
+    "storiesSub": "Texts and traditions",
+    "profile": "Profile",
+    "profileSub": "Statistics",
+    "examForecast": "EXAM FORECAST"
+  },
+  "screens": {
+    "lessonTitle": "Lesson · Food",
+    "lessonSubtitle": "食物 · HSK 2",
+    "characterTitle": "Character card",
+    "characterSubtitle": "字卡 · 食 (shí)",
+    "mistakesTitle": "My mistakes",
+    "mistakesSubtitle": "错误复习 · To review",
+    "reviewsTitle": "Reviews · SRS",
+    "reviewsSubtitle": "间隔重复 · Spaced Repetition",
+    "storiesTitle": "Reading and culture",
+    "storiesSubtitle": "Texts and traditions"
+  },
+  "common": {
+    "close": "Close",
+    "save": "Save",
+    "logout": "Log out",
+    "back": "Back",
+    "guest": "Guest"
+  },
+  "search": {
+    "placeholder": "Search character, pinyin or meaning…",
+    "empty": "Nothing found",
+    "dictionary": "Dictionary",
+    "known": "In dictionary"
+  },
+  "settings": {
+    "title": "Settings",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme",
+    "logoutHint": "Leave local profile"
+  },
+  "notify": {
+    "title": "Notifications",
+    "due": "{{count}} cards due for SRS",
+    "empty": "No notifications yet",
+    "mistakes": "{{count}} words in mistakes"
+  },
+  "stories": {
+    "all": "All",
+    "locked": "Not enough words in your HSK vocabulary",
+    "culture": "Culture note",
+    "wordsUsed": "Words in the text",
+    "s1title": "Greeting at school",
+    "s1culture": "In China people often ask «你吃了吗？» — “Have you eaten?” as a polite greeting.",
+    "s2title": "Family at home",
+    "s2culture": "Family dinners are a core part of culture and 关系 (relationships).",
+    "s3title": "An evening of dumplings",
+    "s3culture": "饺子 are eaten especially at Lunar New Year as a symbol of prosperity.",
+    "s4title": "At the shop",
+    "s4culture": "Bargaining is common at markets, but chain stores usually have fixed prices."
+  },
+  "pdf": {
+    "title": "Practice sheets this week",
+    "saved": "PDF saved"
+  },
+  "auth": {
+    "platform": "CHINESE LANGUAGE PLATFORM",
+    "heading": "Master Mandarin",
+    "headingAccent": "step by step.",
+    "description": "Learn along an HSK-standard path — with a tone visualizer, AI-recommended lessons, and calligraphy practice.",
+    "featTones": "Real-time tone visualizer",
+    "featAi": "AI-recommended lessons",
+    "featCalligraphy": "Calligraphy writing practice",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create an account",
+    "loginSubtitle": "Sign in and continue learning",
+    "registerSubtitle": "Start your Chinese language journey",
+    "login": "Sign in",
+    "register": "Sign up",
+    "email": "EMAIL ADDRESS",
+    "emailPlaceholder": "you@email.com",
+    "password": "PASSWORD",
+    "forgotPassword": "Forgot your password?",
+    "loginSubmit": "Sign in →",
+    "registerSubmit": "Sign up →",
+    "continueGuest": "Continue without an account",
+    "legal": "By signing up, you accept the",
+    "terms": "Terms of use",
+    "and": "and",
+    "privacy": "Privacy policy",
+    "name": "NAME",
+    "namePlaceholder": "Anna"
+  },
+  "placement": {
+    "title": "PLACEMENT TEST",
+    "heading": "Let's check your",
+    "headingAccent": "language level",
+    "description": "A short test to match the learning path to your skills.",
+    "progress": "PROGRESS",
+    "questionOf": "Question {{current}} of {{total}}",
+    "confirm": "Confirm answer",
+    "qChar": "What does this character mean?",
+    "qWord": "What does this word mean?",
+    "resultTitle": "Test completed",
+    "assigned": "Recommended start: HSK {{level}}",
+    "continue": "Continue to learning"
+  },
+  "dashboard": {
+    "goodDay": "GOOD DAY, KARINA · {{date}}",
+    "title": "Your learning dashboard",
+    "streak": "days in a row",
+    "dedicatedLesson": "A DEDICATED LESSON FOR YOU",
+    "aiLive": "AI GENERATOR · LIVE",
+    "needsReview": " Needs review",
+    "match": " Match: 98%",
+    "vocabMeta": "HSK 2 · VOCABULARY",
+    "lessonTitle": "食物 · Food",
+    "lessonDuration": "12 new words · ~15 min session",
+    "srsAnalysis": "SRS & AI SYSTEM ANALYSIS",
+    "reasonBefore": "You have already mastered",
+    "reasonHighlight1": "80% of HSK 2 vocabulary",
+    "reasonMid": ", but the algorithm registered recent mistakes in the critical category",
+    "reasonHighlight2": "'Food'",
+    "reasonAfter": ". This session will close those gaps and raise overall accuracy to a safe 88%.",
+    "progressLabel": "Current progress",
+    "progressCount": "7 of 12 words (58%)",
+    "moreWords": "+ 8 words waiting",
+    "startLearning": "Start personalized learning",
+    "quoteTitle": "QUOTE OF THE DAY",
+    "quoteTranslation": "“Learning is like rowing against the current — if you don’t move forward, you drift back.”",
+    "todoTitle": "TO DO TODAY",
+    "todoLesson": "Lesson: Food",
+    "todoLessonTime": "15 min",
+    "todoSrs": "SRS reviews",
+    "todoSrsTime": "47 cards",
+    "todoTones": "Tone exercises",
+    "todoTonesTime": "10 min",
+    "errorsTitle": "RECENT MISTAKES",
+    "reviewWords": "Review these words (SRS)",
+    "reasonErrors": "SRS & AI: you have mastered {{mastered}}% of HSK {{level}} vocabulary, but the system found mistakes in “{{category}}”. This session will close the gaps.",
+    "reasonProgress": "SRS & AI: steady progress. The next topic “{{category}}” best matches your current HSK {{level}}."
+  },
+  "lesson": {
+    "wordOf": "WORD {{current}} OF {{total}}",
+    "example": "EXAMPLE SENTENCE",
+    "prev": "← Previous",
+    "next": "Next →",
+    "finish": "Finish lesson →",
+    "matchTitle": "Match the meaning",
+    "matchSubtitle": "Choose the translation for",
+    "correct": "Great! Correct answer.",
+    "wrong": "Wrong. Correct answer: “{{answer}}”",
+    "check": "Check answer",
+    "nextWord": "Next word",
+    "finishLesson": "Finish lesson",
+    "wordsInLesson": "WORDS IN THIS LESSON",
+    "buildTitle": "Build the sentence",
+    "buildHint": "Tap the characters in the correct order"
+  },
+  "profile": {
+    "meta": "Learning for 14 weeks · HSK 3 → 4 · 5-day streak 🔥",
+    "certified": "HSK 3 certified",
+    "aiming": "Aiming for HSK 4",
+    "edit": "Edit profile",
+    "examDate": "PREDICTED EXAM DATE",
+    "readiness": "Readiness",
+    "words": "WORDS",
+    "lessons": "LESSONS",
+    "lessonsTrend": "↑ +4 today",
+    "accuracy": "ACCURACY",
+    "average": "average",
+    "studyTime": "STUDY TIME",
+    "thisWeek": "this week",
+    "progressByCategory": "PROGRESS BY CATEGORY",
+    "errors": "My mistakes",
+    "errorsSub": "Review difficult words",
+    "reviews": "Reviews",
+    "reviewsSub": "Spaced Repetition System",
+    "grammar": "Grammar base",
+    "grammarSub": "Required HSK structures",
+    "goals": "Goals and challenges",
+    "goalsSub": "Weekly study goals",
+    "since": "Active since {{date}}",
+    "streakDays": "{{count}}-day streak",
+    "wordsLearned": "{{count}} words",
+    "dynamics": "HSK progress",
+    "dynamicsSub": "Vocabulary growth · 6 months"
+  },
+  "path": {
+    "completed": "Completed",
+    "active": "Active",
+    "locked": "Locked",
+    "topicBlock": "Topic block · {{count}} lessons"
+  },
+  "tones": {
+    "targetSyllable": "TARGET SYLLABLE",
+    "example": "Example:",
+    "tone1": "1st tone",
+    "tone1Desc": "high level",
+    "tone1Example": "māma (mom)",
+    "tone2": "2nd tone",
+    "tone2Desc": "rising",
+    "tone2Example": "máfan (trouble)",
+    "tone3": "3rd tone",
+    "tone3Desc": "falling-rising",
+    "tone3Example": "mǎ (horse)",
+    "tone4": "4th tone",
+    "tone4Desc": "falling",
+    "tone4Example": "mà (to scold)",
+    "recording": "Recording...",
+    "pressSpeak": "Press and speak",
+    "visTitle": "Voice tone visualization",
+    "visSub": "Your voice (black line) vs. pattern (colored lines)",
+    "matchPct": "{{score}}% match",
+    "recordingBadge": "RECORDING",
+    "high": "High",
+    "low": "Low",
+    "pattern": "Pattern ({{label}})",
+    "otherTones": "Other tones (reference)",
+    "yourVoice": "Your voice",
+    "excellent": "Excellent! Tone recognized correctly.",
+    "almost": "Almost! Small adjustments needed.",
+    "feedbackGood": "Your voice matched the {{label}} pattern at {{score}}%. The pitch line looks correct.",
+    "hint1": "keep the tone steady and high throughout the syllable",
+    "hint2": "start lower and rise more clearly",
+    "hint3": "fall more clearly, then rise",
+    "hint4": "start higher and fall decisively",
+    "try": "Try to {{hint}}.",
+    "accuracyTitle": "YOUR TONE ACCURACY"
+  },
+  "character": {
+    "gridAria": "Mi-zi-ge grid for character {{hanzi}}",
+    "gridLabel": "CALLIGRAPHY GRID · 米字格",
+    "speakAloud": "Say it aloud",
+    "pause": "Pause",
+    "runAnimation": "Play animation",
+    "downloadPdf": "Download PDF",
+    "pinyin": "PINYIN",
+    "radical": "RADICAL",
+    "meaning": "MEANING",
+    "hsk": "HSK",
+    "strokes": "STROKES",
+    "tones": "TONES",
+    "meaningValue": "to eat / food",
+    "hskValue": "Level 1",
+    "strokesValue": "9 strokes",
+    "tonesValue": "2nd tone (rising)",
+    "strokeOrder": "Stroke order",
+    "strokesTotal": "{{count}} strokes in total · {{status}}",
+    "strokeOf": "Stroke {{current}} of {{total}}",
+    "pressAnimate": "Press animate",
+    "strokeN": "Stroke {{n}}:",
+    "animationSteps": "ANIMATION STEPS",
+    "related": "RELATED WORDS",
+    "stroke1": "Right diagonal stroke (点) — slant down-right",
+    "stroke2": "Horizontal stroke (横 héng) — left to right",
+    "stroke3": "Left slash (撇 piě) — slant down-left",
+    "stroke4": "Right slash (捺 nà) — slant down-right",
+    "stroke5": "Vertical stroke with hook (竖钩 shùgōu)",
+    "stroke6": "Lower-left stroke (撇) — slash left",
+    "stroke7": "Lower-right stroke (横折)",
+    "stroke8": "Closing (横) — bottom horizontal stroke",
+    "stroke9": "Vertical (竖) — inner"
+  },
+  "mistakes": {
+    "totalErrors": "errors in total",
+    "summary": "{{count}} words need review in the last 7 days.",
+    "categories": "CATEGORIES",
+    "practice": "Practice ({{count}} words)",
+    "colSign": "Character",
+    "colMeaning": "Pronunciation / Meaning",
+    "colCategory": "Category",
+    "colErrors": "Errors",
+    "empty": "No mistakes in this category!",
+    "lastError": "Last error: {{time}}",
+    "markMastered": "Mark as mastered",
+    "all": "All",
+    "ago2h": "2 hrs ago",
+    "yesterday": "yesterday",
+    "ago2d": "2 days ago",
+    "ago3d": "3 days ago",
+    "ago1h": "1 hr ago",
+    "ago4d": "4 days ago"
+  },
+  "reviews": {
+    "doneTitle": "Session complete!",
+    "doneDesc": "You reviewed {{count}} flashcards.",
+    "know": "I know",
+    "toLearn": "To learn",
+    "backProfile": "Back to profile",
+    "cardOf": "CARD {{current}} OF {{total}}",
+    "remaining": "{{count}} left",
+    "reveal": "Reveal card",
+    "dontKnow": "I don't know",
+    "prev": "Previous",
+    "next": "Next",
+    "queue": "FLASHCARD QUEUE",
+    "sessionResults": "SESSION RESULTS",
+    "dueNow": "now",
+    "due10min": "in 10 min",
+    "dueTomorrow": "tomorrow"
+  },
+  "categories": {
+    "food": "Food",
+    "time": "Time",
+    "family": "Family",
+    "shopping": "Shopping",
+    "numbers": "Numbers",
+    "people": "People",
+    "nature": "Nature",
+    "greetings": "Greetings",
+    "school": "School",
+    "places": "Places",
+    "work": "Work",
+    "travel": "Travel",
+    "weather": "Weather",
+    "animals": "Animals",
+    "health": "Health",
+    "entertainment": "Entertainment",
+    "transport": "Transport",
+    "colors": "Colors",
+    "clothes": "Clothes",
+    "culture": "Culture",
+    "media": "Media",
+    "education": "Education",
+    "emotions": "Emotions",
+    "environment": "Environment",
+    "society": "Society",
+    "interests": "Interests",
+    "sport": "Sport",
+    "housing": "Housing",
+    "technology": "Technology",
+    "business": "Business",
+    "career": "Career",
+    "scienceDev": "Science and growth",
+    "relationships": "Interpersonal relations",
+    "lawOrder": "Law and order",
+    "ecology": "Ecology",
+    "artLit": "Art and literature",
+    "science": "Science",
+    "politics": "Politics",
+    "globalEconomy": "Global economy",
+    "psychology": "Psychology",
+    "traditions": "Traditions and customs",
+    "modernMedicine": "Modern medicine",
+    "lifePhilosophy": "Life philosophy",
+    "classicPhilosophy": "Classical philosophy",
+    "ancientHistory": "Ancient history",
+    "classicLit": "Classical literature",
+    "archaeology": "Archaeology",
+    "intlRelations": "International relations",
+    "metaphysics": "Metaphysics",
+    "traditionalArt": "Traditional art",
+    "comparativeLing": "Comparative linguistics",
+    "forensicMed": "Forensic medicine",
+    "behavioralEcon": "Behavioral economics",
+    "diplomatic": "Diplomatic relations",
+    "contemporaryLit": "Contemporary literature",
+    "cybersecurity": "Cybersecurity",
+    "ai": "Artificial intelligence",
+    "culturalSoc": "Cultural sociology",
+    "macroeconomics": "Macroeconomics"
+  },
+  "pathTitles": {
+    "languageBasics": "Language basics",
+    "dailyLife": "Daily life",
+    "surroundingsPlaces": "Surroundings and places",
+    "personSurroundings": "People and surroundings",
+    "citySpace": "City and space",
+    "workInterests": "Work and interests",
+    "commsRelations": "Communication and relations",
+    "leisureCulture": "Leisure and culture",
+    "surroundingsCity": "Surroundings and city",
+    "socialLife": "Social life",
+    "scienceDev": "Science and growth",
+    "mediaArt": "Media and art",
+    "advancedDiscussion": "Advanced discussion",
+    "businessMarkets": "Business and markets",
+    "cultureScience": "Culture and science",
+    "specialized": "Specialized fields",
+    "econGlobalization": "Economy and globalization",
+    "sociologyHumanities": "Sociology and humanities",
+    "academic": "Academic level",
+    "highCulture": "High culture and sources",
+    "globalIt": "Global IT challenges"
+  },
+  "pathNodes": {
+    "greetings": {
+      "label": "Greetings",
+      "sub": "Basic phrases"
+    },
+    "numbers": {
+      "label": "Numbers 1–100",
+      "sub": "Digits and counting"
+    },
+    "pronouns": {
+      "label": "Personal pronouns",
+      "sub": "I, you, he, we"
+    },
+    "timeDates": {
+      "label": "Time and dates",
+      "sub": "Days and hours"
+    },
+    "family": {
+      "label": "Family",
+      "sub": "Family relations"
+    },
+    "countries": {
+      "label": "Countries and languages",
+      "sub": "Origin and countries"
+    },
+    "hobbies": {
+      "label": "Hobbies",
+      "sub": "Free time and passions"
+    },
+    "weather": {
+      "label": "Weather",
+      "sub": "Basic descriptions"
+    },
+    "school": {
+      "label": "School",
+      "sub": "Subjects and places"
+    },
+    "home": {
+      "label": "At home",
+      "sub": "Furniture and rooms"
+    },
+    "shopping": {
+      "label": "Shopping",
+      "sub": "Simple transactions"
+    },
+    "fruit": {
+      "label": "Fruit",
+      "sub": "Popular produce"
+    },
+    "food": {
+      "label": "Food",
+      "sub": "Dishes and drinks"
+    },
+    "routine": {
+      "label": "Daily routine",
+      "sub": "Everyday actions"
+    },
+    "appearance": {
+      "label": "Appearance",
+      "sub": "Describing the body"
+    },
+    "health": {
+      "label": "Health",
+      "sub": "Feeling unwell and the doctor"
+    },
+    "inStore": {
+      "label": "In the shop",
+      "sub": "Clothes and prices"
+    },
+    "transport": {
+      "label": "Transport",
+      "sub": "Travel and directions"
+    },
+    "orientation": {
+      "label": "Finding your way",
+      "sub": "Right, left, straight"
+    },
+    "publicPlaces": {
+      "label": "Public places",
+      "sub": "Cinema, bank, hospital"
+    },
+    "jobs": {
+      "label": "Jobs",
+      "sub": "Work and the office"
+    },
+    "animals": {
+      "label": "Animals",
+      "sub": "Nature and environment"
+    },
+    "colorsStyle": {
+      "label": "Colors and style",
+      "sub": "Describing objects"
+    },
+    "sport": {
+      "label": "Sport and fitness",
+      "sub": "Physical activity"
+    },
+    "travel": {
+      "label": "Travel",
+      "sub": "Tourism and bookings"
+    },
+    "emotions": {
+      "label": "Emotions",
+      "sub": "Feelings and relationships"
+    },
+    "higherEd": {
+      "label": "Higher education",
+      "sub": "University"
+    },
+    "career": {
+      "label": "Career",
+      "sub": "Job interview"
+    },
+    "music": {
+      "label": "Music",
+      "sub": "Genres and instruments"
+    },
+    "cinema": {
+      "label": "Cinema and theatre",
+      "sub": "Films and plays"
+    },
+    "traditions": {
+      "label": "Traditions",
+      "sub": "Chinese festivals"
+    },
+    "stories": {
+      "label": "Stories",
+      "sub": "Mythology and legends"
+    },
+    "services": {
+      "label": "Services",
+      "sub": "Post and banking"
+    },
+    "apartment": {
+      "label": "Apartment",
+      "sub": "Rent and bills"
+    },
+    "restaurant": {
+      "label": "Restaurant",
+      "sub": "Ordering food"
+    },
+    "nature": {
+      "label": "Nature",
+      "sub": "Climate change"
+    },
+    "society": {
+      "label": "Society",
+      "sub": "Culture and life"
+    },
+    "businessFinance": {
+      "label": "Business and finance",
+      "sub": "Global market"
+    },
+    "law": {
+      "label": "Law",
+      "sub": "Judicial system"
+    },
+    "customs": {
+      "label": "Customs",
+      "sub": "Social traditions"
+    },
+    "research": {
+      "label": "Research",
+      "sub": "Scientific projects"
+    },
+    "technology": {
+      "label": "Technology",
+      "sub": "Digital development"
+    },
+    "ecology": {
+      "label": "Ecology",
+      "sub": "Nature protection"
+    },
+    "innovation": {
+      "label": "Innovation",
+      "sub": "New patents"
+    },
+    "news": {
+      "label": "News",
+      "sub": "Press and TV"
+    },
+    "art": {
+      "label": "Art",
+      "sub": "High culture"
+    },
+    "marketing": {
+      "label": "Marketing",
+      "sub": "Ads and media"
+    },
+    "literature": {
+      "label": "Literature",
+      "sub": "Contemporary works"
+    },
+    "philosophy": {
+      "label": "Philosophy",
+      "sub": "Chinese thought and ethics"
+    },
+    "mediaPress": {
+      "label": "Media and press",
+      "sub": "National news"
+    },
+    "psychology": {
+      "label": "Psychology",
+      "sub": "Human behavior"
+    },
+    "logic": {
+      "label": "Logic",
+      "sub": "Argumentation"
+    },
+    "negotiations": {
+      "label": "Negotiations",
+      "sub": "Business meetings"
+    },
+    "investments": {
+      "label": "Investments",
+      "sub": "Stock market and capital"
+    },
+    "trade": {
+      "label": "Export and import",
+      "sub": "Trade exchange"
+    },
+    "management": {
+      "label": "Management",
+      "sub": "Human resources"
+    },
+    "history": {
+      "label": "History",
+      "sub": "Ancient dynasties"
+    },
+    "eduSystem": {
+      "label": "Education system",
+      "sub": "Education reforms"
+    },
+    "geography": {
+      "label": "Geography",
+      "sub": "Landforms"
+    },
+    "monuments": {
+      "label": "Monuments",
+      "sub": "UNESCO heritage"
+    },
+    "politics": {
+      "label": "Politics",
+      "sub": "Diplomacy and law"
+    },
+    "medicine": {
+      "label": "Medicine",
+      "sub": "Biotechnology"
+    },
+    "industry": {
+      "label": "Industry",
+      "sub": "Factory automation"
+    },
+    "strategy": {
+      "label": "Strategy",
+      "sub": "Military history"
+    },
+    "publicFinance": {
+      "label": "Public finance",
+      "sub": "State budget"
+    },
+    "legalActs": {
+      "label": "Legal acts",
+      "sub": "Constitution and codes"
+    },
+    "currencies": {
+      "label": "Currencies",
+      "sub": "Financial markets"
+    },
+    "resources": {
+      "label": "Natural resources",
+      "sub": "Global energy"
+    },
+    "demography": {
+      "label": "Demography",
+      "sub": "Social structure"
+    },
+    "religion": {
+      "label": "Religious studies",
+      "sub": "Philosophical systems"
+    },
+    "archaeology": {
+      "label": "Archaeology",
+      "sub": "Scientific excavations"
+    },
+    "aesthetics": {
+      "label": "Aesthetics",
+      "sub": "Literary criticism"
+    },
+    "academicResearch": {
+      "label": "Research",
+      "sub": "Academic papers"
+    },
+    "ai": {
+      "label": "Artificial intelligence",
+      "sub": "New technologies"
+    },
+    "methodology": {
+      "label": "Methodology",
+      "sub": "Statistical analysis"
+    },
+    "discourse": {
+      "label": "Academic discourse",
+      "sub": "Publications and reviews"
+    },
+    "classicalChinese": {
+      "label": "Classical Chinese",
+      "sub": "Source texts"
+    },
+    "tangPoetry": {
+      "label": "Tang poetry",
+      "sub": "Versification analysis"
+    },
+    "chineseOpera": {
+      "label": "Chinese opera",
+      "sub": "Theatre traditions"
+    },
+    "confucianism": {
+      "label": "Confucianism",
+      "sub": "Philosophical texts"
+    },
+    "cybersecurity": {
+      "label": "Cybersecurity",
+      "sub": "Data protection"
+    },
+    "bigData": {
+      "label": "Big Data",
+      "sub": "Algorithmic analysis"
+    },
+    "cloud": {
+      "label": "Cloud computing",
+      "sub": "Network infrastructure"
+    },
+    "quantum": {
+      "label": "Quantum physics",
+      "sub": "Quantum computers"
+    }
+  },
+  "meanings": {
+    "吃货": "foodie / gourmand",
+    "美食": "delicacies",
+    "火锅": "hot pot",
+    "零食": "snacks",
+    "外卖": "takeaway",
+    "夜宵": "late-night snack",
+    "爆米花": "popcorn",
+    "垃圾食品": "junk food",
+    "招牌菜": "signature dish",
+    "重口味": "strong flavors",
+    "开胃菜": "appetizer",
+    "甜點": "dessert",
+    "矛盾": "contradiction",
+    "马虎": "careless",
+    "吃醋": "jealous",
+    "凡尔赛": "humblebrag",
+    "摸鱼": "slacking off",
+    "顺其自然": "let it be",
+    "不可思议": "incredible",
+    "八卦": "gossip",
+    "内卷": "rat race",
+    "躺平": "lying flat",
+    "洗脑": "brainwashing",
+    "吐槽": "complaining",
+    "吃": "to eat",
+    "喝": "to drink",
+    "坐": "to sit",
+    "走": "to walk",
+    "好": "good",
+    "美": "beautiful",
+    "大": "big",
+    "小": "small",
+    "家人": "family",
+    "老师": "teacher",
+    "朋友": "friend",
+    "同学": "classmate",
+    "米饭": "cooked rice",
+    "面条": "noodles",
+    "饺子": "dumplings",
+    "水": "water",
+    "星期": "week",
+    "下午": "afternoon",
+    "商店": "shop",
+    "便宜": "cheap",
+    "医院": "hospital",
+    "星期三": "Wednesday",
+    "漂亮": "beautiful / pretty",
+    "食物": "food",
+    "食堂": "canteen",
+    "饮食": "diet",
+    "食谱": "recipe"
+  },
+  "examples": {
+    "米饭": "I like eating rice.",
+    "面条": "The noodles are very tasty.",
+    "饺子": "Let's eat dumplings together.",
+    "饺子2": "I like eating dumplings.",
+    "星期三": "Today is Wednesday.",
+    "商店": "That shop is very big.",
+    "便宜": "This piece of clothing is very cheap.",
+    "漂亮": "She is very beautiful."
+  }
+}

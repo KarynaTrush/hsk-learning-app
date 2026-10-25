@@ -1,41 +1,43 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import styles from "./PlacementTest.module.css";
 
 const questions = [
   {
-    hanzi: "吃", pinyin: "chī", question: "Co oznacza ten znak?",
+    hanzi: "吃", pinyin: "chī", questionKey: "placement.qChar",
     options: [
-      { pinyin: "chī", polish: "jeść" },
-      { pinyin: "hē", polish: "pić" },
-      { pinyin: "zuò", polish: "siedzieć" },
-      { pinyin: "zǒu", polish: "iść" },
+      { pinyin: "chī", meaningKey: "吃" },
+      { pinyin: "hē", meaningKey: "喝" },
+      { pinyin: "zuò", meaningKey: "坐" },
+      { pinyin: "zǒu", meaningKey: "走" },
     ],
     correct: 0,
   },
   {
-    hanzi: "美", pinyin: "měi", question: "Co oznacza ten znak?",
+    hanzi: "美", pinyin: "měi", questionKey: "placement.qChar",
     options: [
-      { pinyin: "hǎo", polish: "dobry" },
-      { pinyin: "měi", polish: "piękny" },
-      { pinyin: "dà", polish: "duży" },
-      { pinyin: "xiǎo", polish: "mały" },
+      { pinyin: "hǎo", meaningKey: "好" },
+      { pinyin: "měi", meaningKey: "美" },
+      { pinyin: "dà", meaningKey: "大" },
+      { pinyin: "xiǎo", meaningKey: "小" },
     ],
     correct: 1,
   },
   {
-    hanzi: "朋友", pinyin: "péngyou", question: "Co oznacza to słowo?",
+    hanzi: "朋友", pinyin: "péngyou", questionKey: "placement.qWord",
     options: [
-      { pinyin: "jiārén", polish: "rodzina" },
-      { pinyin: "lǎoshī", polish: "nauczyciel" },
-      { pinyin: "péngyou", polish: "przyjaciel" },
-      { pinyin: "tóngxué", polish: "kolega z klasy" },
+      { pinyin: "jiārén", meaningKey: "家人" },
+      { pinyin: "lǎoshī", meaningKey: "老师" },
+      { pinyin: "péngyou", meaningKey: "朋友" },
+      { pinyin: "tóngxué", meaningKey: "同学" },
     ],
     correct: 2,
   },
 ];
 
 export default function PlacementTestScreen({ onComplete }) {
+  const { t } = useTranslation();
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -70,26 +72,26 @@ export default function PlacementTestScreen({ onComplete }) {
             </div>
             <div>
               <p className={styles.logoTitle}>漢語學習</p>
-              <p className={styles.logoSubtitle}>TEST POZIOMUJĄCY</p>
+              <p className={styles.logoSubtitle}>{t("placement.title")}</p>
             </div>
           </div>
 
           <h2 className={styles.mainHeading}>
-            Sprawdźmy Twój<br />
-            <span className={styles.headingAccent}>poziom języka</span>
+            {t("placement.heading")}<br />
+            <span className={styles.headingAccent}>{t("placement.headingAccent")}</span>
           </h2>
           <p className={styles.description}>
-            Krótki test, który pomoże nam dopasować ścieżkę nauki do Twoich umiejętności.
+            {t("placement.description")}
           </p>
         </div>
 
         <div className={styles.progressSection}>
-          <p className={styles.progressLabel}>POSTĘP</p>
+          <p className={styles.progressLabel}>{t("placement.progress")}</p>
           <div className={styles.progressBarTrack}>
             <div className={styles.progressBarFill} style={{ width: `${progress}%` }} />
           </div>
           <p className={styles.progressText}>
-            Pytanie {current + 1} z {questions.length}
+            {t("placement.questionOf", { current: current + 1, total: questions.length })}
           </p>
         </div>
       </div>
@@ -98,7 +100,7 @@ export default function PlacementTestScreen({ onComplete }) {
           <div className={styles.mobileProgressSection}>
             <div className={styles.mobileProgressHeader}>
               <span className={styles.mobileProgressText}>
-                Pytanie {current + 1} z {questions.length}
+                {t("placement.questionOf", { current: current + 1, total: questions.length })}
               </span>
             </div>
             <div className={styles.mobileTrack}>
@@ -106,7 +108,7 @@ export default function PlacementTestScreen({ onComplete }) {
             </div>
           </div>
 
-          <p className={styles.questionMeta}>{q.question}</p>
+          <p className={styles.questionMeta}>{t(q.questionKey)}</p>
           
           <div className={styles.promptCard}>
             <span className={styles.hanziText}>{q.hanzi}</span>
@@ -158,7 +160,7 @@ export default function PlacementTestScreen({ onComplete }) {
                     >
                       {opt.pinyin}
                     </span>
-                    <span className={styles.optPolish}>{opt.polish}</span>
+                    <span className={styles.optPolish}>{t(`meanings.${opt.meaningKey}`)}</span>
                   </div>
                 </button>
               );
@@ -178,7 +180,7 @@ export default function PlacementTestScreen({ onComplete }) {
               opacity: selected !== null ? 1 : 0.6,
             }}
           >
-            Zatwierdź odpowiedź
+            {t("placement.confirm")}
           </button>
         </div>
       </div>

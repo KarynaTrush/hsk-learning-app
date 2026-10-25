@@ -20,7 +20,7 @@
 }
 
 .title {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 28px;
   font-weight: 700;
   color: var(--foreground);
@@ -37,7 +37,7 @@
 }
 
 .streakNumber {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 20px;
   font-weight: 700;
   color: #a07820;
@@ -170,7 +170,7 @@
 }
 
 .lessonHanziText {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 32px;
   font-weight: 700;
   color: var(--primary);
@@ -185,7 +185,7 @@
 }
 
 .lessonTitle {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 24px;
   font-weight: 700;
   color: var(--foreground);
@@ -312,7 +312,7 @@
 }
 
 .miniStatValue {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 24px;
   font-weight: 700;
   line-height: 1;
@@ -347,7 +347,7 @@
 }
 
 .quoteHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 17px;
   font-weight: 600;
   color: var(--foreground);
@@ -567,7 +567,7 @@
 }
 
 .errHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 20px;
   font-weight: 700;
   color: var(--foreground);
@@ -650,7 +650,7 @@
 }
 
 .previewHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 17px;
   font-weight: 700;
   color: var(--foreground);

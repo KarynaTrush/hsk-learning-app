@@ -1,15 +1,18 @@
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import logo from '../../assets/images/logo.png';
-import styles from './Sidebar.module.css'; 
+import styles from './Sidebar.module.css';
+
 export default function Sidebar({ isMain, activeTab, goMain }) {
-  
-const menuItems = [
-  { id: "dashboard", label: "Panel główny",     hanzi: "主", sublabel: "Twój dzień nauki" },
-  { id: "path",      label: "Mapa Wiedzy",      hanzi: "路", sublabel: "Ścieżka HSK" },
-  { id: "tones",     label: "Tony",             hanzi: "声", sublabel: "Wizualizator" },
-  { id: "stories",   label: "Czytanie i kultura",hanzi: "书", sublabel: "Teksty i tradycje" }, // Новый вариант тут
-  { id: "profile",   label: "Profil",           hanzi: "我", sublabel: "Statystyki" },
-];
+  const { t } = useTranslation();
+
+  const menuItems = [
+    { id: "dashboard", label: t("nav.dashboard"), hanzi: "主", sublabel: t("nav.dashboardSub") },
+    { id: "path",      label: t("nav.path"),      hanzi: "路", sublabel: t("nav.pathSub") },
+    { id: "tones",     label: t("nav.tones"),     hanzi: "声", sublabel: t("nav.tonesSub") },
+    { id: "stories",   label: t("nav.stories"),   hanzi: "书", sublabel: t("nav.storiesSub") },
+    { id: "profile",   label: t("nav.profile"),   hanzi: "我", sublabel: t("nav.profileSub") },
+  ];
 
   return (
     <aside className={`flex-none flex flex-col justify-between ${styles.sidebar}`}>
@@ -58,7 +61,7 @@ const menuItems = [
       </div>
       <div className="px-4 pb-5 pt-2">
         <div className={`rounded-xl px-4 py-3 ${styles.forecastWidget}`}>
-          <p className={styles.forecastTitle}>PROGNOZA EGZAMINU</p>
+          <p className={styles.forecastTitle}>{t("nav.examForecast")}</p>
           <p className={styles.forecastValue}>HSK 3</p>
           <p className={styles.forecastDate}>est. 15.03.2027</p>
         </div>

@@ -154,7 +154,7 @@
 }
 
 .exampleHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 16px;
   color: var(--foreground);
   text-align: center;
@@ -318,7 +318,7 @@
 }
 
 .queueHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 18px;
   font-weight: 700;
 }
@@ -346,7 +346,7 @@
 }
 
 .resultValue {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 32px;
   font-weight: 700;
 }
@@ -377,7 +377,7 @@
 }
 
 .endIcon {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 80px;
   opacity: 0.1;
   display: block;
@@ -386,7 +386,7 @@
 }
 
 .endTitle {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 32px;
   font-weight: 700;
   color: var(--foreground);
@@ -408,7 +408,7 @@
 }
 
 .endValue {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 48px;
   font-weight: 700;
 }

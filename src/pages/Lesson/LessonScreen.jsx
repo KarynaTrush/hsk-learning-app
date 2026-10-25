@@ -1,22 +1,24 @@
 import { useState } from "react";
 import { Volume2, ChevronRight, X, Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useTranslation } from "react-i18next";
 import styles from "./Lesson.module.css"; 
 
 const vocabulary = [
-  { hanzi: "米饭", pinyin: "mǐfàn", polish: "gotowany ryż", example: "我喜欢吃米饭。", exampleTranslation: "Lubię jeść ryż." },
-  { hanzi: "面条", pinyin: "miàntiáo", polish: "makaron", example: "面条很好吃。", exampleTranslation: "Makaron jest bardzo smaczny." },
-  { hanzi: "饺子", pinyin: "jiǎozi", polish: "pierożki", example: "微们一起吃饺子吧。", exampleTranslation: "Zjedzmy razem pierożki." },
+  { hanzi: "米饭", pinyin: "mǐfàn", example: "我喜欢吃米饭。" },
+  { hanzi: "面条", pinyin: "miàntiáo", example: "面条很好吃。" },
+  { hanzi: "饺子", pinyin: "jiǎozi", example: "微们一起吃饺子吧。" },
 ];
 
 const matchItems = [
-  { hanzi: "米饭", polish: "gotowany ryż" },
-  { hanzi: "面条", polish: "makaron" },
-  { hanzi: "饺子", polish: "pierożki" },
-  { hanzi: "水", polish: "woda" },
+  { hanzi: "米饭" },
+  { hanzi: "面条" },
+  { hanzi: "饺子" },
+  { hanzi: "水" },
 ];
 
 export default function LessonScreen({ onComplete }) {
+  const { t } = useTranslation();
   const [vocabIndex, setVocabIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answered, setAnswered] = useState(false);
@@ -50,7 +52,7 @@ export default function LessonScreen({ onComplete }) {
       <div className={styles.headerRow}>
         <div>
           <p className={styles.counterText}>
-            SŁOWO {vocabIndex + 1} Z {vocabulary.length}
+            {t("lesson.wordOf", { current: vocabIndex + 1, total: vocabulary.length })}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -86,7 +88,7 @@ export default function LessonScreen({ onComplete }) {
                     <div className="flex flex-col items-center">
                       <span className={styles.hanziText}>{word.hanzi}</span>
                       <span className={styles.pinyinText}>{word.pinyin}</span>
-                      <span className={styles.polishText}>{word.polish}</span>
+                      <span className={styles.polishText}>{t(`meanings.${word.hanzi}`)}</span>
                     </div>
                     <button
                       onClick={handleSpeak}
@@ -102,9 +104,9 @@ export default function LessonScreen({ onComplete }) {
                 </div>
 
                 <div className={styles.exampleBlock}>
-                  <p className={styles.exampleMeta}>ZDANIE PRZYKŁADOWE</p>
+                  <p className={styles.exampleMeta}>{t("lesson.example")}</p>
                   <p className={styles.exampleHanzi}>{word.example}</p>
-                  <p className={styles.exampleTranslation}>{word.exampleTranslation}</p>
+                  <p className={styles.exampleTranslation}>{t(`examples.${word.hanzi}`)}</p>
                 </div>
               </div>
             </motion.div>
@@ -116,7 +118,7 @@ export default function LessonScreen({ onComplete }) {
               disabled={vocabIndex === 0}
               className={`flex-1 py-3 rounded-xl border border-border bg-card text-sm transition-all hover:border-foreground/20 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed ${styles.navButtonPrev}`}
             >
-              ← Poprzednie
+              {t("lesson.prev")}
             </button>
             <button
               onClick={handleNext}
@@ -129,27 +131,27 @@ export default function LessonScreen({ onComplete }) {
                 fontWeight: answered ? 600 : 400,
               }}
             >
-              {vocabIndex < vocabulary.length - 1 ? "Następne →" : "Zakończ lekcję →"}
+              {vocabIndex < vocabulary.length - 1 ? t("lesson.next") : t("lesson.finish")}
             </button>
           </div>
         </div>
         <div className={styles.flexCol}>
           <div className={styles.matchCard}>
-            <p className={styles.matchTitle}>Dopasuj znaczenie</p>
+            <p className={styles.matchTitle}>{t("lesson.matchTitle")}</p>
             <p className={styles.matchSubtitle}>
-              Wybierz polskie tłumaczenie dla znaku{" "}
+              {t("lesson.matchSubtitle")}{" "}
               <span className={styles.targetHanziInline}>{word.hanzi}</span>
             </p>
 
             <div className={styles.answersGrid}>
               {matchItems.map((item) => {
-                const isSelected = selected === item.polish;
-                const isCorrect  = answered && item.polish === word.polish;
-                const isWrong    = answered && isSelected && item.polish !== word.polish;
+                const isSelected = selected === item.hanzi;
+                const isCorrect  = answered && item.hanzi === word.hanzi;
+                const isWrong    = answered && isSelected && item.hanzi !== word.hanzi;
                 return (
                   <button
-                    key={item.polish}
-                    onClick={() => !answered && setSelected(item.polish)}
+                    key={item.hanzi}
+                    onClick={() => !answered && setSelected(item.hanzi)}
                     className={styles.answerButton}
                     style={{
                       backgroundColor: isCorrect ? "rgba(79,121,66,0.07)" : isWrong ? "rgba(200,62,52,0.05)" : isSelected ? "rgba(200,62,52,0.04)" : "var(--secondary)",
@@ -165,7 +167,7 @@ export default function LessonScreen({ onComplete }) {
                     >
                       {item.hanzi}
                     </span>
-                    <span className={styles.answerPolish}>{item.polish}</span>
+                    <span className={styles.answerPolish}>{t(`meanings.${item.hanzi}`)}</span>
                   </button>
                 );
               })}
@@ -179,24 +181,24 @@ export default function LessonScreen({ onComplete }) {
                   exit={{ opacity: 0 }}
                   className={styles.feedbackAlert}
                   style={{
-                    backgroundColor: selected === word.polish ? "rgba(79,121,66,0.08)" : "rgba(200,62,52,0.06)",
-                    border: `1.5px solid ${selected === word.polish ? "var(--accent)" : "var(--primary)"}`,
+                    backgroundColor: selected === word.hanzi ? "rgba(79,121,66,0.08)" : "rgba(200,62,52,0.06)",
+                    border: `1.5px solid ${selected === word.hanzi ? "var(--accent)" : "var(--primary)"}`,
                   }}
                 >
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center flex-none"
-                    style={{ backgroundColor: selected === word.polish ? "var(--accent)" : "var(--primary)" }}
+                    style={{ backgroundColor: selected === word.hanzi ? "var(--accent)" : "var(--primary)" }}
                   >
-                    {selected === word.polish
+                    {selected === word.hanzi
                       ? <Check size={16} color="white" strokeWidth={2.5} />
                       : <X size={16} color="white" strokeWidth={2.5} />
                     }
                   </div>
                   <p 
                     className={styles.feedbackText} 
-                    style={{ color: selected === word.polish ? "var(--accent)" : "var(--primary)" }}
+                    style={{ color: selected === word.hanzi ? "var(--accent)" : "var(--primary)" }}
                   >
-                    {selected === word.polish ? "Świetnie! Dobra odpowiedź." : `Błąd. Poprawna odpowiedź: „${word.polish}"`}
+                    {selected === word.hanzi ? t("lesson.correct") : t("lesson.wrong", { answer: t(`meanings.${word.hanzi}`) })}
                   </p>
                 </motion.div>
               )}
@@ -217,18 +219,18 @@ export default function LessonScreen({ onComplete }) {
                   opacity: selected ? 1 : 0.6,
                 }}
               >
-                Sprawdź odpowiedź
+                {t("lesson.check")}
               </button>
             ) : (
               <button onClick={handleNext} className={styles.actionButton}>
-                <span>{vocabIndex < vocabulary.length - 1 ? "Następne słowo" : "Zakończ lekcję"}</span>
+                <span>{vocabIndex < vocabulary.length - 1 ? t("lesson.nextWord") : t("lesson.finishLesson")}</span>
                 <ChevronRight size={18} strokeWidth={2} />
               </button>
             )}
           </div>
 
           <div className={styles.vocabularyListCard}>
-            <p className={styles.vocabListTitle}>SŁOWA W TEJ LEKCJI</p>
+            <p className={styles.vocabListTitle}>{t("lesson.wordsInLesson")}</p>
             <div className="flex flex-col gap-2">
               {vocabulary.map((v, i) => (
                 <div
@@ -247,7 +249,7 @@ export default function LessonScreen({ onComplete }) {
                   </span>
                   <div>
                     <span className={styles.vocabRowPinyin}>{v.pinyin}</span>
-                    <span className={styles.vocabRowPolish}>{v.polish}</span>
+                    <span className={styles.vocabRowPolish}>{t(`meanings.${v.hanzi}`)}</span>
                   </div>
                   {i < vocabIndex && <span className="ml-auto text-[12px] color-[var(--accent)]">✓</span>}
                   {i === vocabIndex && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}

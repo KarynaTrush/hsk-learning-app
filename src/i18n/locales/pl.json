@@ -1,0 +1,799 @@
+{
+  "header": {
+    "changeTheme": "Zmień motyw",
+    "search": "Szukaj",
+    "notifications": "Powiadomienia",
+    "settings": "Ustawienia",
+    "userProfile": "Profil użytkownika"
+  },
+  "nav": {
+    "dashboard": "Panel główny",
+    "dashboardSub": "Twój dzień nauki",
+    "path": "Mapa Wiedzy",
+    "pathSub": "Ścieżka HSK",
+    "tones": "Tony",
+    "tonesSub": "Wizualizator",
+    "stories": "Czytanie i kultura",
+    "storiesSub": "Teksty i tradycje",
+    "profile": "Profil",
+    "profileSub": "Statystyki",
+    "examForecast": "PROGNOZA EGZAMINU"
+  },
+  "screens": {
+    "lessonTitle": "Lekcja · Jedzenie",
+    "lessonSubtitle": "食物 · HSK 2",
+    "characterTitle": "Karta Hieroglifa",
+    "characterSubtitle": "字卡 · 食 (shí)",
+    "mistakesTitle": "Moje Błędy",
+    "mistakesSubtitle": "错误复习 · Do powtórzenia",
+    "reviewsTitle": "Powtórki · SRS",
+    "reviewsSubtitle": "间隔重复 · Spaced Repetition",
+    "storiesTitle": "Czytanie i kultura",
+    "storiesSubtitle": "Teksty i tradycje"
+  },
+  "common": {
+    "close": "Zamknij",
+    "save": "Zapisz",
+    "logout": "Wyloguj",
+    "back": "Wstecz",
+    "guest": "Gość"
+  },
+  "search": {
+    "placeholder": "Szukaj znaku, pinyin lub znaczenia…",
+    "empty": "Nic nie znaleziono",
+    "dictionary": "Słownik",
+    "known": "W słowniku"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "themeLight": "Jasny motyw",
+    "themeDark": "Ciemny motyw",
+    "logoutHint": "Wyjdź z lokalnego profilu"
+  },
+  "notify": {
+    "title": "Powiadomienia",
+    "due": "{{count}} fiszek czeka na SRS",
+    "empty": "Brak powiadomień",
+    "mistakes": "{{count}} słów w błędach"
+  },
+  "stories": {
+    "all": "Wszystkie",
+    "locked": "Za mało słów w Twoim słowniku HSK",
+    "culture": "Notatka kulturowa",
+    "wordsUsed": "Słowa w tekście",
+    "s1title": "Powitanie w szkole",
+    "s1culture": "W Chinach często pyta się «你吃了吗？» — „Czy już jadłeś?” jako grzeczność.",
+    "s2title": "Rodzina w domu",
+    "s2culture": "Wspólne posiłki są ważną częścią kultury i 关系 (relacji).",
+    "s3title": "Wieczór z pierożkami",
+    "s3culture": "饺子 jada się szczególnie na Nowy Rok księżycowy — symbol dostatku.",
+    "s4title": "W sklepie",
+    "s4culture": "Targowanie jest na bazarach, w sieciach ceny zwykle stałe."
+  },
+  "pdf": {
+    "title": "Kaligrafia z tego tygodnia",
+    "saved": "Zapisano PDF"
+  },
+  "auth": {
+    "platform": "PLATFORMA JĘZYKA CHIŃSKIEGO",
+    "heading": "Opanuj mandaryński",
+    "headingAccent": "krok po kroku.",
+    "description": "Ucz się opartą na standardach HSK ścieżką — z wizualizatorem tonów, AI-rekomendowanymi lekcjami i piśmiennictwem kaligrafia.",
+    "featTones": "Wizualizator tonów w czasie rzeczywistym",
+    "featAi": "Lekcje rekomendowane przez AI",
+    "featCalligraphy": "Kaligraficzne ćwiczenia pisania",
+    "welcomeBack": "Witaj z powrotem",
+    "createAccount": "Utwórz konto",
+    "loginSubtitle": "Zaloguj się i kontynuuj naukę",
+    "registerSubtitle": "Zacznij swoją przygodę z językiem chińskim",
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "email": "ADRES E-MAIL",
+    "emailPlaceholder": "twoj@email.com",
+    "password": "HASŁO",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "loginSubmit": "Zaloguj się →",
+    "registerSubmit": "Zarejestruj się →",
+    "continueGuest": "Kontynuuj bez konta",
+    "legal": "Rejestrując się, akceptujesz",
+    "terms": "Warunki korzystania",
+    "and": "i",
+    "privacy": "Politykę prywatności",
+    "name": "IMIĘ",
+    "namePlaceholder": "Anna"
+  },
+  "placement": {
+    "title": "TEST POZIOMUJĄCY",
+    "heading": "Sprawdźmy Twój",
+    "headingAccent": "poziom języka",
+    "description": "Krótki test, który pomoże nam dopasować ścieżkę nauki do Twoich umiejętności.",
+    "progress": "POSTĘP",
+    "questionOf": "Pytanie {{current}} z {{total}}",
+    "confirm": "Zatwierdź odpowiedź",
+    "qChar": "Co oznacza ten znak?",
+    "qWord": "Co oznacza to słowo?",
+    "resultTitle": "Test zakończony",
+    "assigned": "Zalecany start: HSK {{level}}",
+    "continue": "Przejdź do nauki"
+  },
+  "dashboard": {
+    "goodDay": "DZIEŃ DOBRY, KARINA · {{date}}",
+    "title": "Twój panel nauki",
+    "streak": "dni z rzędu",
+    "dedicatedLesson": "DEDYKOWANA LEKCJA DLA CIEBIE",
+    "aiLive": "AI GENERATOR · LIVE",
+    "needsReview": " Wymaga powtórzenia",
+    "match": " Dopasowanie: 98%",
+    "vocabMeta": "HSK 2 · SŁOWNICTWO",
+    "lessonTitle": "食物 · Jedzenie",
+    "lessonDuration": "12 nowych słówek · ~15 min sesji",
+    "srsAnalysis": "ANALIZA SYSTEMU SRS & AI",
+    "reasonBefore": "Opanowałaś już",
+    "reasonHighlight1": "80% słownictwa HSK 2",
+    "reasonMid": ", ale algorytm zarejestrował niedawne błędy w krytycznej kategorii",
+    "reasonHighlight2": "'Jedzenie'",
+    "reasonAfter": ". Bieżąca sesja zamknie te luki i podniesie ogólną celność do bezpiecznych 88%.",
+    "progressLabel": "Aktualny stan zaawansowania",
+    "progressCount": "7 z 12 słów (58%)",
+    "moreWords": "+ 8 słówek oczekuje",
+    "startLearning": "Rozpocznij spersonalizowaną naukę",
+    "quoteTitle": "CYTAT DNIA",
+    "quoteTranslation": "„Nauka jest jak wiosłowanie pod prąd — jeśli nie płyniesz naprzód, cofasz się.”",
+    "todoTitle": "DZISIAJ DO ZROBIENIA",
+    "todoLesson": "Lekcja: Jedzenie",
+    "todoLessonTime": "15 min",
+    "todoSrs": "Powtórki SRS",
+    "todoSrsTime": "47 kart",
+    "todoTones": "Ćwiczenia tonów",
+    "todoTonesTime": "10 min",
+    "errorsTitle": "OSTATNIE BŁĘDY",
+    "reviewWords": "Powtórz te słowa (SRS)",
+    "reasonErrors": "SRS & AI: opanowałaś {{mastered}}% słownictwa HSK {{level}}, ale wykryto błędy w kategorii „{{category}}”. Ta sesja zamknie luki.",
+    "reasonProgress": "SRS & AI: postęp jest stabilny. Następny temat „{{category}}” najlepiej pasuje do Twojego poziomu HSK {{level}}."
+  },
+  "lesson": {
+    "wordOf": "SŁOWO {{current}} Z {{total}}",
+    "example": "ZDANIE PRZYKŁADOWE",
+    "prev": "← Poprzednie",
+    "next": "Następne →",
+    "finish": "Zakończ lekcję →",
+    "matchTitle": "Dopasuj znaczenie",
+    "matchSubtitle": "Wybierz polskie tłumaczenie dla znaku",
+    "correct": "Świetnie! Dobra odpowiedź.",
+    "wrong": "Błąd. Poprawna odpowiedź: „{{answer}}\"",
+    "check": "Sprawdź odpowiedź",
+    "nextWord": "Następne słowo",
+    "finishLesson": "Zakończ lekcję",
+    "wordsInLesson": "SŁOWA W TEJ LEKCJI",
+    "buildTitle": "Ułóż zdanie",
+    "buildHint": "Kliknij znaki we właściwej kolejności"
+  },
+  "profile": {
+    "meta": "Uczy się od 14 tygodni · HSK 3 → 4 · 5-dniowa passa 🔥",
+    "certified": "HSK 3 Certyfik.",
+    "aiming": "Celuje w HSK 4",
+    "edit": "Edytuj profil",
+    "examDate": "PRZEWIDYWANA DATA EGZAMINU",
+    "readiness": "Gotowość",
+    "words": "SŁOWA",
+    "lessons": "LEKCJE",
+    "lessonsTrend": "↑ +4 dzisiaj",
+    "accuracy": "CELNOŚĆ",
+    "average": "średnia",
+    "studyTime": "CZAS NAUKI",
+    "thisWeek": "ten tydzień",
+    "progressByCategory": "POSTĘP PO KATEGORIACH",
+    "errors": "Moje błędy",
+    "errorsSub": "Powtórz trudne słowa",
+    "reviews": "Powtórki",
+    "reviewsSub": "Spaced Repetition System",
+    "grammar": "Baza gramatyki",
+    "grammarSub": "Wymagane konstrukcje HSK",
+    "goals": "Cele i wyzwania",
+    "goalsSub": "Tygodniowe cele nauki",
+    "since": "Aktywna od {{date}}",
+    "streakDays": "{{count}} dni z rzędu",
+    "wordsLearned": "{{count}} słów",
+    "dynamics": "Dynamika HSK",
+    "dynamicsSub": "Przyrost słownictwa · 6 miesięcy"
+  },
+  "path": {
+    "completed": "Ukończono",
+    "active": "Aktywne",
+    "locked": "Zablokowane",
+    "topicBlock": "Blok tematyczny · {{count}} leksje"
+  },
+  "tones": {
+    "targetSyllable": "DOCELOWA SYLABA",
+    "example": "Przykład:",
+    "tone1": "I ton",
+    "tone1Desc": "płaski wysoki",
+    "tone1Example": "māma (mama)",
+    "tone2": "II ton",
+    "tone2Desc": "wznoszący",
+    "tone2Example": "máfan (kłopot)",
+    "tone3": "III ton",
+    "tone3Desc": "opadająco-wznoszący",
+    "tone3Example": "mǎ (koń)",
+    "tone4": "IV ton",
+    "tone4Desc": "opadający",
+    "tone4Example": "mà (besztać)",
+    "recording": "Nagrywam...",
+    "pressSpeak": "Naciśnij i mów",
+    "visTitle": "Wizualizacja tonu głosowego",
+    "visSub": "Twój głos (czarna linia) vs. wzorzec (kolorowe linie)",
+    "matchPct": "{{score}}% zgodności",
+    "recordingBadge": "NAGRYWAM",
+    "high": "Wysoko",
+    "low": "Nisko",
+    "pattern": "Wzorzec ({{label}})",
+    "otherTones": "Inne tony (odniesienie)",
+    "yourVoice": "Twój głos",
+    "excellent": "Doskonale! Ton rozpoznany poprawnie.",
+    "almost": "Prawie! Małe korekty potrzebne.",
+    "feedbackGood": "Twój głos zgodny ze wzorcem {{label}} w {{score}}%. Linia głosowa przebiega poprawnie.",
+    "hint1": "utrzymać ton na stałym, wysokim poziomie przez całą sylabę",
+    "hint2": "zacząć niżej i wyraźniej wznosić ton",
+    "hint3": "wyraźniej opaść, a potem wznieść głos",
+    "hint4": "zacząć wyżej i zdecydowanie opaść",
+    "try": "Spróbuj {{hint}}.",
+    "accuracyTitle": "TWOJA CELNOŚĆ TONÓW"
+  },
+  "character": {
+    "gridAria": "Siatka Mi-zi-ge dla znaku {{hanzi}}",
+    "gridLabel": "SIATKA KALIGRAFII · 米字格",
+    "speakAloud": "Wymów głośno",
+    "pause": "Pauza",
+    "runAnimation": "Uruchom animację",
+    "downloadPdf": "Pobierz PDF",
+    "pinyin": "PINYIN",
+    "radical": "RADYKAŁ",
+    "meaning": "ZNACZENIE",
+    "hsk": "HSK",
+    "strokes": "KRESK",
+    "tones": "TONY",
+    "meaningValue": "jeść / jedzenie",
+    "hskValue": "Poziom 1",
+    "strokesValue": "9 kresek",
+    "tonesValue": "2. ton (wznoszący)",
+    "strokeOrder": "Kolejność kresek",
+    "strokesTotal": "{{count}} kresek łącznie · {{status}}",
+    "strokeOf": "Kreska {{current}} z {{total}}",
+    "pressAnimate": "Naciśnij animuj",
+    "strokeN": "Kreska {{n}}:",
+    "animationSteps": "KROKI ANIMACJI",
+    "related": "POWIĄZANE SŁOWA",
+    "stroke1": "Prawa kreska ukośna (点) — skos w prawo-dół",
+    "stroke2": "Pozioma kreska (横 héng) — od lewej do prawej",
+    "stroke3": "Lewy skos (撇 piě) — ukos w lewo-dół",
+    "stroke4": "Prawy skos (捺 nà) — ukos w prawo-dół",
+    "stroke5": "Pionowa kreska z haczykiem (竖钩 shùgōu)",
+    "stroke6": "Lewa dolna kreska (撇) — skos w lewo",
+    "stroke7": "Prawa dolna kreska (横折)",
+    "stroke8": "Zamknięcie (横) — dolna pozioma kreska",
+    "stroke9": "Pionowa (竖) — wewnętrzna"
+  },
+  "mistakes": {
+    "totalErrors": "błędów łącznie",
+    "summary": "{{count}} słów wymaga powtórzenia w ostatnich 7 dniach.",
+    "categories": "KATEGORIE",
+    "practice": "Przećwicz ({{count}} słów)",
+    "colSign": "Znak",
+    "colMeaning": "Wymowa / Znaczenie",
+    "colCategory": "Kategoria",
+    "colErrors": "Błędy",
+    "empty": "Brak błędów w tej kategorii!",
+    "lastError": "Ostatni błąd: {{time}}",
+    "markMastered": "Oznacz jako opanowane",
+    "all": "Wszystkie",
+    "ago2h": "2 godz. temu",
+    "yesterday": "wczoraj",
+    "ago2d": "2 dni temu",
+    "ago3d": "3 dni temu",
+    "ago1h": "1 godz. temu",
+    "ago4d": "4 dni temu"
+  },
+  "reviews": {
+    "doneTitle": "Sesja zakończona!",
+    "doneDesc": "Przerobiłeś {{count}} fiszek.",
+    "know": "Znam",
+    "toLearn": "Do nauki",
+    "backProfile": "Wróć do profilu",
+    "cardOf": "FISZKA {{current}} Z {{total}}",
+    "remaining": "{{count}} pozostało",
+    "reveal": "Odkryj kartę",
+    "dontKnow": "Nie znam",
+    "prev": "Poprzednia",
+    "next": "Następna",
+    "queue": "KOLEJKA FISZEK",
+    "sessionResults": "WYNIKI SESJI",
+    "dueNow": "teraz",
+    "due10min": "za 10 min",
+    "dueTomorrow": "jutro"
+  },
+  "categories": {
+    "food": "Jedzenie",
+    "time": "Czas",
+    "family": "Rodzina",
+    "shopping": "Zakupy",
+    "numbers": "Liczby",
+    "people": "Ludzie",
+    "nature": "Natura",
+    "greetings": "Powitania",
+    "school": "Szkoła",
+    "places": "Miejsca",
+    "work": "Praca",
+    "travel": "Podróże",
+    "weather": "Pogoda",
+    "animals": "Zwierzęta",
+    "health": "Zdrowie",
+    "entertainment": "Rozrywka",
+    "transport": "Transport",
+    "colors": "Kolory",
+    "clothes": "Ubrania",
+    "culture": "Kultura",
+    "media": "Media",
+    "education": "Edukacja",
+    "emotions": "Emocje",
+    "environment": "Środowisko",
+    "society": "Społeczeństwo",
+    "interests": "Zainteresowania",
+    "sport": "Sport",
+    "housing": "Mieszkanie",
+    "technology": "Technologia",
+    "business": "Biznes",
+    "career": "Kariera zawodowa",
+    "scienceDev": "Nauka i rozwój",
+    "relationships": "Stosunki międzyludzkie",
+    "lawOrder": "Prawo i porządek",
+    "ecology": "Ekologia",
+    "artLit": "Sztuka i literatura",
+    "science": "Nauka",
+    "politics": "Polityka",
+    "globalEconomy": "Ekonomia globalna",
+    "psychology": "Psychologia",
+    "traditions": "Tradycje i obyczaje",
+    "modernMedicine": "Medycyna nowoczesna",
+    "lifePhilosophy": "Filozofia życiowa",
+    "classicPhilosophy": "Filozofia klasyczna",
+    "ancientHistory": "Historia starożytna",
+    "classicLit": "Literatura klasyczna",
+    "archaeology": "Archeologia",
+    "intlRelations": "Stosunki międzynarodowe",
+    "metaphysics": "Metafizyka",
+    "traditionalArt": "Sztuka tradycyjna",
+    "comparativeLing": "Lingwistyka porównawcza",
+    "forensicMed": "Medycyna sądowa",
+    "behavioralEcon": "Ekonomia behawioralna",
+    "diplomatic": "Stosunki dyplomatyczne",
+    "contemporaryLit": "Literatura współczesna",
+    "cybersecurity": "Cyberbezpieczeństwo",
+    "ai": "Sztuczna inteligencja",
+    "culturalSoc": "Socjologia kultury",
+    "macroeconomics": "Makroekonomia"
+  },
+  "pathTitles": {
+    "languageBasics": "Podstawy języka",
+    "dailyLife": "Życie codzienne",
+    "surroundingsPlaces": "Otoczenie i miejsca",
+    "personSurroundings": "Człowiek i otoczenie",
+    "citySpace": "Miasto i przestrzeń",
+    "workInterests": "Praca i zainteresowania",
+    "commsRelations": "Komunikacja i relacje",
+    "leisureCulture": "Czas wolny i kultura",
+    "surroundingsCity": "Otoczenie i miasto",
+    "socialLife": "Życie społeczne",
+    "scienceDev": "Nauka i rozwój",
+    "mediaArt": "Media i sztuka",
+    "advancedDiscussion": "Zaawansowana dyskusja",
+    "businessMarkets": "Biznes i rynki",
+    "cultureScience": "Kultura i nauka",
+    "specialized": "Sfery specjalistyczne",
+    "econGlobalization": "Ekonomia i globalizacja",
+    "sociologyHumanities": "Socjologia i humanistyka",
+    "academic": "Poziom akademicki",
+    "highCulture": "Kultura wyższa i źródła",
+    "globalIt": "Globalne wyzwania IT"
+  },
+  "pathNodes": {
+    "greetings": {
+      "label": "Powitania",
+      "sub": "Podstawowe zwroty"
+    },
+    "numbers": {
+      "label": "Liczby 1–100",
+      "sub": "Cyfry i liczenie"
+    },
+    "pronouns": {
+      "label": "Zaimki osobowe",
+      "sub": "Ja, ty, on, my"
+    },
+    "timeDates": {
+      "label": "Czas i daty",
+      "sub": "Dni i godziny"
+    },
+    "family": {
+      "label": "Rodzina",
+      "sub": "Relacje rodzinne"
+    },
+    "countries": {
+      "label": "Państwa i języki",
+      "sub": "Pochodzenie i kraje"
+    },
+    "hobbies": {
+      "label": "Hobby",
+      "sub": "Czas wolny i pasje"
+    },
+    "weather": {
+      "label": "Pogoda",
+      "sub": "Podstawowe opisy"
+    },
+    "school": {
+      "label": "Szkoła",
+      "sub": "Przedmioty i miejsca"
+    },
+    "home": {
+      "label": "W domu",
+      "sub": "Meble i pokoje"
+    },
+    "shopping": {
+      "label": "Zakupy",
+      "sub": "Proste transakcje"
+    },
+    "fruit": {
+      "label": "Owoce",
+      "sub": "Popularne produkty"
+    },
+    "food": {
+      "label": "Jedzenie",
+      "sub": "Potrawy i napoje"
+    },
+    "routine": {
+      "label": "Rutyna dnia",
+      "sub": "Czynności codzienne"
+    },
+    "appearance": {
+      "label": "Wygląd zewnętrzny",
+      "sub": "Opis sylwetki"
+    },
+    "health": {
+      "label": "Zdrowie",
+      "sub": "Samopoczucie i lekarz"
+    },
+    "inStore": {
+      "label": "W sklepie",
+      "sub": "Ubrania i ceny"
+    },
+    "transport": {
+      "label": "Transport",
+      "sub": "Podróże i kierunki"
+    },
+    "orientation": {
+      "label": "Orientacja w terenie",
+      "sub": "Prawo, lewo, prosto"
+    },
+    "publicPlaces": {
+      "label": "Miejsca publiczne",
+      "sub": "Kino, bank, szpital"
+    },
+    "jobs": {
+      "label": "Zawody",
+      "sub": "Praca i biuro"
+    },
+    "animals": {
+      "label": "Zwierzęta",
+      "sub": "Natura i środowisko"
+    },
+    "colorsStyle": {
+      "label": "Kolory i styl",
+      "sub": "Opisywanie przedmiotów"
+    },
+    "sport": {
+      "label": "Sport i fitness",
+      "sub": "Aktywność fizyczna"
+    },
+    "travel": {
+      "label": "Podróże",
+      "sub": "Turystyka i rezerwacje"
+    },
+    "emotions": {
+      "label": "Emocje",
+      "sub": "Uczucia i relacje"
+    },
+    "higherEd": {
+      "label": "Edukacja wyższa",
+      "sub": "Uniwersytet"
+    },
+    "career": {
+      "label": "Kariera zawodowa",
+      "sub": "Rozmowa o pracę"
+    },
+    "music": {
+      "label": "Muzyka",
+      "sub": "Gatunki i instrumenty"
+    },
+    "cinema": {
+      "label": "Kino i teatr",
+      "sub": "Filmy i spektakle"
+    },
+    "traditions": {
+      "label": "Tradycje",
+      "sub": "Chińskie święta"
+    },
+    "stories": {
+      "label": "Opowieści",
+      "sub": "Mitologia i legendy"
+    },
+    "services": {
+      "label": "Usługi",
+      "sub": "Poczta i bankowość"
+    },
+    "apartment": {
+      "label": "Mieszkanie",
+      "sub": "Wynajem i opłaty"
+    },
+    "restaurant": {
+      "label": "Restauracja",
+      "sub": "Zamawianie jedzenia"
+    },
+    "nature": {
+      "label": "Natura",
+      "sub": "Zmiany klimatyczne"
+    },
+    "society": {
+      "label": "Społeczeństwo",
+      "sub": "Kultura i życie"
+    },
+    "businessFinance": {
+      "label": "Biznes i finanse",
+      "sub": "Rynek globalny"
+    },
+    "law": {
+      "label": "Prawo",
+      "sub": "System sądownictwa"
+    },
+    "customs": {
+      "label": "Obyczaje",
+      "sub": "Tradycje społeczne"
+    },
+    "research": {
+      "label": "Badania",
+      "sub": "Projekty naukowe"
+    },
+    "technology": {
+      "label": "Technologia",
+      "sub": "Rozwój cyfrowy"
+    },
+    "ecology": {
+      "label": "Ekologia",
+      "sub": "Ochrona przyrody"
+    },
+    "innovation": {
+      "label": "Innowacje",
+      "sub": "Nowe patenty"
+    },
+    "news": {
+      "label": "Wiadomości",
+      "sub": "Prasa i telewizja"
+    },
+    "art": {
+      "label": "Sztuka",
+      "sub": "Kultura wysoka"
+    },
+    "marketing": {
+      "label": "Marketing",
+      "sub": "Reklama i media"
+    },
+    "literature": {
+      "label": "Literatura",
+      "sub": "Współczesne dzieła"
+    },
+    "philosophy": {
+      "label": "Filozofia",
+      "sub": "Chińska myśl i etyka"
+    },
+    "mediaPress": {
+      "label": "Media i prasa",
+      "sub": "Wiadomości krajowe"
+    },
+    "psychology": {
+      "label": "Psychologia",
+      "sub": "Zachowanie ludzkie"
+    },
+    "logic": {
+      "label": "Logika",
+      "sub": "Argumentacja"
+    },
+    "negotiations": {
+      "label": "Negocjacje",
+      "sub": "Spotkania biznesowe"
+    },
+    "investments": {
+      "label": "Inwestycje",
+      "sub": "Giełda i kapitał"
+    },
+    "trade": {
+      "label": "Eksport i import",
+      "sub": "Wymiana handlowa"
+    },
+    "management": {
+      "label": "Zarządzanie",
+      "sub": "Zasoby ludzkie"
+    },
+    "history": {
+      "label": "Historia",
+      "sub": "Starożytne dynastie"
+    },
+    "eduSystem": {
+      "label": "System szkolnictwa",
+      "sub": "Reformy edukacji"
+    },
+    "geography": {
+      "label": "Geografia",
+      "sub": "Ukształtowanie terenu"
+    },
+    "monuments": {
+      "label": "Zabytki",
+      "sub": "Dziedzictwo UNESCO"
+    },
+    "politics": {
+      "label": "Polityka",
+      "sub": "Dyplomacja i prawo"
+    },
+    "medicine": {
+      "label": "Medycyna",
+      "sub": "Biotechnologia"
+    },
+    "industry": {
+      "label": "Przemysł",
+      "sub": "Automatyzacja fabryk"
+    },
+    "strategy": {
+      "label": "Strategia",
+      "sub": "Historia wojskowości"
+    },
+    "publicFinance": {
+      "label": "Finanse publiczne",
+      "sub": "Budżet państwa"
+    },
+    "legalActs": {
+      "label": "Akty prawne",
+      "sub": "Konstytucja i kodeksy"
+    },
+    "currencies": {
+      "label": "Waluty",
+      "sub": "Rynki finansowe"
+    },
+    "resources": {
+      "label": "Surowce naturalne",
+      "sub": "Energetyka globalna"
+    },
+    "demography": {
+      "label": "Demografia",
+      "sub": "Struktura społeczna"
+    },
+    "religion": {
+      "label": "Religioznawstwo",
+      "sub": "Systemy filozoficzne"
+    },
+    "archaeology": {
+      "label": "Archeologia",
+      "sub": "Wykopaliska naukowe"
+    },
+    "aesthetics": {
+      "label": "Estetyka",
+      "sub": "Krytyka literacka"
+    },
+    "academicResearch": {
+      "label": "Badania",
+      "sub": "Prace naukowe"
+    },
+    "ai": {
+      "label": "Sztuczna inteligencja",
+      "sub": "Nowe technologie"
+    },
+    "methodology": {
+      "label": "Metodologia",
+      "sub": "Analiza statystyczna"
+    },
+    "discourse": {
+      "label": "Dyskurs naukowy",
+      "sub": "Publikacje i recenzje"
+    },
+    "classicalChinese": {
+      "label": "Klasyczny chiński",
+      "sub": "Teksty źródłowe"
+    },
+    "tangPoetry": {
+      "label": "Poezja Tang",
+      "sub": "Analiza wersyfikacji"
+    },
+    "chineseOpera": {
+      "label": "Opera chińska",
+      "sub": "Tradycje teatralne"
+    },
+    "confucianism": {
+      "label": "Konfucjanizm",
+      "sub": "Teksty filozoficzne"
+    },
+    "cybersecurity": {
+      "label": "Cyberbezpieczeństwo",
+      "sub": "Ochrona danych"
+    },
+    "bigData": {
+      "label": "Big Data",
+      "sub": "Analiza algorytmiczna"
+    },
+    "cloud": {
+      "label": "Chmury obliczeniowe",
+      "sub": "Infrastruktura sieci"
+    },
+    "quantum": {
+      "label": "Fizyka kwantowa",
+      "sub": "Komputery kwantowe"
+    }
+  },
+  "meanings": {
+    "吃货": "żarłok / smakosz",
+    "美食": "przysmaki",
+    "火锅": "gorący kociołek",
+    "零食": "przekąski",
+    "外卖": "jedzenie na wynos",
+    "夜宵": "nocna przekąska",
+    "爆米花": "popcorn",
+    "垃圾食品": "śmieciowe jedzenie",
+    "招牌菜": "danie popisowe",
+    "重口味": "ostre smaki",
+    "开胃菜": "przystawka",
+    "甜點": "deser",
+    "矛盾": "sprzeczność",
+    "马虎": "beztroski",
+    "吃醋": "zazdrosny",
+    "凡尔赛": "flexowanie",
+    "摸鱼": "obijanie się",
+    "顺其自然": "naturalnie",
+    "不可思议": "niesamowity",
+    "八卦": "plotki",
+    "内卷": "wyścig szczurów",
+    "躺平": "odpuszczanie",
+    "洗脑": "pranie mózgu",
+    "吐槽": "narzekanie",
+    "吃": "jeść",
+    "喝": "pić",
+    "坐": "siedzieć",
+    "走": "iść",
+    "好": "dobry",
+    "美": "piękny",
+    "大": "duży",
+    "小": "mały",
+    "家人": "rodzina",
+    "老师": "nauczyciel",
+    "朋友": "przyjaciel",
+    "同学": "kolega z klasy",
+    "米饭": "gotowany ryż",
+    "面条": "makaron",
+    "饺子": "pierożki",
+    "水": "woda",
+    "星期": "tydzień",
+    "下午": "popołudnie",
+    "商店": "sklep",
+    "便宜": "tani",
+    "医院": "szpital",
+    "星期三": "środa",
+    "漂亮": "piękny/ładny",
+    "食物": "jedzenie",
+    "食堂": "stołówka",
+    "饮食": "żywienie",
+    "食谱": "przepis"
+  },
+  "examples": {
+    "米饭": "Lubię jeść ryż.",
+    "面条": "Makaron jest bardzo smaczny.",
+    "饺子": "Zjedzmy razem pierożki.",
+    "饺子2": "Lubię jeść pierożki.",
+    "星期三": "Dzisiaj jest środa.",
+    "商店": "Ten sklep jest bardzo duży.",
+    "便宜": "To ubranie jest bardzo tanie.",
+    "漂亮": "Ona jest bardzo piękna."
+  }
+}

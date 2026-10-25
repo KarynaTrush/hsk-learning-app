@@ -30,7 +30,7 @@
   justify-content: center;
   pointer-events: none;
   opacity: 0.055;
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 340px;
   font-weight: 700;
   color: #1a1a1a;
@@ -57,14 +57,14 @@
 }
 
 .logoHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 20px;
   font-weight: 700;
   color: var(--primary);
 }
 
 .logoTitle {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--foreground);
@@ -78,7 +78,7 @@
 }
 
 .mainHeading {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 32px;
   font-weight: 700;
   color: var(--foreground);
@@ -202,7 +202,7 @@
 }
 
 .hanziText {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 100px;
   font-weight: 700;
   color: var(--foreground);
@@ -269,7 +269,7 @@
 }
 
 .optPolish {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 16px;
   color: var(--foreground);
   font-weight: 600;

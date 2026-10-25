@@ -1,35 +1,37 @@
 import React, { useState } from "react";
-import { ChevronRight, BookOpen, Target, Flame, TrendingUp, Zap, AlertCircle, RefreshCw } from "lucide-react";
+import { ChevronRight, BookOpen, Flame, AlertCircle, RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { DATE_LOCALES } from "../../i18n";
 import styles from "./Dashboard.module.css";
 
 const previewWords = [
-  { hanzi: "吃货", pinyin: "chīhuò", translation: "żarłok / smakosz" },
-  { hanzi: "美食", pinyin: "měishí", translation: "przysmaki" },
-  { hanzi: "火锅", pinyin: "huǒguō", translation: "gorący kociołek" },
-  { hanzi: "零食", pinyin: "língshí", translation: "przekąski" },
-  { hanzi: "外卖", pinyin: "wàimài", translation: "jedzenie na wynos" },
-  { hanzi: "夜宵", pinyin: "yèxiāo", translation: "nocna przekąska" },
-  { hanzi: "爆米花", pinyin: "bàomǐhuā", translation: "popcorn" },
-  { hanzi: "垃圾食品", pinyin: "lājī shípǐn", translation: "śmieciowe jedzenie" },
-  { hanzi: "招牌菜", pinyin: "zhāopáicài", translation: "danie popisowe" },
-  { hanzi: "重口味", pinyin: "zhòngkǒuwèi", translation: "ostre smaki" },
-  { hanzi: "开胃菜", pinyin: "kāiwèicài", translation: "przystawka" },
-  { hanzi: "甜點", pinyin: "tiándiǎn", translation: "deser" },
+  { hanzi: "吃货", pinyin: "chīhuò" },
+  { hanzi: "美食", pinyin: "měishí" },
+  { hanzi: "火锅", pinyin: "huǒguō" },
+  { hanzi: "零食", pinyin: "língshí" },
+  { hanzi: "外卖", pinyin: "wàimài" },
+  { hanzi: "夜宵", pinyin: "yèxiāo" },
+  { hanzi: "爆米花", pinyin: "bàomǐhuā" },
+  { hanzi: "垃圾食品", pinyin: "lājī shípǐn" },
+  { hanzi: "招牌菜", pinyin: "zhāopáicài" },
+  { hanzi: "重口味", pinyin: "zhòngkǒuwèi" },
+  { hanzi: "开胃菜", pinyin: "kāiwèicài" },
+  { hanzi: "甜點", pinyin: "tiándiǎn" },
 ];
 
 const errorWords = [
-  { hanzi: "矛盾", pinyin: "máodùn", translation: "sprzeczność" },
-  { hanzi: "马虎", pinyin: "mǎhu", translation: "beztroski" },
-  { hanzi: "吃醋", pinyin: "chīcù", translation: "zazdrosny" },
-  { hanzi: "凡尔赛", pinyin: "fán'ěrsài", translation: "flexowanie" },
-  { hanzi: "摸鱼", pinyin: "mōyú", translation: "obijanie się" },
-  { hanzi: "顺其自然", pinyin: "shùnqí zìrán", translation: "naturalnie" },
-  { hanzi: "不可思议", pinyin: "bùkě sīyì", translation: "niesamowity" },
-  { hanzi: "八卦", pinyin: "bāguà", translation: "plotki" },
-  { hanzi: "内卷", pinyin: "nèijuǎn", translation: "wyścig szczurów" },
-  { hanzi: "躺平", pinyin: "tǎngpíng", translation: "odpuszczanie" },
-  { hanzi: "洗脑", pinyin: "xǐnǎo", translation: "pranie mózgu" },
-  { hanzi: "吐槽", pinyin: "tùcáo", translation: "narzekanie" },
+  { hanzi: "矛盾", pinyin: "máodùn" },
+  { hanzi: "马虎", pinyin: "mǎhu" },
+  { hanzi: "吃醋", pinyin: "chīcù" },
+  { hanzi: "凡尔赛", pinyin: "fán'ěrsài" },
+  { hanzi: "摸鱼", pinyin: "mōyú" },
+  { hanzi: "顺其自然", pinyin: "shùnqí zìrán" },
+  { hanzi: "不可思议", pinyin: "bùkě sīyì" },
+  { hanzi: "八卦", pinyin: "bāguà" },
+  { hanzi: "内卷", pinyin: "nèijuǎn" },
+  { hanzi: "躺平", pinyin: "tǎngpíng" },
+  { hanzi: "洗脑", pinyin: "xǐnǎo" },
+  { hanzi: "吐槽", pinyin: "tùcáo" },
 ];
 
 // Кастомная карточка для слов посередине лекции (иероглифы строго по центру)
@@ -65,10 +67,14 @@ function DashboardErrorCard({ hanzi, pinyin, translation }) {
 }
 
 export default function DashboardScreen({ onStartLesson, onStartReview }) {
+  const { t, i18n } = useTranslation();
+  const dateLocale = DATE_LOCALES[i18n.resolvedLanguage] || DATE_LOCALES[i18n.language] || "pl-PL";
+  const today = new Date().toLocaleDateString(dateLocale, { weekday: "long", day: "numeric", month: "long" });
+
   const [todos, setTodos] = useState([
-    { id: 1, label: "Lekcja: Jedzenie", done: false, time: "15 min", color: "var(--primary)" },
-    { id: 2, label: "Powtórki SRS", done: false, time: "47 kart", color: "#D4A843" },
-    { id: 3, label: "Ćwiczenia tonów", done: false, time: "10 min", color: "var(--accent)" },
+    { id: 1, labelKey: "dashboard.todoLesson", timeKey: "dashboard.todoLessonTime", done: false, color: "var(--primary)" },
+    { id: 2, labelKey: "dashboard.todoSrs", timeKey: "dashboard.todoSrsTime", done: false, color: "#D4A843" },
+    { id: 3, labelKey: "dashboard.todoTones", timeKey: "dashboard.todoTonesTime", done: false, color: "var(--accent)" },
   ]);
 
   const toggleTodo = (id) => {
@@ -80,15 +86,15 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
       <div className={styles.headerRow}>
         <div>
           <p className={styles.welcomeText}>
-            DZIEŃ DOBRY, KARYNA · {new Date().toLocaleDateString("pl-PL", { weekday: "long", day: "numeric", month: "long" })}
+            {t("dashboard.goodDay", { date: today })}
           </p>
-          <h2 className={styles.title}>Twój panel nauki</h2>
+          <h2 className={styles.title}>{t("dashboard.title")}</h2>
         </div>
         <div className={styles.streakBadge}>
           <Flame size={20} color="#D4A843" strokeWidth={1.8} />
           <div>
             <p className={styles.streakNumber}>5</p>
-            <p className={styles.streakLabel}>dni z rzędu</p>
+            <p className={styles.streakLabel}>{t("dashboard.streak")}</p>
           </div>
         </div>
       </div>
@@ -98,10 +104,10 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
         <div className={styles.mainColumn}>
           <div className={styles.lessonSectionWrapper}>
             <div className="flex items-center justify-between mb-3">
-              <span className={styles.recommendationLabel}>DEDYKOWANA LEKCJA DLA CIEBIE</span>
+              <span className={styles.recommendationLabel}>{t("dashboard.dedicatedLesson")}</span>
               <div className={styles.aiLiveBadge}>
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-pulse" />
-                <span className={styles.aiLiveText}>AI GENERATOR · LIVE</span>
+                <span className={styles.aiLiveText}>{t("dashboard.aiLive")}</span>
               </div>
             </div>
 
@@ -110,8 +116,8 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
               <div className={styles.lessonCardContent}>
                 
                 <div className={styles.lectureTagsRow}>
-                  <span className={styles.lectureTagUrgent}>⚠️ Wymaga powtórzenia</span>
-                  <span className={styles.lectureTagMatch}>🎯 Dopasowanie: 98%</span>
+                  <span className={styles.lectureTagUrgent}>{t("dashboard.needsReview")}</span>
+                  <span className={styles.lectureTagMatch}>{t("dashboard.match")}</span>
                 </div>
 
                 <div className={styles.lessonMainInfo}>
@@ -119,23 +125,23 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
                     <span className={styles.lessonHanziText}>食</span>
                   </div>
                   <div className="flex-1">
-                    <p className={styles.lessonMetaText}>HSK 2 · SŁOWNICTWO</p>
-                    <h3 className={styles.lessonTitle}>食物 · Jedzenie</h3>
-                    <p className={styles.lessonDuration}>12 новых słówek · ~15 min sesji</p>
+                    <p className={styles.lessonMetaText}>{t("dashboard.vocabMeta")}</p>
+                    <h3 className={styles.lessonTitle}>{t("dashboard.lessonTitle")}</h3>
+                    <p className={styles.lessonDuration}>{t("dashboard.lessonDuration")}</p>
                   </div>
                 </div>
 
                 <div className={styles.reasonCallout}>
-                  <p className={styles.reasonMeta}>ANALIZA SYSTEMU SRS & AI</p>
+                  <p className={styles.reasonMeta}>{t("dashboard.srsAnalysis")}</p>
                   <p className={styles.reasonText}>
-                    Opanowałaś już <span className="text-[var(--accent)] font-semibold">80% słownictwa HSK 2</span>, ale algorytm zarejestrował niedawne błędy w krytycznej kategorii <span className="text-[var(--primary)] font-semibold">'Jedzenie'</span>. Bieżąca sesja zamknie te luki i podniesie ogólną celność do bezpiecznych 88%.
+                    {t("dashboard.reasonBefore")} <span className="text-[var(--accent)] font-semibold">{t("dashboard.reasonHighlight1")}</span>{t("dashboard.reasonMid")} <span className="text-[var(--primary)] font-semibold">{t("dashboard.reasonHighlight2")}</span>{t("dashboard.reasonAfter")}
                   </p>
                 </div>
 
                 <div className={styles.progressSection}>
                   <div className={styles.progressHeader}>
-                    <span className={styles.progressLabel}>Aktualny stan zaawansowania</span>
-                    <span className={styles.progressCount}>7 z 12 słów (58%)</span>
+                    <span className={styles.progressLabel}>{t("dashboard.progressLabel")}</span>
+                    <span className={styles.progressCount}>{t("dashboard.progressCount")}</span>
                   </div>
                   <div className={styles.progressBarContainer}>
                     <div className={styles.progressBar} style={{ width: "58%" }} />
@@ -149,17 +155,17 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
                       key={word.hanzi}
                       hanzi={word.hanzi}
                       pinyin={word.pinyin}
-                      translation={word.translation}
+                      translation={t(`meanings.${word.hanzi}`)}
                     />
                   ))}
                   <div className={styles.moreWordsRow}>
-                    <span className={styles.moreWordsText}>+ 8 słówek oczekuje</span>
+                    <span className={styles.moreWordsText}>{t("dashboard.moreWords")}</span>
                   </div>
                 </div>
 
                 <button onClick={onStartLesson} className={styles.startButton}>
                   <BookOpen size={18} strokeWidth={1.8} />
-                  <span>Rozpocznij spersonalizowaną naukę</span>
+                  <span>{t("dashboard.startLearning")}</span>
                   <ChevronRight size={18} strokeWidth={2} />
                 </button>
               </div>
@@ -169,15 +175,15 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
 
         <div className={styles.sideColumn}>
           <div className={styles.quoteCard}>
-            <p className={styles.quoteTitle}>CYTAT DNIA</p>
+            <p className={styles.quoteTitle}>{t("dashboard.quoteTitle")}</p>
             <p className={styles.quoteHanzi}>学如逆水行舟，不进则退。</p>
             <p className={styles.quoteTranslation}>
-              „Nauka jest jak wiosłowanie pod prąd — jeśli nie płyniesz naprzód, cofasz się.”
+              {t("dashboard.quoteTranslation")}
             </p>
           </div>
 
           <div className={styles.todoCard}>
-            <p className={styles.todoTitle}>DZISIAJ DO ZROBIENIA</p>
+            <p className={styles.todoTitle}>{t("dashboard.todoTitle")}</p>
             <div className={styles.todoList}>
               {todos.map((item) => (
                 <div 
@@ -195,9 +201,9 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
                     {item.done && <span className={styles.todoCheckboxMark}>✓</span>}
                   </div>
                   <div className="flex-1">
-                    <p className={styles.todoLabel}>{item.label}</p>
+                    <p className={styles.todoLabel}>{t(item.labelKey)}</p>
                   </div>
-                  <span className={styles.todoTime}>{item.time}</span>
+                  <span className={styles.todoTime}>{t(item.timeKey)}</span>
                 </div>
               ))}
             </div>
@@ -207,7 +213,7 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
             <div className={styles.errorsHeader}>
               <div className="flex items-center gap-2">
                 <AlertCircle size={16} color="var(--primary)" strokeWidth={1.8} />
-                <p className={styles.errorsTitle}>OSTATNIE BŁĘDY</p>
+                <p className={styles.errorsTitle}>{t("dashboard.errorsTitle")}</p>
               </div>
               <div className={styles.errorsBadge}>
                 <span className={styles.errorsBadgeText}>23</span>
@@ -220,14 +226,14 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
                   key={word.hanzi}
                   hanzi={word.hanzi}
                   pinyin={word.pinyin}
-                  translation={word.translation}
+                  translation={t(`meanings.${word.hanzi}`)}
                 />
               ))}
             </div>
 
             <button onClick={onStartReview} className={styles.reviewAllButton}>
               <RefreshCw size={13} strokeWidth={2} />
-              <span>Powtórz te słowa (SRS)</span>
+              <span>{t("dashboard.reviewWords")}</span>
             </button>
           </div>
         </div>

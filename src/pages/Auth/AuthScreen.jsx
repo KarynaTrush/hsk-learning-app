@@ -1,7 +1,22 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./Auth.module.css";
+import { useAppState } from "../../state/AppState";
 
 export default function AuthScreen({ onAuth }) {
+  const { t } = useTranslation();
+  const { login } = useAppState();
+  const [name, setName] = useState("");
+
+ const handleSubmit = () => {
+  login({ name: name.trim(), email: email.trim() });
+  onAuth();
+ };
+
+ const handleGuest = () => {
+  login({ guest: true });
+  onAuth();
+ };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("login");
@@ -37,26 +52,25 @@ export default function AuthScreen({ onAuth }) {
             </div>
             <div>
               <p className={styles.logoTitle}>漢語學習</p>
-              <p className={styles.logoSubtitle}>PLATFORMA JĘZYKA CHIŃSKIEGO</p>
+              <p className={styles.logoSubtitle}>{t("auth.platform")}</p>
             </div>
           </div>
 
           <h2 className={styles.mainHeading}>
-            Opanuj mandaryński
+            {t("auth.heading")}
             <br />
-            <span className={styles.headingAccent}>krok po kroku.</span>
+            <span className={styles.headingAccent}>{t("auth.headingAccent")}</span>
           </h2>
           <p className={styles.description}>
-            Ucz się opartą na standardach HSK ścieżką — z wizualizatorem
-            tonów, AI-rekomendowanymi lekcjami i piśmiennictwem kaligrafia.
+            {t("auth.description")}
           </p>
         </div>
 
         <div className={styles.leftFeatures}>
           {[
-            { hanzi: "声", label: "Wizualizator tonów w czasie rzeczywistym" },
-            { hanzi: "智", label: "Lekcje rekomendowane przez AI" },
-            { hanzi: "字", label: "Kaligraficzne ćwiczenia pisania" },
+            { hanzi: "声", label: t("auth.featTones") },
+            { hanzi: "智", label: t("auth.featAi") },
+            { hanzi: "字", label: t("auth.featCalligraphy") },
           ].map((f) => (
             <div key={f.hanzi} className="flex items-center gap-3">
               <div className={styles.featureIconBox}>
@@ -79,12 +93,12 @@ export default function AuthScreen({ onAuth }) {
         <div className={styles.formWrapper}>
           <div className="mb-8">
             <h1 className={styles.formTitle}>
-              {mode === "login" ? "Witaj z powrotem" : "Utwórz konto"}
+              {mode === "login" ? t("auth.welcomeBack") : t("auth.createAccount")}
             </h1>
             <p className={styles.formSubtitle}>
               {mode === "login"
-                ? "Zaloguj się i kontynuuj naukę"
-                : "Zacznij swoją przygodę z językiem chińskim"}
+                ? t("auth.loginSubtitle")
+                : t("auth.registerSubtitle")}
             </p>
           </div>
 
@@ -101,26 +115,42 @@ export default function AuthScreen({ onAuth }) {
                   boxShadow: mode === m ? "0 1px 4px rgba(26,26,26,0.08)" : "none",
                 }}
               >
-                {m === "login" ? "Zaloguj się" : "Zarejestruj się"}
+                {m === "login" ? t("auth.login") : t("auth.register")}
               </button>
             ))}
           </div>
 
           <div className={styles.inputFieldContainer}>
             <div>
-              <label className={styles.inputLabel}>ADRES E-MAIL</label>
+              {mode === "register" && (
+                <div>
+                  <label className={styles.inputLabel}>{t("auth.name")}</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t("auth.namePlaceholder")}
+                    className={styles.inputElement}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+              )}
+
+              <label className={styles.inputLabel}>{t("auth.email")}</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="twoj@email.com"
+                placeholder={t("auth.emailPlaceholder")}
                 className={styles.inputElement}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
             </div>
+
             <div>
-              <label className={styles.inputLabel}>HASŁO</label>
+              <label className={styles.inputLabel}>{t("auth.password")}</label>
               <input
                 type="password"
                 value={password}
@@ -136,16 +166,16 @@ export default function AuthScreen({ onAuth }) {
           {mode === "login" && (
             <div className={styles.forgotPasswordRow}>
               <button className={styles.forgotPasswordButton}>
-                Zapomniałeś hasła?
+                {t("auth.forgotPassword")}
               </button>
             </div>
           )}
 
           <button
-            onClick={onAuth}
+            onClick={handleSubmit}
             className={`hover:opacity-90 active:scale-[0.98] ${styles.submitButton}`}
           >
-            {mode === "register" ? "Zarejestruj się →" : "Zaloguj się →"}
+            {mode === "register" ? t("auth.registerSubmit") : t("auth.loginSubmit")}
           </button>
 
           <div className={styles.dividerRow}>
@@ -155,17 +185,17 @@ export default function AuthScreen({ onAuth }) {
           </div>
 
           <button
-            onClick={onAuth}
+            onClick={handleGuest}
             className={`active:scale-[0.98] ${styles.guestButton}`}
           >
-            Kontynuuj bez konta
+            {t("auth.continueGuest")}
           </button>
 
           <p className={styles.legalText}>
-            Rejestrując się, akceptujesz{" "}
-            <span className={styles.legalLink}>Warunki korzystania</span>{" "}
-            i{" "}
-            <span className={styles.legalLink}>Politykę prywatności</span>.
+            {t("auth.legal")}{" "}
+            <span className={styles.legalLink}>{t("auth.terms")}</span>{" "}
+            {t("auth.and")}{" "}
+            <span className={styles.legalLink}>{t("auth.privacy")}</span>.
           </p>
         </div>
       </div>

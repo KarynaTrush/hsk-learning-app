@@ -35,14 +35,14 @@
 }
 
 .avatarText {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 38px;
   font-weight: 700;
   color: var(--primary);
 }
 
 .profileName {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 28px;
   font-weight: 700;
   color: var(--foreground);
@@ -128,7 +128,7 @@
 }
 
 .examLevel {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 24px;
   font-weight: 700;
   color: var(--primary);
@@ -136,7 +136,7 @@
 }
 
 .examDate {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 18px;
   font-weight: 600;
   color: var(--foreground);
@@ -216,7 +216,7 @@
 }
 
 .bigStatNumber {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 44px;
   font-weight: 700;
   color: var(--foreground);
@@ -231,7 +231,7 @@
 }
 
 .miniStatNumber {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 44px;
   font-weight: 700;
   color: var(--foreground);
@@ -439,4 +439,45 @@
   font-family: "Inter", sans-serif;
   font-size: 11px;
   font-weight: 700;
+}
+
+.nameRow { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 6px; }
+.nameRow .profileName { margin-bottom: 0; }
+.levelPill {
+  padding: 0.25rem 0.75rem; border-radius: 9999px;
+  background-color: rgba(200, 62, 52, 0.07); border: 1px solid rgba(200, 62, 52, 0.18);
+  font-family: "Inter", sans-serif; font-size: 12px; font-weight: 600; color: var(--primary);
+}
+.chipsRow { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.chipStreak, .chipWords {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  padding: 0.375rem 0.875rem; border-radius: 9999px;
+  font-family: "Inter", sans-serif; font-size: 12px; font-weight: 600;
+}
+.chipStreak { color: #B8651B; background: rgba(212, 130, 67, 0.08); border: 1px solid rgba(212, 130, 67, 0.22); }
+.chipWords { color: var(--accent); background: rgba(79, 121, 66, 0.06); border: 1px solid rgba(79, 121, 66, 0.18); }
+
+.actionsRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.actionTile {
+  display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.1rem;
+  border-radius: 1.25rem; border: 1px solid var(--border); background-color: var(--card);
+  text-align: left; cursor: pointer; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+}
+.actionTile:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04); }
+
+.statsRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.statsRow .numericStatCard { min-height: 130px; }
+
+.bottomGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.bottomGrid .chartCard { height: 420px; min-height: 420px; }
+.bottomGrid .scrollContainer { height: auto; min-height: 0; }
+
+.chartTitleStrong { font-family: "Inter", sans-serif; font-size: 15px; font-weight: 600; color: var(--foreground); }
+.chartSub { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); margin: 2px 0 1rem; }
+.lineChartBox { flex: 1; min-height: 0; }
+
+@media (max-width: 1100px) {
+  .topGrid, .bottomGrid { grid-template-columns: 1fr; }
+  .actionsRow, .statsRow { grid-template-columns: repeat(2, 1fr); }
 }

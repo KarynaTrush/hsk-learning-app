@@ -29,7 +29,7 @@
   justify-content: center;
   pointer-events: none;
   opacity: 0.055;
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: clamp(280px, 30vw, 420px);
   font-weight: 700;
   color: #1a1a1a;
@@ -44,7 +44,7 @@
   right: 4rem;
   pointer-events: none;
   opacity: 0.04;
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 180px;
   font-weight: 700;
   color: #1a1a1a;
@@ -57,7 +57,7 @@
   left: 2.5rem;
   pointer-events: none;
   opacity: 0.04;
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 140px;
   font-weight: 700;
   color: #1a1a1a;
@@ -93,14 +93,14 @@
 }
 
 .logoHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 24px;
   font-weight: 700;
   color: var(--primary);
 }
 
 .logoTitle {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--foreground);
@@ -114,7 +114,7 @@
 }
 
 .mainHeading {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 42px;
   font-weight: 700;
   color: var(--foreground);
@@ -159,7 +159,7 @@
 }
 
 .featureHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--primary);
@@ -197,14 +197,14 @@
 }
 
 .mobileLogoHanzi {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 20px;
   font-weight: 700;
   color: var(--primary);
 }
 
 .mobileLogoTitle {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--foreground);
@@ -216,7 +216,7 @@
 }
 
 .formTitle {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 30px;
   font-weight: 700;
   color: var(--foreground);
@@ -322,7 +322,7 @@
 }
 
 .dividerText {
-  font-family: "'Noto Serif SC', serif";
+  font-family: 'Noto Serif SC', serif;
   font-size: 16px;
   color: var(--muted-foreground);
   opacity: 0.5;
