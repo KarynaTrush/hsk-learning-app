@@ -363,7 +363,7 @@
   line-height: 1.4;
 }
 
-/* Д) Стили кликабельных тасок */
+
 .todoCard {
   border-radius: 1rem;
   border: 1px solid var(--border);
@@ -583,7 +583,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-w: 0;
+  min-width: 0;
   flex: 1;
 }
 
@@ -611,10 +611,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* СЕТКА СЛОВ ПОСЕРЕДИНЕ ЛЕКЦИИ */
+
 .previewWordsGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Ровная сетка из двух колонок */
+  grid-template-columns: 1fr 1fr; 
   gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
@@ -638,7 +638,7 @@
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
-  justify-content: center; /* Центрируем иероглиф горизонтально */
+  justify-content: center; 
   background-color: var(--secondary);
   border: 1px solid var(--border);
 }
@@ -654,7 +654,7 @@
   font-size: 17px;
   font-weight: 700;
   color: var(--foreground);
-  text-align: center; /* Центрируем текст */
+  text-align: center; 
 }
 
 .previewHanziLong {
@@ -695,3 +695,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.container { max-width: 1480px; padding: 1.75rem 2.5rem 4rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.bannerChip { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1.1rem; border-radius: 1rem; background: rgba(255, 255, 255, 0.18); border: 2px solid rgba(255, 255, 255, 0.4); }
+.bannerChipValue { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 700; line-height: 1; }
+.bannerChipLabel { font-family: "Inter", sans-serif; font-size: 10.5px; opacity: 0.9; }
+.dayRing { position: relative; width: 4.5rem; height: 4.5rem; display: flex; align-items: center; justify-content: center; font-family: "Inter", sans-serif; font-weight: 800; font-size: 14px; }
+.dayRing svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dayRingTrack { fill: none; stroke: rgba(255, 255, 255, 0.28); stroke-width: 8; }
+.dayRingFill { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; transition: stroke-dasharray 0.6s ease; }
+.emptyText { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted-foreground); padding: 0.5rem 0; }
+.lessonCard, .quoteCard, .todoCard, .errorsCard { border-radius: 1.75rem; box-shadow: 0 6px 0 var(--border), 0 16px 30px rgba(0, 0, 0, 0.04); }
+.lessonCard { background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 22px 22px; }
+.startButton { box-shadow: 0 5px 0 rgba(150, 40, 33, 0.55); cursor: pointer; transition: transform 0.15s; }
+.startButton:hover { transform: translateY(-1px); }
+.startButton:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(150, 40, 33, 0.55); }
+.previewWordCard, .errCard { box-shadow: 0 3px 0 var(--border); }
+.todoItem { padding: 0.4rem 0.5rem; border-radius: 0.8rem; }
+.todoItem:hover { background: var(--secondary); opacity: 1; }
+@media (max-width: 1000px) { .container { padding: 1.25rem 1rem 3rem; } .dashboardGrid { grid-template-columns: 1fr; } }

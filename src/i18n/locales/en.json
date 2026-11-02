@@ -17,7 +17,10 @@
     "storiesSub": "Texts and traditions",
     "profile": "Profile",
     "profileSub": "Statistics",
-    "examForecast": "EXAM FORECAST"
+    "examForecast": "EXAM FORECAST",
+    "writing": "Writing",
+    "writingSub": "Characters and strokes",
+    "readiness": "Readiness {{percent}}%"
   },
   "screens": {
     "lessonTitle": "Lesson · Food",
@@ -100,7 +103,21 @@
     "and": "and",
     "privacy": "Privacy policy",
     "name": "NAME",
-    "namePlaceholder": "Anna"
+    "namePlaceholder": "Anna",
+    "loading": "Please wait…",
+    "errors": {
+      "invalid_email": "Enter a valid email",
+      "password_short": "Password must be at least 8 characters",
+      "name_required": "Enter your name",
+      "invalid_credentials": "Incorrect email or password",
+      "email_taken": "This email is already registered",
+      "confirm_email": "Check your inbox: we sent a confirmation link",
+      "rate_limited": "Too many attempts. Please wait a moment",
+      "network": "No connection to the server. Check your internet",
+      "not_configured": "Supabase connection is not configured (.env.local)",
+      "wrong_password": "The current password is incorrect",
+      "server_error": "Something went wrong. Please try again"
+    }
   },
   "placement": {
     "title": "PLACEMENT TEST",
@@ -166,7 +183,8 @@
     "finishLesson": "Finish lesson",
     "wordsInLesson": "WORDS IN THIS LESSON",
     "buildTitle": "Build the sentence",
-    "buildHint": "Tap the characters in the correct order"
+    "buildHint": "Tap the characters in the correct order",
+    "empty": "This lesson has no words yet"
   },
   "profile": {
     "meta": "Learning for 14 weeks · HSK 3 → 4 · 5-day streak 🔥",
@@ -195,13 +213,32 @@
     "streakDays": "{{count}}-day streak",
     "wordsLearned": "{{count}} words",
     "dynamics": "HSK progress",
-    "dynamicsSub": "Vocabulary growth · 6 months"
+    "dynamicsSub": "Vocabulary growth · 6 months",
+    "min": "{{count}} min"
   },
   "path": {
     "completed": "Completed",
     "active": "Active",
     "locked": "Locked",
-    "topicBlock": "Topic block · {{count}} lessons"
+    "topicBlock": "Topic block · {{count}} lessons",
+    "lessonsCount": "Lessons: {{count}}",
+    "words": "Words: {{count}}",
+    "comingSoon": "Lessons for this level are coming soon",
+    "start": "Start",
+    "progress": "Lessons completed: {{done}} of {{total}}",
+    "level0": "Basics",
+    "statLessons": "Lessons",
+    "statWords": "Words",
+    "statStreak": "Streak",
+    "levelNames": {
+      "0": "How Chinese works",
+      "1": "First steps",
+      "2": "A solid base",
+      "3": "Everyday communication",
+      "4": "Fluent conversation",
+      "5": "Reading and discussion",
+      "6": "Professional level"
+    }
   },
   "tones": {
     "targetSyllable": "TARGET SYLLABLE",
@@ -795,5 +832,221 @@
     "商店": "That shop is very big.",
     "便宜": "This piece of clothing is very cheap.",
     "漂亮": "She is very beautiful."
+  },
+  "content": {
+    "loading": "Loading lessons…",
+    "error": "Could not load lessons",
+    "retry": "Try again"
+  },
+  "flow": {
+    "intro": "Introduction",
+    "grammar": "Grammar",
+    "continue": "Got it",
+    "next": "Next",
+    "check": "Check",
+    "correct": "Correct!",
+    "wrong": "Not quite. Correct answer: {{answer}}",
+    "newWord": "New word",
+    "example": "Example",
+    "close": "Close",
+    "finish": "Finish lesson",
+    "summaryTitle": "Lesson complete",
+    "summaryScore": "Correct answers: {{correct}} of {{total}}",
+    "skillsTitle": "What you practiced",
+    "retryNote": "We'll come back to this one",
+    "noSpeech": "Audio is not available in this browser",
+    "tapTiles": "Tap the words to build the sentence",
+    "stepOf": "{{current}} of {{total}}",
+    "pinyin": "Pinyin",
+    "prompt": {
+      "chooseMeaning": "Choose the translation",
+      "chooseHanzi": "Choose the character",
+      "listen": "What do you hear?",
+      "pinyinPick": "Choose the correct reading",
+      "translate": "Choose the translation of the sentence",
+      "fill": "Fill in the missing word",
+      "order": "Build the sentence",
+      "quiz": "Check yourself"
+    },
+    "skill": {
+      "recognition": "Word recognition",
+      "recall": "Word recall",
+      "listening": "Listening",
+      "pinyin": "Reading pinyin",
+      "grammar": "Grammar",
+      "reading": "Sentence translation",
+      "knowledge": "Theory",
+      "tones": "Tones",
+      "writing": "Writing characters"
+    }
+  },
+  "account": {
+    "title": "Profile settings",
+    "subtitle": "Account and app",
+    "guest": "Guest",
+    "noEmail": "No email",
+    "guestNotice": "You are using the app as a guest. Create an account to save your progress and change profile settings.",
+    "photoHint": "JPG or PNG, up to 5 MB",
+    "upload": "Upload photo",
+    "avatar_type": "Choose an image file",
+    "avatar_size": "The file is larger than 5 MB",
+    "avatarFailed": "Could not upload the photo",
+    "personal": "Personal details",
+    "name": "First name",
+    "surname": "Last name",
+    "save": "Save",
+    "saved": "Saved",
+    "email": "Email",
+    "newEmail": "New email",
+    "changeEmail": "Change email",
+    "emailSent": "We sent a confirmation email. The address will change after you confirm.",
+    "password": "Password",
+    "oldPassword": "Current password",
+    "newPassword": "New password (8+ characters)",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed",
+    "sessions": "Active sessions",
+    "thisDevice": "This device",
+    "lastSignIn": "last sign-in {{date}}",
+    "signOutOthers": "Sign out on other devices",
+    "signedOutOthers": "Signed out on other devices",
+    "preferences": "App settings",
+    "language": "Interface language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "danger": "Sign out and deletion",
+    "logout": "Sign out",
+    "delete": "Delete account",
+    "deleteConfirm": "Your account and all progress will be permanently deleted. Continue?"
+  },
+  "home": {
+    "greeting": "Good day, {{name}} · {{date}}",
+    "greetingNoName": "Good day · {{date}}",
+    "subtitle": "Recommendation, reviews and today's tasks",
+    "tagDue": "To review: {{count}}",
+    "tagLevel": "HSK {{level}}",
+    "lessonInfo": "Words: {{words}} · about {{minutes}} min",
+    "progressWords": "{{done}} of {{words}} words",
+    "moreWords": "{{count}} more words",
+    "cardsCount": "{{count}} cards",
+    "noErrors": "No mistakes yet. Keep it up!",
+    "reason": {
+      "start": "Start with the first lesson: it explains how Chinese works.",
+      "next": "The next step on your path: the lesson “{{lesson}}”.",
+      "due": "Words to review: {{count}}. Review them, then continue the lesson “{{lesson}}”.",
+      "weak": "Your lowest accuracy is in “{{skill}}” ({{percent}}%). The lesson “{{lesson}}” will include more of these tasks."
+    }
+  },
+  "toneLab": {
+    "kicker": "Pronunciation",
+    "subtitle": "Listen to the model and repeat. The app shows the melody of your voice.",
+    "target": "Target syllable",
+    "hear": "Play the model",
+    "example": "Example",
+    "press": "Press and speak",
+    "recording": "Recording. Press to finish",
+    "vizTitle": "The melody of your voice",
+    "vizSub": "Your voice (dark line) and the model (colored line)",
+    "high": "High",
+    "low": "Low",
+    "legendTarget": "Model ({{tone}})",
+    "legendOthers": "Other tones",
+    "legendYou": "Your voice",
+    "score": "{{score}}% match",
+    "live": "RECORDING",
+    "good": "Excellent! The tone was recognized correctly.",
+    "goodDesc": "Your melody matches the model ({{tone}}) by {{score}}%.",
+    "almost": "Almost! A few small corrections are needed.",
+    "soundsLike": "It sounds more like {{tone}}.",
+    "accuracy": "Tone accuracy",
+    "tone": {
+      "1": {
+        "name": "Tone 1",
+        "desc": "high and flat",
+        "example": "māma (mom)"
+      },
+      "2": {
+        "name": "Tone 2",
+        "desc": "rising",
+        "example": "máfan (trouble)"
+      },
+      "3": {
+        "name": "Tone 3",
+        "desc": "falling then rising",
+        "example": "mǎ (horse)"
+      },
+      "4": {
+        "name": "Tone 4",
+        "desc": "falling",
+        "example": "mà (to scold)"
+      }
+    },
+    "hint": {
+      "1": "Keep your voice high and steady through the whole syllable.",
+      "2": "Start lower and rise clearly.",
+      "3": "First drop your voice, then raise it.",
+      "4": "Start high and fall sharply."
+    },
+    "errors": {
+      "micDenied": "No access to the microphone. Allow it in your browser settings.",
+      "micUnsupported": "Your browser does not support voice recording.",
+      "noVoice": "No voice detected. Speak louder and closer to the microphone."
+    }
+  },
+  "grammar": {
+    "kicker": "Reference",
+    "title": "Grammar base",
+    "subtitle": "All topics by HSK level: explanations and examples only, no exercises",
+    "back": "Back to profile",
+    "empty": "Topics for this level are coming soon",
+    "pattern": "Pattern"
+  },
+  "reading": {
+    "bannerKicker": "Your level: HSK {{level}}",
+    "bannerSubtitle": "Stories unlocked: {{open}} of {{total}}. More open as you progress through the lessons.",
+    "locked": "Unlocks at HSK {{level}}",
+    "readAgain": "Read again",
+    "backToList": "Back to stories",
+    "hoverHint": "Hover over a character to see pinyin and the translation",
+    "noTranslation": "No translation yet",
+    "playAll": "Play the text",
+    "markRead": "Mark as read",
+    "readDone": "Read"
+  },
+  "writing": {
+    "kicker": "Calligraphy",
+    "subtitle": "Watch the stroke order, then write the character with your mouse or finger. The app checks every stroke.",
+    "fromLesson": "From the lesson",
+    "learned": "Learned",
+    "customPlaceholder": "Any character",
+    "go": "Open",
+    "mode": {
+      "watch": "Watch",
+      "trace": "Trace",
+      "free": "No hints"
+    },
+    "unsupported": "There is no stroke data for this character",
+    "loading": "Loading…",
+    "progress": "Strokes written: {{done}} of {{total}}",
+    "mistakes": "mistakes: {{count}}",
+    "watchHint": "Memorize the stroke order, then press “Try it myself”",
+    "restart": "Restart",
+    "tryYourself": "Try it myself",
+    "nextChar": "Next",
+    "strokesCount": "Strokes: {{count}}",
+    "inWords": "Appears in words",
+    "strokeOrder": "Stroke order",
+    "rulesTitle": "Writing rules",
+    "rule1": "Top to bottom and left to right.",
+    "rule2": "Horizontal strokes before vertical ones (十).",
+    "rule3": "Falling left before falling right (人).",
+    "rule4": "Close the frame last (日).",
+    "result": {
+      "1": "Good try. Give it another go!",
+      "2": "Well done!",
+      "3": "Perfect!"
+    },
+    "mistakesTotal": "Mistakes: {{count}}"
   }
 }

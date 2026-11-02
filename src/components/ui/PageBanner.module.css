@@ -1,0 +1,14 @@
+.banner { position: relative; overflow: hidden; display: flex; align-items: center; gap: 1.5rem; padding: 1.6rem 2rem; border-radius: 1.75rem; color: #fff; background: linear-gradient(120deg, var(--level) 0%, color-mix(in srgb, var(--level) 68%, #1a1a1a) 100%); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12); min-height: 140px; }
+.art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.mountainBack { fill: rgba(255, 255, 255, 0.13); }
+.mountainFront { fill: rgba(255, 255, 255, 0.2); }
+.cloud { fill: rgba(255, 255, 255, 0.28); animation: drift 9s ease-in-out infinite alternate; }
+.leading { position: relative; width: 5.5rem; height: 5.5rem; border-radius: 9999px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255, 255, 255, 0.18); border: 3px solid rgba(255, 255, 255, 0.55); font-family: 'Noto Serif SC', serif; font-size: 44px; font-weight: 700; }
+.leading img { width: 100%; height: 100%; object-fit: cover; }
+.text { position: relative; flex: 1; min-width: 0; }
+.kicker { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; }
+.title { font-family: 'Noto Serif SC', serif; font-size: 30px; font-weight: 700; margin: 2px 0 4px; line-height: 1.2; }
+.subtitle { font-family: "Inter", sans-serif; font-size: 13.5px; opacity: 0.92; }
+.side { position: relative; display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; justify-content: flex-end; }
+@keyframes drift { from { transform: translateX(0); } to { transform: translateX(-14px); } }
+@media (max-width: 900px) { .banner { flex-wrap: wrap; padding: 1.25rem; } .title { font-size: 22px; } .side { justify-content: flex-start; } }

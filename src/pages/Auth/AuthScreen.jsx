@@ -1,25 +1,20 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import styles from "./Auth.module.css";
 import { useAppState } from "../../state/AppState";
+import styles from "./Auth.module.css";
+
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 export default function AuthScreen({ onAuth }) {
   const { t } = useTranslation();
-  const { login } = useAppState();
+  const { register, signIn, login } = useAppState();
   const [name, setName] = useState("");
-
- const handleSubmit = () => {
-  login({ name: name.trim(), email: email.trim() });
-  onAuth();
- };
-
- const handleGuest = () => {
-  login({ guest: true });
-  onAuth();
- };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("login");
+  const [error, setError] = useState("");
+  const [detail, setDetail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleInputFocus = (e) => {
     e.target.style.borderColor = "var(--primary)";
@@ -30,6 +25,45 @@ export default function AuthScreen({ onAuth }) {
     e.target.style.borderColor = "var(--border)";
     e.target.style.boxShadow = "none";
   };
+
+  const switchMode = (m) => {
+    setMode(m);
+    setError("");
+  };
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (loading) return;
+    setError("");
+    setDetail("");
+
+    const cleanEmail = email.trim().toLowerCase();
+    if (mode === "register" && !name.trim()) return setError("name_required");
+    if (!EMAIL_RE.test(cleanEmail)) return setError("invalid_email");
+    if (mode === "register" && password.length < 8) return setError("password_short");
+    if (!password) return setError("invalid_credentials");
+
+    setLoading(true);
+    try {
+      if (mode === "register") {
+        await register({ name: name.trim(), email: cleanEmail, password });
+      } else {
+        await signIn({ email: cleanEmail, password });
+      }
+      setLoading(false);
+      onAuth();
+    } catch (err) {
+      console.warn("Auth error:", err);
+      setLoading(false);
+      setError(err?.code || "server_error");
+      setDetail(err?.detail || err?.message || "");
+    }
+  }
+
+  function handleGuest() {
+    login({ guest: true });
+    onAuth();
+  }
 
   return (
     <div className={styles.container}>
@@ -44,7 +78,7 @@ export default function AuthScreen({ onAuth }) {
           <span>道</span>
         </div>
         <div className={styles.panelBorder} />
-        
+
         <div className={styles.leftHeader}>
           <div className="flex items-center gap-4 mb-16">
             <div className={styles.logoBox}>
@@ -61,9 +95,7 @@ export default function AuthScreen({ onAuth }) {
             <br />
             <span className={styles.headingAccent}>{t("auth.headingAccent")}</span>
           </h2>
-          <p className={styles.description}>
-            {t("auth.description")}
-          </p>
+          <p className={styles.description}>{t("auth.description")}</p>
         </div>
 
         <div className={styles.leftFeatures}>
@@ -90,15 +122,13 @@ export default function AuthScreen({ onAuth }) {
           <span className={styles.mobileLogoTitle}>漢語學習</span>
         </div>
 
-        <div className={styles.formWrapper}>
+        <form className={styles.formWrapper} onSubmit={handleSubmit} noValidate>
           <div className="mb-8">
             <h1 className={styles.formTitle}>
               {mode === "login" ? t("auth.welcomeBack") : t("auth.createAccount")}
             </h1>
             <p className={styles.formSubtitle}>
-              {mode === "login"
-                ? t("auth.loginSubtitle")
-                : t("auth.registerSubtitle")}
+              {mode === "login" ? t("auth.loginSubtitle") : t("auth.registerSubtitle")}
             </p>
           </div>
 
@@ -106,7 +136,8 @@ export default function AuthScreen({ onAuth }) {
             {["login", "register"].map((m) => (
               <button
                 key={m}
-                onClick={() => setMode(m)}
+                type="button"
+                onClick={() => switchMode(m)}
                 className={styles.modeButton}
                 style={{
                   backgroundColor: mode === m ? "var(--card)" : "transparent",
@@ -121,25 +152,26 @@ export default function AuthScreen({ onAuth }) {
           </div>
 
           <div className={styles.inputFieldContainer}>
+            {mode === "register" && (
+              <div>
+                <label className={styles.inputLabel}>{t("auth.name")}</label>
+                <input
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder={t("auth.namePlaceholder")}
+                  className={styles.inputElement}
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                />
+              </div>
+            )}
             <div>
-              {mode === "register" && (
-                <div>
-                  <label className={styles.inputLabel}>{t("auth.name")}</label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={t("auth.namePlaceholder")}
-                    className={styles.inputElement}
-                    onFocus={handleInputFocus}
-                    onBlur={handleInputBlur}
-                  />
-                </div>
-              )}
-
               <label className={styles.inputLabel}>{t("auth.email")}</label>
               <input
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t("auth.emailPlaceholder")}
@@ -148,11 +180,11 @@ export default function AuthScreen({ onAuth }) {
                 onBlur={handleInputBlur}
               />
             </div>
-
             <div>
               <label className={styles.inputLabel}>{t("auth.password")}</label>
               <input
                 type="password"
+                autoComplete={mode === "register" ? "new-password" : "current-password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -165,17 +197,29 @@ export default function AuthScreen({ onAuth }) {
 
           {mode === "login" && (
             <div className={styles.forgotPasswordRow}>
-              <button className={styles.forgotPasswordButton}>
+              <button type="button" className={styles.forgotPasswordButton}>
                 {t("auth.forgotPassword")}
               </button>
             </div>
           )}
 
+          {error && (
+            <p className={styles.errorText} role="alert">
+              {t(`auth.errors.${error}`, { defaultValue: t("auth.errors.server_error") })}
+              {import.meta.env.DEV && detail && (
+                <small style={{ display: "block", marginTop: 6, opacity: 0.8, wordBreak: "break-word" }}>
+                  [dev] {detail}
+                </small>
+              )}
+            </p>
+          )}
+
           <button
-            onClick={handleSubmit}
+            type="submit"
+            disabled={loading}
             className={`hover:opacity-90 active:scale-[0.98] ${styles.submitButton}`}
           >
-            {mode === "register" ? t("auth.registerSubmit") : t("auth.loginSubmit")}
+            {loading ? t("auth.loading") : mode === "register" ? t("auth.registerSubmit") : t("auth.loginSubmit")}
           </button>
 
           <div className={styles.dividerRow}>
@@ -185,6 +229,7 @@ export default function AuthScreen({ onAuth }) {
           </div>
 
           <button
+            type="button"
             onClick={handleGuest}
             className={`active:scale-[0.98] ${styles.guestButton}`}
           >
@@ -192,12 +237,10 @@ export default function AuthScreen({ onAuth }) {
           </button>
 
           <p className={styles.legalText}>
-            {t("auth.legal")}{" "}
-            <span className={styles.legalLink}>{t("auth.terms")}</span>{" "}
-            {t("auth.and")}{" "}
+            {t("auth.legal")} <span className={styles.legalLink}>{t("auth.terms")}</span> {t("auth.and")}{" "}
             <span className={styles.legalLink}>{t("auth.privacy")}</span>.
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );

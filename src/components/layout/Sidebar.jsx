@@ -1,15 +1,20 @@
 import React from 'react';
 import { useTranslation } from "react-i18next";
+import { useAppState } from "../../state/AppState";
+import { examReadiness } from "../../lib/readiness";
 import logo from '../../assets/images/logo.png';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar({ isMain, activeTab, goMain }) {
   const { t } = useTranslation();
+  const { state } = useAppState();
+  const exam = examReadiness(state);
 
   const menuItems = [
     { id: "dashboard", label: t("nav.dashboard"), hanzi: "主", sublabel: t("nav.dashboardSub") },
     { id: "path",      label: t("nav.path"),      hanzi: "路", sublabel: t("nav.pathSub") },
     { id: "tones",     label: t("nav.tones"),     hanzi: "声", sublabel: t("nav.tonesSub") },
+    { id: "writing",   label: t("nav.writing"),   hanzi: "写", sublabel: t("nav.writingSub") },
     { id: "stories",   label: t("nav.stories"),   hanzi: "书", sublabel: t("nav.storiesSub") },
     { id: "profile",   label: t("nav.profile"),   hanzi: "我", sublabel: t("nav.profileSub") },
   ];
@@ -62,8 +67,8 @@ export default function Sidebar({ isMain, activeTab, goMain }) {
       <div className="px-4 pb-5 pt-2">
         <div className={`rounded-xl px-4 py-3 ${styles.forecastWidget}`}>
           <p className={styles.forecastTitle}>{t("nav.examForecast")}</p>
-          <p className={styles.forecastValue}>HSK 3</p>
-          <p className={styles.forecastDate}>est. 15.03.2027</p>
+          <p className={styles.forecastValue}>HSK {exam.target}</p>
+          <p className={styles.forecastDate}>{t("nav.readiness", { percent: exam.percent })}</p>
         </div>
       </div>
     </aside>

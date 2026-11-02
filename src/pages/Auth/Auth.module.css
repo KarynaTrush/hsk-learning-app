@@ -358,3 +358,15 @@
   color: var(--primary);
   cursor: pointer;
 }
+
+.errorText {
+  margin: 0.75rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.75rem;
+  background: rgba(200, 62, 52, 0.08);
+  border: 1px solid rgba(200, 62, 52, 0.2);
+  color: var(--primary);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+}
+.submitButton:disabled { opacity: 0.6; cursor: not-allowed; }

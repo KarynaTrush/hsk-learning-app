@@ -17,7 +17,10 @@
     "storiesSub": "Teksty i tradycje",
     "profile": "Profil",
     "profileSub": "Statystyki",
-    "examForecast": "PROGNOZA EGZAMINU"
+    "examForecast": "PROGNOZA EGZAMINU",
+    "writing": "Pisanie",
+    "writingSub": "Znaki i kreski",
+    "readiness": "Gotowość {{percent}}%"
   },
   "screens": {
     "lessonTitle": "Lekcja · Jedzenie",
@@ -100,7 +103,21 @@
     "and": "i",
     "privacy": "Politykę prywatności",
     "name": "IMIĘ",
-    "namePlaceholder": "Anna"
+    "namePlaceholder": "Anna",
+    "loading": "Chwileczkę…",
+    "errors": {
+      "invalid_email": "Wpisz poprawny adres e-mail",
+      "password_short": "Hasło musi mieć co najmniej 8 znaków",
+      "name_required": "Wpisz imię",
+      "invalid_credentials": "Nieprawidłowy e-mail lub hasło",
+      "email_taken": "Ten adres e-mail jest już zarejestrowany",
+      "confirm_email": "Sprawdź skrzynkę: wysłaliśmy link potwierdzający",
+      "rate_limited": "Zbyt wiele prób. Odczekaj chwilę",
+      "network": "Brak połączenia z serwerem. Sprawdź internet",
+      "not_configured": "Nie skonfigurowano połączenia z Supabase (plik .env.local)",
+      "wrong_password": "Aktualne hasło jest nieprawidłowe",
+      "server_error": "Coś poszło nie tak. Spróbuj ponownie"
+    }
   },
   "placement": {
     "title": "TEST POZIOMUJĄCY",
@@ -166,7 +183,8 @@
     "finishLesson": "Zakończ lekcję",
     "wordsInLesson": "SŁOWA W TEJ LEKCJI",
     "buildTitle": "Ułóż zdanie",
-    "buildHint": "Kliknij znaki we właściwej kolejności"
+    "buildHint": "Kliknij znaki we właściwej kolejności",
+    "empty": "W tej lekcji nie ma jeszcze słów"
   },
   "profile": {
     "meta": "Uczy się od 14 tygodni · HSK 3 → 4 · 5-dniowa passa 🔥",
@@ -195,13 +213,32 @@
     "streakDays": "{{count}} dni z rzędu",
     "wordsLearned": "{{count}} słów",
     "dynamics": "Dynamika HSK",
-    "dynamicsSub": "Przyrost słownictwa · 6 miesięcy"
+    "dynamicsSub": "Przyrost słownictwa · 6 miesięcy",
+    "min": "{{count}} min"
   },
   "path": {
     "completed": "Ukończono",
     "active": "Aktywne",
     "locked": "Zablokowane",
-    "topicBlock": "Blok tematyczny · {{count}} leksje"
+    "topicBlock": "Blok tematyczny · {{count}} leksje",
+    "lessonsCount": "Lekcji: {{count}}",
+    "words": "Słów: {{count}}",
+    "comingSoon": "Lekcje dla tego poziomu pojawią się wkrótce",
+    "start": "Zacznij",
+    "progress": "Ukończone lekcje: {{done}} z {{total}}",
+    "level0": "Podstawy",
+    "statLessons": "Lekcje",
+    "statWords": "Słowa",
+    "statStreak": "Seria",
+    "levelNames": {
+      "0": "Jak działa chiński",
+      "1": "Pierwsze kroki",
+      "2": "Pewna baza",
+      "3": "Codzienna komunikacja",
+      "4": "Swobodna rozmowa",
+      "5": "Czytanie i dyskusje",
+      "6": "Poziom zawodowy"
+    }
   },
   "tones": {
     "targetSyllable": "DOCELOWA SYLABA",
@@ -795,5 +832,221 @@
     "商店": "Ten sklep jest bardzo duży.",
     "便宜": "To ubranie jest bardzo tanie.",
     "漂亮": "Ona jest bardzo piękna."
+  },
+  "content": {
+    "loading": "Ładowanie lekcji…",
+    "error": "Nie udało się załadować lekcji",
+    "retry": "Spróbuj ponownie"
+  },
+  "flow": {
+    "intro": "Wprowadzenie",
+    "grammar": "Gramatyka",
+    "continue": "Rozumiem",
+    "next": "Dalej",
+    "check": "Sprawdź",
+    "correct": "Dobrze!",
+    "wrong": "Źle. Poprawnie: {{answer}}",
+    "newWord": "Nowe słowo",
+    "example": "Przykład",
+    "close": "Zamknij",
+    "finish": "Zakończ lekcję",
+    "summaryTitle": "Lekcja ukończona",
+    "summaryScore": "Poprawne odpowiedzi: {{correct}} z {{total}}",
+    "skillsTitle": "Co ćwiczyłeś(-aś)",
+    "retryNote": "Wrócimy do tego jeszcze raz",
+    "noSpeech": "Odtwarzanie dźwięku jest niedostępne w tej przeglądarce",
+    "tapTiles": "Klikaj słowa, aby ułożyć zdanie",
+    "stepOf": "{{current}} z {{total}}",
+    "pinyin": "Pinyin",
+    "prompt": {
+      "chooseMeaning": "Wybierz tłumaczenie",
+      "chooseHanzi": "Wybierz znak",
+      "listen": "Co słyszysz?",
+      "pinyinPick": "Wybierz poprawną wymowę",
+      "translate": "Wybierz tłumaczenie zdania",
+      "fill": "Uzupełnij brakujące słowo",
+      "order": "Ułóż zdanie",
+      "quiz": "Sprawdź się"
+    },
+    "skill": {
+      "recognition": "Rozpoznawanie słów",
+      "recall": "Przypominanie słów",
+      "listening": "Rozumienie ze słuchu",
+      "pinyin": "Czytanie pinyin",
+      "grammar": "Gramatyka",
+      "reading": "Tłumaczenie zdań",
+      "knowledge": "Znajomość teorii",
+      "tones": "Tony",
+      "writing": "Pisanie znaków"
+    }
+  },
+  "account": {
+    "title": "Ustawienia profilu",
+    "subtitle": "Konto i aplikacja",
+    "guest": "Gość",
+    "noEmail": "Brak adresu e-mail",
+    "guestNotice": "Korzystasz z aplikacji jako gość. Załóż konto, aby zapisywać postępy i zmieniać ustawienia profilu.",
+    "photoHint": "JPG lub PNG, do 5 MB",
+    "upload": "Wgraj zdjęcie",
+    "avatar_type": "Wybierz plik graficzny",
+    "avatar_size": "Plik jest większy niż 5 MB",
+    "avatarFailed": "Nie udało się wgrać zdjęcia",
+    "personal": "Dane osobowe",
+    "name": "Imię",
+    "surname": "Nazwisko",
+    "save": "Zapisz",
+    "saved": "Zapisano",
+    "email": "E-mail",
+    "newEmail": "Nowy e-mail",
+    "changeEmail": "Zmień e-mail",
+    "emailSent": "Wysłaliśmy wiadomość z potwierdzeniem. Adres zmieni się po potwierdzeniu.",
+    "password": "Hasło",
+    "oldPassword": "Obecne hasło",
+    "newPassword": "Nowe hasło (min. 8 znaków)",
+    "changePassword": "Zmień hasło",
+    "passwordChanged": "Hasło zostało zmienione",
+    "sessions": "Aktywne sesje",
+    "thisDevice": "To urządzenie",
+    "lastSignIn": "ostatnie logowanie {{date}}",
+    "signOutOthers": "Wyloguj na innych urządzeniach",
+    "signedOutOthers": "Wylogowano na innych urządzeniach",
+    "preferences": "Ustawienia aplikacji",
+    "language": "Język interfejsu",
+    "theme": "Motyw",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny",
+    "danger": "Wylogowanie i usuwanie",
+    "logout": "Wyloguj",
+    "delete": "Usuń konto",
+    "deleteConfirm": "Konto i cały postęp zostaną trwale usunięte. Kontynuować?"
+  },
+  "home": {
+    "greeting": "Dzień dobry, {{name}} · {{date}}",
+    "greetingNoName": "Dzień dobry · {{date}}",
+    "subtitle": "Rekomendacja, powtórki i zadania na dziś",
+    "tagDue": "Do powtórki: {{count}}",
+    "tagLevel": "HSK {{level}}",
+    "lessonInfo": "Słów: {{words}} · około {{minutes}} min",
+    "progressWords": "{{done}} z {{words}} słów",
+    "moreWords": "jeszcze {{count}} słów",
+    "cardsCount": "{{count}} kart",
+    "noErrors": "Na razie bez błędów. Tak trzymaj!",
+    "reason": {
+      "start": "Zacznij od pierwszej lekcji: wyjaśni, jak zbudowany jest język chiński.",
+      "next": "Następny krok na twojej ścieżce: lekcja «{{lesson}}».",
+      "due": "Słów do powtórki: {{count}}. Powtórz je, a potem kontynuuj lekcję «{{lesson}}».",
+      "weak": "Najmniej poprawnych odpowiedzi masz w umiejętności «{{skill}}» ({{percent}}%). W lekcji «{{lesson}}» będzie więcej takich zadań."
+    }
+  },
+  "toneLab": {
+    "kicker": "Wymowa",
+    "subtitle": "Posłuchaj wzorca i powtórz. Aplikacja pokaże melodię twojego głosu.",
+    "target": "Docelowa sylaba",
+    "hear": "Odsłuchaj wzorzec",
+    "example": "Przykład",
+    "press": "Naciśnij i mów",
+    "recording": "Trwa nagrywanie. Naciśnij, aby zakończyć",
+    "vizTitle": "Melodia twojego głosu",
+    "vizSub": "Twój głos (ciemna linia) i wzorzec (kolorowa linia)",
+    "high": "Wysoko",
+    "low": "Nisko",
+    "legendTarget": "Wzorzec ({{tone}})",
+    "legendOthers": "Inne tony",
+    "legendYou": "Twój głos",
+    "score": "{{score}}% zgodności",
+    "live": "NAGRYWANIE",
+    "good": "Doskonale! Ton rozpoznany poprawnie.",
+    "goodDesc": "Melodia zgadza się ze wzorcem ({{tone}}) w {{score}}%.",
+    "almost": "Prawie! Potrzebne drobne korekty.",
+    "soundsLike": "Brzmi raczej jak {{tone}}.",
+    "accuracy": "Trafność tonów",
+    "tone": {
+      "1": {
+        "name": "I ton",
+        "desc": "płaski wysoki",
+        "example": "māma (mama)"
+      },
+      "2": {
+        "name": "II ton",
+        "desc": "wznoszący",
+        "example": "máfan (kłopot)"
+      },
+      "3": {
+        "name": "III ton",
+        "desc": "opadająco-wznoszący",
+        "example": "mǎ (koń)"
+      },
+      "4": {
+        "name": "IV ton",
+        "desc": "opadający",
+        "example": "mà (besztać)"
+      }
+    },
+    "hint": {
+      "1": "Utrzymaj głos na stałym, wysokim poziomie przez całą sylabę.",
+      "2": "Zacznij niżej i wyraźnie wznieś ton.",
+      "3": "Najpierw opuść głos, a potem go wznieś.",
+      "4": "Zacznij wysoko i zdecydowanie opadnij."
+    },
+    "errors": {
+      "micDenied": "Brak dostępu do mikrofonu. Zezwól na niego w ustawieniach przeglądarki.",
+      "micUnsupported": "Twoja przeglądarka nie obsługuje nagrywania głosu.",
+      "noVoice": "Nie słychać głosu. Mów głośniej i bliżej mikrofonu."
+    }
+  },
+  "grammar": {
+    "kicker": "Przewodnik",
+    "title": "Baza gramatyki",
+    "subtitle": "Wszystkie tematy według poziomów HSK: tylko wyjaśnienia i przykłady, bez ćwiczeń",
+    "back": "Do profilu",
+    "empty": "Tematy tego poziomu pojawią się wkrótce",
+    "pattern": "Wzór"
+  },
+  "reading": {
+    "bannerKicker": "Twój poziom: HSK {{level}}",
+    "bannerSubtitle": "Odblokowane historie: {{open}} z {{total}}. Kolejne otworzą się wraz z postępami w lekcjach.",
+    "locked": "Odblokuje się na poziomie HSK {{level}}",
+    "readAgain": "Czytaj ponownie",
+    "backToList": "Do listy historii",
+    "hoverHint": "Najedź na znak, aby zobaczyć pinyin i tłumaczenie",
+    "noTranslation": "Brak tłumaczenia",
+    "playAll": "Odtwórz tekst",
+    "markRead": "Oznacz jako przeczytane",
+    "readDone": "Przeczytane"
+  },
+  "writing": {
+    "kicker": "Kaligrafia",
+    "subtitle": "Obejrzyj kolejność kresek, a potem napisz znak myszką lub palcem. Aplikacja sprawdza każdą kreskę.",
+    "fromLesson": "Z lekcji",
+    "learned": "Poznane",
+    "customPlaceholder": "Dowolny znak",
+    "go": "Otwórz",
+    "mode": {
+      "watch": "Oglądaj",
+      "trace": "Po konturze",
+      "free": "Bez podpowiedzi"
+    },
+    "unsupported": "Dla tego znaku nie ma danych o kreskach",
+    "loading": "Ładowanie…",
+    "progress": "Napisane kreski: {{done}} z {{total}}",
+    "mistakes": "błędów: {{count}}",
+    "watchHint": "Zapamiętaj kolejność kresek, potem naciśnij «Próbuję sam»",
+    "restart": "Od nowa",
+    "tryYourself": "Próbuję sam",
+    "nextChar": "Następny",
+    "strokesCount": "Kresek: {{count}}",
+    "inWords": "Występuje w słowach",
+    "strokeOrder": "Kolejność kresek",
+    "rulesTitle": "Zasady pisania",
+    "rule1": "Z góry na dół i od lewej do prawej.",
+    "rule2": "Kreski poziome przed pionowymi (十).",
+    "rule3": "Najpierw w lewo w dół, potem w prawo w dół (人).",
+    "rule4": "Ramkę zamyka się na końcu (日).",
+    "result": {
+      "1": "Niezła próba. Spróbuj jeszcze raz!",
+      "2": "Dobrze!",
+      "3": "Idealnie!"
+    },
+    "mistakesTotal": "Błędów: {{count}}"
   }
 }

@@ -1,106 +1,99 @@
-import React, { useState } from "react";
-import { ChevronRight, BookOpen, Flame, AlertCircle, RefreshCw } from "lucide-react";
+import React from "react";
+import { ChevronRight, BookOpen, Flame, AlertCircle, RefreshCw, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DATE_LOCALES } from "../../i18n";
+import { useAppState } from "../../state/AppState";
+import { dueCards } from "../../lib/srs";
+import { nextLesson } from "../../lib/nextLesson";
+import { PATH_NODES, nodeById, nodeTitle } from "../../data/path";
+import { vocabByNode, vocabByHanzi, wordMeaning } from "../../data/vocab";
+import PageBanner from "../../components/ui/PageBanner";
 import styles from "./Dashboard.module.css";
 
-const previewWords = [
-  { hanzi: "吃货", pinyin: "chīhuò" },
-  { hanzi: "美食", pinyin: "měishí" },
-  { hanzi: "火锅", pinyin: "huǒguō" },
-  { hanzi: "零食", pinyin: "língshí" },
-  { hanzi: "外卖", pinyin: "wàimài" },
-  { hanzi: "夜宵", pinyin: "yèxiāo" },
-  { hanzi: "爆米花", pinyin: "bàomǐhuā" },
-  { hanzi: "垃圾食品", pinyin: "lājī shípǐn" },
-  { hanzi: "招牌菜", pinyin: "zhāopáicài" },
-  { hanzi: "重口味", pinyin: "zhòngkǒuwèi" },
-  { hanzi: "开胃菜", pinyin: "kāiwèicài" },
-  { hanzi: "甜點", pinyin: "tiándiǎn" },
-];
+const RING = 2 * Math.PI * 44;
 
-const errorWords = [
-  { hanzi: "矛盾", pinyin: "máodùn" },
-  { hanzi: "马虎", pinyin: "mǎhu" },
-  { hanzi: "吃醋", pinyin: "chīcù" },
-  { hanzi: "凡尔赛", pinyin: "fán'ěrsài" },
-  { hanzi: "摸鱼", pinyin: "mōyú" },
-  { hanzi: "顺其自然", pinyin: "shùnqí zìrán" },
-  { hanzi: "不可思议", pinyin: "bùkě sīyì" },
-  { hanzi: "八卦", pinyin: "bāguà" },
-  { hanzi: "内卷", pinyin: "nèijuǎn" },
-  { hanzi: "躺平", pinyin: "tǎngpíng" },
-  { hanzi: "洗脑", pinyin: "xǐnǎo" },
-  { hanzi: "吐槽", pinyin: "tùcáo" },
-];
-
-// Кастомная карточка для слов посередине лекции (иероглифы строго по центру)
-function DashboardPreviewCard({ hanzi, pinyin, translation }) {
+function WordCard({ hanzi, pinyin, translation, variant }) {
   const isLong = hanzi.length > 2;
+  const k = variant === "error" ? "err" : "preview";
   return (
-    <div className={styles.previewWordCard}>
-      <div className={`${styles.previewIconBox} ${isLong ? styles.previewIconBoxLong : ""}`}>
-        <span className={`${styles.previewHanzi} ${isLong ? styles.previewHanziLong : ""}`}>{hanzi}</span>
+    <div className={styles[`${k}WordCard`] || styles.errCard}>
+      <div className={`${styles[`${k}IconBox`]} ${isLong ? styles[`${k}IconBoxLong`] : ""}`}>
+        <span className={`${styles[`${k}Hanzi`]} ${isLong ? styles[`${k}HanziLong`] : ""}`}>{hanzi}</span>
       </div>
-      <div className={styles.previewContentBox}>
-        <h4 className={`${styles.previewPinyin} ${isLong ? styles.previewPinyinLong : ""}`}>{pinyin}</h4>
-        {translation && <p className={styles.previewTranslation}>{translation}</p>}
+      <div className={styles[`${k}ContentBox`]}>
+        <h4 className={`${styles[`${k}Pinyin`]} ${isLong ? styles[`${k}PinyinLong`] : ""}`}>{pinyin}</h4>
+        {translation && <p className={styles[`${k}Translation`]}>{translation}</p>}
       </div>
     </div>
   );
 }
 
-// Кастомная карточка для ошибок в сайдбаре
-function DashboardErrorCard({ hanzi, pinyin, translation }) {
-  const isLong = hanzi.length > 2;
-  return (
-    <div className={styles.errCard}>
-      <div className={`${styles.errIconBox} ${isLong ? styles.errIconBoxLong : ""}`}>
-        <span className={`${styles.errHanzi} ${isLong ? styles.errHanziLong : ""}`}>{hanzi}</span>
-      </div>
-      <div className={styles.errContentBox}>
-        <h4 className={`${styles.errPinyin} ${isLong ? styles.errPinyinLong : ""}`}>{pinyin}</h4>
-        {translation && <p className={styles.errTranslation}>{translation}</p>}
-      </div>
-    </div>
-  );
-}
-
-export default function DashboardScreen({ onStartLesson, onStartReview }) {
+export default function DashboardScreen({ onStartLesson, onStartReview, onOpenTones }) {
   const { t, i18n } = useTranslation();
-  const dateLocale = DATE_LOCALES[i18n.resolvedLanguage] || DATE_LOCALES[i18n.language] || "pl-PL";
+  const { state } = useAppState();
+  const lang = i18n.resolvedLanguage || "ru";
+  const dateLocale = DATE_LOCALES[lang] || "ru-RU";
   const today = new Date().toLocaleDateString(dateLocale, { weekday: "long", day: "numeric", month: "long" });
 
-  const [todos, setTodos] = useState([
-    { id: 1, labelKey: "dashboard.todoLesson", timeKey: "dashboard.todoLessonTime", done: false, color: "var(--primary)" },
-    { id: 2, labelKey: "dashboard.todoSrs", timeKey: "dashboard.todoSrsTime", done: false, color: "#D4A843" },
-    { id: 3, labelKey: "dashboard.todoTones", timeKey: "dashboard.todoTonesTime", done: false, color: "var(--accent)" },
-  ]);
+  const node = nodeById(state.activeNodeId) || PATH_NODES[0];
+  const words = node ? vocabByNode(node.id) : [];
+  const learned = words.filter((w) => state.words?.[w.hanzi]).length;
+  const pct = words.length ? Math.round((learned / words.length) * 100) : 0;
+  const dueCount = dueCards(state.words).length;
+  const rec = nextLesson({ completedCount: state.completedNodeIds?.length || 0, dueCount, skills: state.skills });
+  const lessonName = node ? nodeTitle(node, lang) : "";
+  const minutes = node ? Math.max(5, Math.round(words.length * 0.8 + (node.sentences?.length || 0) * 1.2 + (node.notes?.length || 0))) : 5;
 
-  const toggleTodo = (id) => {
-    setTodos(todos.map(t => t.id === id ? { ...t, done: !t.done } : t));
+  const name = state.user?.name;
+  const greeting = name ? t("home.greeting", { name, date: today }) : t("home.greetingNoName", { date: today });
+
+  const daily = state.daily || {};
+  const todos = [
+    { id: "lesson", label: t("dashboard.todoLesson"), time: t("dashboard.todoLessonTime"), done: Boolean(daily.lesson), color: "var(--primary)", action: onStartLesson },
+    { id: "srs", label: t("dashboard.todoSrs"), time: t("home.cardsCount", { count: dueCount }), done: Boolean(daily.srs), color: "#D4A843", action: onStartReview },
+    { id: "tones", label: t("dashboard.todoTones"), time: t("dashboard.todoTonesTime"), done: Boolean(daily.tones), color: "var(--accent)", action: onOpenTones },
+  ];
+  const doneCount = todos.filter((x) => x.done).length;
+
+  const errorItems = [...(state.mistakes || [])]
+    .sort((a, b) => (b.lastAt || 0) - (a.lastAt || 0))
+    .map((m) => vocabByHanzi(m.hanzi))
+    .filter(Boolean);
+
+  const reasonVars = {
+    lesson: lessonName,
+    count: rec.count,
+    skill: rec.skill ? t(`flow.skill.${rec.skill}`, { defaultValue: rec.skill }) : "",
+    percent: rec.percent,
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.headerRow}>
-        <div>
-          <p className={styles.welcomeText}>
-            {t("dashboard.goodDay", { date: today })}
-          </p>
-          <h2 className={styles.title}>{t("dashboard.title")}</h2>
-        </div>
-        <div className={styles.streakBadge}>
-          <Flame size={20} color="#D4A843" strokeWidth={1.8} />
+      <PageBanner color="#C83E34" hanzi="主" kicker={greeting} title={t("dashboard.title")} subtitle={t("home.subtitle")}>
+        <div className={styles.bannerChip}>
+          <Flame size={20} strokeWidth={1.8} />
           <div>
-            <p className={styles.streakNumber}>5</p>
-            <p className={styles.streakLabel}>{t("dashboard.streak")}</p>
+            <p className={styles.bannerChipValue}>{state.streak?.count || 0}</p>
+            <p className={styles.bannerChipLabel}>{t("dashboard.streak")}</p>
           </div>
         </div>
-      </div>
+        <div className={styles.dayRing}>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" className={styles.dayRingTrack} />
+            <circle
+              cx="50"
+              cy="50"
+              r="44"
+              className={styles.dayRingFill}
+              strokeDasharray={`${(doneCount / 3) * RING} ${RING}`}
+              transform="rotate(-90 50 50)"
+            />
+          </svg>
+          <span>{doneCount}/3</span>
+        </div>
+      </PageBanner>
 
       <div className={styles.dashboardGrid}>
-        
         <div className={styles.mainColumn}>
           <div className={styles.lessonSectionWrapper}>
             <div className="flex items-center justify-between mb-3">
@@ -114,54 +107,50 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
             <div className={styles.lessonCard}>
               <div className={styles.lessonCardLine} />
               <div className={styles.lessonCardContent}>
-                
                 <div className={styles.lectureTagsRow}>
-                  <span className={styles.lectureTagUrgent}>{t("dashboard.needsReview")}</span>
-                  <span className={styles.lectureTagMatch}>{t("dashboard.match")}</span>
+                  {dueCount > 0 && <span className={styles.lectureTagUrgent}>{t("home.tagDue", { count: dueCount })}</span>}
+                  {node && <span className={styles.lectureTagMatch}>{t("home.tagLevel", { level: node.level })}</span>}
                 </div>
 
                 <div className={styles.lessonMainInfo}>
                   <div className={styles.lessonHanziIcon}>
-                    <span className={styles.lessonHanziText}>食</span>
+                    <span className={styles.lessonHanziText}>{node?.hanzi?.[0] || "字"}</span>
                   </div>
                   <div className="flex-1">
-                    <p className={styles.lessonMetaText}>{t("dashboard.vocabMeta")}</p>
-                    <h3 className={styles.lessonTitle}>{t("dashboard.lessonTitle")}</h3>
-                    <p className={styles.lessonDuration}>{t("dashboard.lessonDuration")}</p>
+                    <p className={styles.lessonMetaText}>{t("home.lessonInfo", { words: words.length, minutes })}</p>
+                    <h3 className={styles.lessonTitle}>{lessonName}</h3>
                   </div>
                 </div>
 
                 <div className={styles.reasonCallout}>
                   <p className={styles.reasonMeta}>{t("dashboard.srsAnalysis")}</p>
-                  <p className={styles.reasonText}>
-                    {t("dashboard.reasonBefore")} <span className="text-[var(--accent)] font-semibold">{t("dashboard.reasonHighlight1")}</span>{t("dashboard.reasonMid")} <span className="text-[var(--primary)] font-semibold">{t("dashboard.reasonHighlight2")}</span>{t("dashboard.reasonAfter")}
-                  </p>
+                  <p className={styles.reasonText}>{t(`home.reason.${rec.reason}`, reasonVars)}</p>
                 </div>
 
-                <div className={styles.progressSection}>
-                  <div className={styles.progressHeader}>
-                    <span className={styles.progressLabel}>{t("dashboard.progressLabel")}</span>
-                    <span className={styles.progressCount}>{t("dashboard.progressCount")}</span>
+                {words.length > 0 && (
+                  <div className={styles.progressSection}>
+                    <div className={styles.progressHeader}>
+                      <span className={styles.progressLabel}>{t("dashboard.progressLabel")}</span>
+                      <span className={styles.progressCount}>{t("home.progressWords", { done: learned, words: words.length })}</span>
+                    </div>
+                    <div className={styles.progressBarContainer}>
+                      <div className={styles.progressBar} style={{ width: `${pct}%` }} />
+                    </div>
                   </div>
-                  <div className={styles.progressBarContainer}>
-                    <div className={styles.progressBar} style={{ width: "58%" }} />
-                  </div>
-                </div>
+                )}
 
-                {/* Ограничиваем сетку только 4 словами на главном экране */}
-                <div className={styles.previewWordsGrid}>
-                  {previewWords.slice(0, 4).map((word) => (
-                    <DashboardPreviewCard
-                      key={word.hanzi}
-                      hanzi={word.hanzi}
-                      pinyin={word.pinyin}
-                      translation={t(`meanings.${word.hanzi}`)}
-                    />
-                  ))}
-                  <div className={styles.moreWordsRow}>
-                    <span className={styles.moreWordsText}>{t("dashboard.moreWords")}</span>
+                {words.length > 0 && (
+                  <div className={styles.previewWordsGrid}>
+                    {words.slice(0, 4).map((w) => (
+                      <WordCard key={w.hanzi} variant="preview" hanzi={w.hanzi} pinyin={w.pinyin} translation={wordMeaning(w, lang)} />
+                    ))}
+                    {words.length > 4 && (
+                      <div className={styles.moreWordsRow}>
+                        <span className={styles.moreWordsText}>{t("home.moreWords", { count: words.length - 4 })}</span>
+                      </div>
+                    )}
                   </div>
-                </div>
+                )}
 
                 <button onClick={onStartLesson} className={styles.startButton}>
                   <BookOpen size={18} strokeWidth={1.8} />
@@ -177,33 +166,28 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
           <div className={styles.quoteCard}>
             <p className={styles.quoteTitle}>{t("dashboard.quoteTitle")}</p>
             <p className={styles.quoteHanzi}>学如逆水行舟，不进则退。</p>
-            <p className={styles.quoteTranslation}>
-              {t("dashboard.quoteTranslation")}
-            </p>
+            <p className={styles.quoteTranslation}>{t("dashboard.quoteTranslation")}</p>
           </div>
 
           <div className={styles.todoCard}>
             <p className={styles.todoTitle}>{t("dashboard.todoTitle")}</p>
             <div className={styles.todoList}>
               {todos.map((item) => (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   className={`${styles.todoItem} ${item.done ? styles.todoItemDone : ""}`}
-                  onClick={() => toggleTodo(item.id)}
+                  onClick={() => item.action && item.action()}
                 >
                   <div
                     className={styles.todoCheckbox}
-                    style={{ 
-                      border: `1.5px solid ${item.color}`, 
-                      backgroundColor: item.done ? item.color : "transparent" 
-                    }}
+                    style={{ border: `1.5px solid ${item.color}`, backgroundColor: item.done ? item.color : "transparent" }}
                   >
-                    {item.done && <span className={styles.todoCheckboxMark}>✓</span>}
+                    {item.done && <Check size={12} color="white" strokeWidth={3} />}
                   </div>
                   <div className="flex-1">
-                    <p className={styles.todoLabel}>{t(item.labelKey)}</p>
+                    <p className={styles.todoLabel}>{item.label}</p>
                   </div>
-                  <span className={styles.todoTime}>{t(item.timeKey)}</span>
+                  <span className={styles.todoTime}>{item.time}</span>
                 </div>
               ))}
             </div>
@@ -216,18 +200,14 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
                 <p className={styles.errorsTitle}>{t("dashboard.errorsTitle")}</p>
               </div>
               <div className={styles.errorsBadge}>
-                <span className={styles.errorsBadgeText}>23</span>
+                <span className={styles.errorsBadgeText}>{errorItems.length}</span>
               </div>
             </div>
-            
+
             <div className={styles.errorsScrollContainer}>
-              {errorWords.map((word) => (
-                <DashboardErrorCard
-                  key={word.hanzi}
-                  hanzi={word.hanzi}
-                  pinyin={word.pinyin}
-                  translation={t(`meanings.${word.hanzi}`)}
-                />
+              {errorItems.length === 0 && <p className={styles.emptyText}>{t("home.noErrors")}</p>}
+              {errorItems.slice(0, 12).map((w) => (
+                <WordCard key={w.hanzi} variant="error" hanzi={w.hanzi} pinyin={w.pinyin} translation={wordMeaning(w, lang)} />
               ))}
             </div>
 
@@ -237,7 +217,6 @@ export default function DashboardScreen({ onStartLesson, onStartReview }) {
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );

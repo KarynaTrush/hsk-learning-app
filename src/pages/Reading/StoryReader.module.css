@@ -1,0 +1,37 @@
+.container { padding: 1.75rem 2.5rem 4rem; width: 100%; max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
+.backBtn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border-radius: 0.9rem; border: 2px solid rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.15); color: #fff; font-family: "Inter", sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.backBtn:hover { background: rgba(255, 255, 255, 0.28); }
+.tooltipBar { position: sticky; top: 0.75rem; z-index: 5; min-height: 5rem; display: flex; align-items: center; gap: 1.25rem; padding: 0.9rem 1.5rem; border-radius: 1.5rem; border: 2px solid var(--primary); background: var(--card); box-shadow: 0 6px 0 rgba(200, 62, 52, 0.25), 0 14px 30px rgba(0, 0, 0, 0.08); }
+.tipHanzi { font-family: 'Noto Serif SC', serif; font-size: 40px; font-weight: 700; color: var(--foreground); line-height: 1; }
+.tipPinyin { font-family: "Inter", sans-serif; font-size: 18px; font-weight: 700; color: var(--primary); }
+.tipMeaning { font-family: "Inter", sans-serif; font-size: 15px; color: var(--foreground); margin-top: 2px; }
+.tipHint { font-family: "Inter", sans-serif; font-size: 14px; color: var(--muted-foreground); }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+.ctrl { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.55rem 1rem; border-radius: 0.9rem; border: 2px solid var(--border); background: var(--card); color: var(--muted-foreground); font-family: "Inter", sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 var(--border); transition: all 0.15s; }
+.ctrl:hover { color: var(--foreground); }
+.ctrlOn { color: var(--foreground); border-color: var(--primary); box-shadow: 0 3px 0 rgba(200, 62, 52, 0.4); }
+.playBtn { margin-left: auto; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.3rem; border-radius: 0.9rem; border: none; background: var(--primary); color: #fff; font-family: "Inter", sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 rgba(150, 40, 33, 0.55); }
+.playBtn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(150, 40, 33, 0.55); }
+.text { padding: 2rem 2.25rem; border-radius: 1.75rem; border: 1px solid var(--border); background: var(--card); box-shadow: 0 6px 0 var(--border), 0 14px 28px rgba(0, 0, 0, 0.03); display: flex; flex-direction: column; gap: 1.75rem; }
+.sentence { display: flex; align-items: flex-start; gap: 1rem; }
+.sentenceAudio { margin-top: 0.9rem; width: 2.1rem; height: 2.1rem; flex-shrink: 0; border-radius: 9999px; border: 1px solid var(--border); background: var(--card); color: var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.line { font-family: 'Noto Serif SC', serif; font-size: 34px; font-weight: 600; line-height: 2.6; color: var(--foreground); }
+.token { display: inline-block; padding: 0 0.1em; border-radius: 0.4rem; cursor: pointer; transition: background 0.12s; outline: none; }
+.tokenKnown:hover, .token:focus { background: rgba(200, 62, 52, 0.1); }
+.tokenActive { background: rgba(200, 62, 52, 0.16); box-shadow: 0 3px 0 var(--primary); }
+.punct { color: var(--muted-foreground); }
+.token ruby { ruby-position: over; }
+.rtOn { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 600; color: var(--primary); }
+.rtOff { font-size: 0; }
+.panel { padding: 1.5rem 1.75rem; border-radius: 1.75rem; border: 1px solid var(--border); background: var(--card); box-shadow: 0 6px 0 var(--border), 0 14px 28px rgba(0, 0, 0, 0.03); }
+.kicker { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 0.9rem; }
+.vocabGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.75rem; }
+.vocabItem { display: flex; align-items: center; gap: 1rem; padding: 0.7rem 0.95rem; border-radius: 1rem; background: var(--secondary); border: 1px solid var(--border); }
+.vocabZh { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 700; color: var(--primary); min-width: 3.4rem; }
+.vocabPy { font-family: "Inter", sans-serif; font-size: 13px; font-weight: 600; color: var(--foreground); }
+.vocabMeaning { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); }
+.culture { font-family: "Inter", sans-serif; font-size: 14.5px; line-height: 1.65; color: var(--foreground); }
+.readBtn { align-self: center; display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.95rem 2.2rem; border-radius: 1rem; border: none; background: var(--accent); color: #fff; font-family: "Inter", sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 0 rgba(40, 80, 30, 0.55); }
+.readBtn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(40, 80, 30, 0.55); }
+.readBtnDone { background: var(--muted); color: var(--muted-foreground); box-shadow: none; cursor: default; }
+@media (max-width: 800px) { .container { padding: 1.25rem 1rem 3rem; } .line { font-size: 26px; } .text { padding: 1.25rem; } }
