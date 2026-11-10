@@ -36,9 +36,9 @@ function StrokeThumb({ strokes, upTo, done }) {
   );
 }
 
-export default function WritingScreen() {
+export default function WritingScreen({ initialChar }) {
   const { t, i18n } = useTranslation();
-  const { state, recordExercise } = useAppState();
+  const { state, recordWriting } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
 
   const activeLevel = nodeById(state.activeNodeId)?.level ?? 1;
@@ -70,6 +70,13 @@ export default function WritingScreen() {
     const nodes = Object.values(HSK_LEVELS[String(level)]?.groups || []).flatMap((g) => g.nodes);
     return charsOf(nodes.flatMap((n) => vocabByNode(n.id)));
   }, [source, state.activeNodeId, state.words]);
+
+  useEffect(() => {
+    if (initialChar) {
+      setChar(initialChar);
+      setCustom(initialChar);
+    }
+  }, [initialChar]);
 
   useEffect(() => {
     if (!char || !chars.includes(char)) {
@@ -134,13 +141,7 @@ export default function WritingScreen() {
           const strokes = charData?.strokes?.length || 1;
           const stars = total === 0 ? 3 : total <= Math.max(2, Math.round(strokes * 0.3)) ? 2 : 1;
           setResult({ mistakes: total, stars });
-          recordExercise({
-            ref: `write:${char}`,
-            correct: stars >= 2,
-            ms: Date.now() - startedAt.current,
-            type: "write",
-            skill: "writing",
-          });
+          recordWriting({ char, mistakes: total, stars, ms: Date.now() - startedAt.current });
         },
       });
     }

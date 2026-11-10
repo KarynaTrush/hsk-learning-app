@@ -15,6 +15,23 @@ export async function saveProgress(userId, state) {
     .upsert({ user_id: userId, state, updated_at: new Date().toISOString() });
   if (error) throw error;
 }
+export async function logRecommendations(userId, items) {
+  if (!items.length) return;
+  const { error } = await supabase.from("recommendation_events").insert(
+    items.map((r) => ({
+      user_id: userId,
+      rec_type: r.type,
+      reason: r.reason,
+      target: r.target || {},
+      score: r.score,
+      rank: r.rank,
+      action: r.action,
+      policy: "rules-v1",
+    }))
+  );
+  if (error) throw error;
+}
+
 export async function logAnswer(userId, { hanzi, correct, responseMs = null, source = null, type = null, skill = null, lessonId = null, policy = null }) {
   const { error } = await supabase.from("answer_events").insert({
     user_id: userId,

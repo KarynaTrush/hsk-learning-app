@@ -213,6 +213,7 @@ export function ChoiceStep({ step, lang, t, onAnswered, onNext }) {
 export function OrderStep({ step, t, onAnswered, onNext }) {
   const [placed, setPlaced] = useState([]);
   const [checked, setChecked] = useState(false);
+  const [dragId, setDragId] = useState(null);
   const startedAt = useRef(Date.now());
 
   const byId = Object.fromEntries(step.tiles.map((tile) => [tile.id, tile]));
@@ -226,29 +227,65 @@ export function OrderStep({ step, t, onAnswered, onNext }) {
     onAnswered({ correct: isCorrect, ms: Date.now() - startedAt.current });
   }
 
+  function dropAt(beforeId) {
+    if (!dragId || checked) return;
+    setPlaced((list) => {
+      const without = list.filter((x) => x !== dragId);
+      if (!beforeId) return [...without, dragId];
+      const at = without.indexOf(beforeId);
+      return [...without.slice(0, at), dragId, ...without.slice(at)];
+    });
+    setDragId(null);
+  }
+
+  function dropToPool() {
+    if (!dragId || checked) return;
+    setPlaced((list) => list.filter((x) => x !== dragId));
+    setDragId(null);
+  }
+
   return (
     <div className={styles.card}>
       <p className={styles.kicker}>{step.retry ? t("flow.retryNote") : t("flow.prompt.order")}</p>
       <div className={styles.promptBox}>
         <p className={styles.promptText}>{step.prompt.hint}</p>
       </div>
-      <div className={`${styles.answerLine} ${checked ? (isCorrect ? styles.answerOk : styles.answerBad) : ""}`}>
+      <div
+        className={`${styles.answerLine} ${checked ? (isCorrect ? styles.answerOk : styles.answerBad) : ""}`}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={() => dropAt(null)}
+      >
         {placed.length === 0 && <span className={styles.answerPlaceholder}>{t("flow.tapTiles")}</span>}
         {placed.map((id) => (
           <button
             key={id}
             type="button"
             disabled={checked}
+            draggable={!checked}
             className={styles.tile}
+            onDragStart={() => setDragId(id)}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.stopPropagation();
+              dropAt(id);
+            }}
             onClick={() => setPlaced((p) => p.filter((x) => x !== id))}
           >
             {byId[id].text}
           </button>
         ))}
       </div>
-      <div className={styles.tilePool}>
+      <div className={styles.tilePool} onDragOver={(e) => e.preventDefault()} onDrop={dropToPool}>
         {free.map((tile) => (
-          <button key={tile.id} type="button" disabled={checked} className={styles.tile} onClick={() => setPlaced((p) => [...p, tile.id])}>
+          <button
+            key={tile.id}
+            type="button"
+            disabled={checked}
+            draggable={!checked}
+            className={styles.tile}
+            onDragStart={() => setDragId(tile.id)}
+            onClick={() => setPlaced((p) => [...p, tile.id])}
+          >
             {tile.text}
           </button>
         ))}

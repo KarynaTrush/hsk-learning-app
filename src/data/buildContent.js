@@ -144,6 +144,7 @@ export function buildContent(raw) {
         summary: { ru: t.summary_ru, pl: t.summary_pl, en: t.summary_en },
         culture: { ru: t.culture_ru, pl: t.culture_pl, en: t.culture_en },
         cultureKey: hasCulture ? `storiesDb.${t.slug}.culture` : undefined,
+        imageUrl: t.image_url || "",
         body: sentences.map((s) => s.zh).join(""),
         sentences: sentences.map((s) => ({ zh: s.zh, py: s.pinyin })),
         vocab: vocab.map((v) => ({
@@ -164,6 +165,8 @@ export function buildContent(raw) {
       pattern: g.pattern,
       title: { ru: g.title_ru, pl: g.title_pl, en: g.title_en },
       body: { ru: g.body_ru, pl: g.body_pl, en: g.body_en },
+      theory: { ru: g.theory_ru, pl: g.theory_pl, en: g.theory_en },
+      mistake: { ru: g.mistake_ru, pl: g.mistake_pl, en: g.mistake_en },
       examples: g.examples || [],
     }));
 

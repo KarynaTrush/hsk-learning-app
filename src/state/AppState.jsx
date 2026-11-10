@@ -34,7 +34,7 @@ export function defaultState() {
     theme: localStorage.getItem(THEME_KEY) || "light",
     placementDone: false,
     hskLevel: 1,
-    targetHsk: 3,
+    targetHsk: 1,
     startedAt: null,
     streak: { count: 0, lastDate: null },
     daily: { date: todayKey(), lesson: false, srs: false, tones: false },
@@ -48,6 +48,10 @@ export function defaultState() {
     stats: { answers: 0, correct: 0 },
     skills: {},
     readStories: [],
+    activityLog: {},
+    writingStats: {},
+    grammarStats: {},
+    plan: { newWords: 10, reviews: 20, minutes: 15, tones: 3, writes: 2 },
     studyLog: {},
     wordsLog: {},
   };
@@ -82,6 +86,14 @@ function bumpSkill(skills, skill, correct) {
   const base = skills || {};
   const prev = base[skill] || { answers: 0, correct: 0 };
   return { ...base, [skill]: { answers: prev.answers + 1, correct: prev.correct + (correct ? 1 : 0) } };
+}
+
+function addActivity(log, field, n = 1) {
+  if (!field || !n) return log || {};
+  const key = todayKey();
+  const day = { ...((log || {})[key] || {}) };
+  day[field] = (day[field] || 0) + n;
+  return { ...(log || {}), [key]: day };
 }
 
 function logWords(s, words) {
@@ -326,7 +338,7 @@ export function AppStateProvider({ children }) {
           if (i >= 0) mistakes[i] = { ...mistakes[i], count: mistakes[i].count + 1, lastAt: Date.now() };
           else mistakes.push({ hanzi, count: 1, lastAt: Date.now() });
         }
-        return { ...s, words, mistakes, stats: bumpStats(s.stats, correct), skills: meta.skill ? bumpSkill(s.skills, meta.skill, correct) : s.skills, wordsLog: logWords(s, words), streak: bumpStreak(s) };
+        return { ...s, words, mistakes, stats: bumpStats(s.stats, correct), skills: meta.skill ? bumpSkill(s.skills, meta.skill, correct) : s.skills, activityLog: addActivity(s.activityLog, s.words[hanzi] ? null : "words"), wordsLog: logWords(s, words), streak: bumpStreak(s) };
       });
       logEvent(hanzi, correct, "lesson", responseMs, meta);
     },
@@ -346,6 +358,7 @@ export function AppStateProvider({ children }) {
         for (const w of words) {
           if (!nextWords[w.hanzi]) nextWords[w.hanzi] = createCard(w.hanzi, { category: w.category });
         }
+        const added = words.filter((w) => !s.words[w.hanzi]).length;
         const completed = new Set(s.completedNodeIds);
         completed.add(nodeId);
         const daily = { ...ensureDaily(s), lesson: true };
@@ -353,6 +366,7 @@ export function AppStateProvider({ children }) {
           ...s,
           words: nextWords,
           wordsLog: logWords(s, nextWords),
+          activityLog: addActivity(addActivity(s.activityLog, "lessons"), "words", added),
           completedNodeIds: [...completed],
           activeNodeId: nextNodeId(nodeId),
           practiceHanzis: null,
@@ -373,7 +387,7 @@ export function AppStateProvider({ children }) {
           else mistakes.push({ hanzi, count: 1, lastAt: Date.now() });
         }
         const daily = { ...ensureDaily(s), srs: true };
-        return { ...s, words, mistakes, daily, stats: bumpStats(s.stats, know), wordsLog: logWords(s, words), streak: bumpStreak(s) };
+        return { ...s, words, mistakes, daily, stats: bumpStats(s.stats, know), activityLog: addActivity(s.activityLog, "reviews"), wordsLog: logWords(s, words), streak: bumpStreak(s) };
       });
       logEvent(hanzi, know, "review");
     },
@@ -392,6 +406,7 @@ export function AppStateProvider({ children }) {
         return {
           ...s,
           toneScores: { ...s.toneScores, [tone]: list },
+          activityLog: addActivity(s.activityLog, "tones"),
           daily: { ...ensureDaily(s), tones: true },
           streak: bumpStreak(s),
         };
@@ -400,9 +415,53 @@ export function AppStateProvider({ children }) {
     markStoryRead(id) {
       setState((s) => {
         if ((s.readStories || []).includes(id)) return s;
-        return { ...s, readStories: [...(s.readStories || []), id], streak: bumpStreak(s) };
+        return { ...s, readStories: [...(s.readStories || []), id], activityLog: addActivity(s.activityLog, "reads"), streak: bumpStreak(s) };
       });
       logEvent(id, true, "reading", null, { type: "read", skill: "reading" });
+    },
+    recordWriting({ char, mistakes, stars, ms }) {
+      setState((s) => {
+        const prev = s.writingStats?.[char] || { attempts: 0, mistakes: 0, bestStars: 0 };
+        return {
+          ...s,
+          writingStats: {
+            ...(s.writingStats || {}),
+            [char]: { attempts: prev.attempts + 1, mistakes: prev.mistakes + mistakes, bestStars: Math.max(prev.bestStars, stars) },
+          },
+          stats: bumpStats(s.stats, stars >= 2),
+          skills: bumpSkill(s.skills, "writing", stars >= 2),
+          activityLog: addActivity(s.activityLog, "writes"),
+          streak: bumpStreak(s),
+        };
+      });
+      logEvent(`write:${char}`, stars >= 2, "lesson", ms, { type: "write", skill: "writing" });
+    },
+    recordGrammar({ topicId, correct, ms, type }) {
+      setState((s) => {
+        const prev = s.grammarStats?.[topicId] || { answers: 0, correct: 0 };
+        return {
+          ...s,
+          grammarStats: { ...(s.grammarStats || {}), [topicId]: { answers: prev.answers + 1, correct: prev.correct + (correct ? 1 : 0) } },
+          stats: bumpStats(s.stats, correct),
+          skills: bumpSkill(s.skills, "grammar", correct),
+          activityLog: addActivity(s.activityLog, "grammar"),
+          streak: bumpStreak(s),
+        };
+      });
+      logEvent(`grammar:${topicId}`, correct, "lesson", ms, { type: type || "grammar", skill: "grammar" });
+    },
+    setPlan(plan) {
+      setState((s) => ({ ...s, plan: { ...s.plan, ...plan } }));
+    },
+    setTarget(level) {
+      setState((s) => ({ ...s, targetHsk: Math.min(Math.max(level, 1), 6) }));
+    },
+    logRecommendations(items, action) {
+      const u = userRef.current;
+      if (!supabase || !u?.id || u.guest || syncBlocked.current) return;
+      progressApi
+        .logRecommendations(u.id, items.map((r) => ({ ...r, action })))
+        .catch((e) => console.warn("recommendation_events:", e));
     },
     addStudySeconds(sec) {
       setState((s) => {

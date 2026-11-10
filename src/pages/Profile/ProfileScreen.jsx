@@ -6,10 +6,10 @@ import { useAppState } from "../../state/AppState";
 import { dueCards } from "../../lib/srs";
 import { dateKey } from "../../lib/dates";
 import { DATE_LOCALES } from "../../i18n";
-import { PATH_NODES, nodeTitle } from "../../data/path";
+import { PATH_NODES, nodeById, nodeTitle } from "../../data/path";
+import { evaluateAchievements } from "../../lib/achievements";
 import { vocabByNode } from "../../data/vocab";
 import { GRAMMAR } from "../../data/grammar";
-import { profileMock } from "../../data/profileMock";
 import PageBanner from "../../components/ui/PageBanner";
 import styles from "./Profile.module.css";
 
@@ -58,6 +58,8 @@ export default function ProfileScreen({ onMenuSelect }) {
   const user = state.user || {};
   const fullName = [user.name, user.surname].filter(Boolean).join(" ") || t("account.guest");
   const wordsCount = Object.keys(state.words || {}).length;
+  const currentLevel = nodeById(state.activeNodeId)?.level ?? 0;
+  const unlockedCount = evaluateAchievements(state).filter((a) => a.unlocked).length;
   const lessonsCount = state.completedNodeIds?.length || 0;
   const mistakesCount = state.mistakes?.length || 0;
   const dueCount = dueCards(state.words).length;
@@ -89,7 +91,7 @@ export default function ProfileScreen({ onMenuSelect }) {
     { key: "errors", icon: <AlertCircle size={20} color="var(--primary)" strokeWidth={1.5} />, iconBg: "rgba(200,62,52,0.08)", label: t("profile.errors"), sublabel: t("profile.errorsSub"), badge: mistakesCount, badgeColor: "var(--primary)", badgeBg: "rgba(200,62,52,0.1)" },
     { key: "srs", icon: <RefreshCw size={20} color="#D4A843" strokeWidth={1.5} />, iconBg: "rgba(212,168,67,0.1)", label: t("profile.reviews"), sublabel: t("profile.reviewsSub"), badge: dueCount, badgeColor: "#A07820", badgeBg: "rgba(212,168,67,0.1)" },
     { key: "grammar", icon: <FileText size={20} color="var(--accent)" strokeWidth={1.5} />, iconBg: "rgba(79,121,66,0.1)", label: t("profile.grammar"), sublabel: t("profile.grammarSub"), badge: GRAMMAR.length, badgeColor: "var(--accent)", badgeBg: "rgba(79,121,66,0.1)" },
-    { key: "goals", icon: <Target size={20} color="#6B8CAE" strokeWidth={1.5} />, iconBg: "rgba(107,140,174,0.1)", label: t("profile.goals"), sublabel: t("profile.goalsSub"), badge: profileMock.goalsCount, badgeColor: "#4A6A8A", badgeBg: "rgba(107,140,174,0.1)" },
+    { key: "goals", icon: <Target size={20} color="#6B8CAE" strokeWidth={1.5} />, iconBg: "rgba(107,140,174,0.1)", label: t("profile.goals"), sublabel: t("profile.goalsSub"), badge: unlockedCount, badgeColor: "#4A6A8A", badgeBg: "rgba(107,140,174,0.1)" },
   ];
 
   const avatar = user.avatarUrl ? <img src={user.avatarUrl} alt="" /> : <span>{user.name ? user.name[0].toUpperCase() : "安"}</span>;
@@ -99,7 +101,7 @@ export default function ProfileScreen({ onMenuSelect }) {
       <PageBanner
         color="#4A6FA5"
         leading={avatar}
-        kicker={`HSK ${state.hskLevel} → HSK ${state.targetHsk}`}
+        kicker={`HSK ${currentLevel} → HSK ${state.targetHsk}`}
         title={fullName}
         subtitle={since ? t("profile.since", { date: since }) : undefined}
       >

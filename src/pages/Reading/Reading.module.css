@@ -1,14 +1,4 @@
 .container { padding: 1.75rem 2.5rem 4rem; width: 100%; max-width: 1480px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
-.chengyuCard { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; padding: 1.4rem 2rem; border-radius: 1.75rem; border: 1px solid rgba(200, 62, 52, 0.25); background: linear-gradient(135deg, rgba(200, 62, 52, 0.08), rgba(200, 62, 52, 0.02)); box-shadow: 0 6px 0 rgba(200, 62, 52, 0.15); }
-.chengyuWatermark { position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%); font-family: 'Noto Serif SC', serif; font-size: 130px; font-weight: 700; color: var(--primary); opacity: 0.07; pointer-events: none; line-height: 1; }
-.chengyuMain { position: relative; }
-.chengyuLabel { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--primary); margin-bottom: 0.4rem; }
-.chengyuRow { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
-.chengyuZh { font-family: 'Noto Serif SC', serif; font-size: 40px; font-weight: 700; color: var(--foreground); letter-spacing: 0.04em; line-height: 1.1; }
-.chengyuSpeak { width: 2.8rem; height: 2.8rem; border-radius: 9999px; border: none; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 0 rgba(150, 40, 33, 0.55); }
-.chengyuPy { font-family: "Inter", sans-serif; font-size: 17px; font-weight: 600; color: var(--primary); }
-.chengyuMeaning { position: relative; font-family: "Inter", sans-serif; font-size: 14.5px; color: var(--muted-foreground); line-height: 1.5; max-width: 30rem; }
-.chengyuLiteral { font-style: italic; margin-bottom: 0.2rem; }
 .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .chip { padding: 0.55rem 1.1rem; border-radius: 9999px; border: 2px solid var(--border); background: var(--card); color: var(--muted-foreground); cursor: pointer; font-family: "Inter", sans-serif; font-size: 13.5px; font-weight: 700; box-shadow: 0 3px 0 var(--border); transition: all 0.15s; }
 .chip:hover { color: var(--foreground); transform: translateY(-1px); }
@@ -47,3 +37,6 @@
 .noteTitle { font-family: "Inter", sans-serif; font-size: 14px; font-weight: 700; color: var(--foreground); }
 .noteText { font-family: "Inter", sans-serif; font-size: 12.5px; line-height: 1.55; color: var(--muted-foreground); margin-top: 2px; }
 @media (max-width: 800px) { .container { padding: 1.25rem 1rem 3rem; } }
+
+.cardImage { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cardTop { overflow: hidden; }

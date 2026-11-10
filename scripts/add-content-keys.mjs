@@ -1,5 +1,4 @@
-// Добавляет тексты для карты знаний, урока и экрана загрузки в ru.json, pl.json, en.json.
-// Существующие переводы не перезаписываются. Запуск: node scripts/add-content-keys.mjs
+//node scripts/add-content-keys.mjs
 import fs from "fs";
 
 const DIR = "src/i18n/locales";

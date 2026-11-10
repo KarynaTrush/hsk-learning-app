@@ -8,13 +8,13 @@ import { segment, entryMeaning } from "../../lib/segment";
 import { speakZh, stopSpeech, ttsSupported } from "../../lib/tts";
 import styles from "./StoryReader.module.css";
 
-const SPEEDS = [0.8, 1.0];
+const SPEEDS = [0.5, 0.8, 1.0];
 
 export default function StoryReader({ story, isRead, onBack, onRead }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage || "ru";
   const [showPinyin, setShowPinyin] = useState(false);
-  const [speed, setSpeed] = useState(0.8);
+  const [speed, setSpeed] = useState(0.5);
   const [active, setActive] = useState(null);
   const [playing, setPlaying] = useState(false);
   const playToken = useRef(0);

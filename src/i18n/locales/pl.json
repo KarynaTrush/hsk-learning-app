@@ -20,7 +20,9 @@
     "examForecast": "PROGNOZA EGZAMINU",
     "writing": "Pisanie",
     "writingSub": "Znaki i kreski",
-    "readiness": "Gotowość {{percent}}%"
+    "readiness": "Gotowość {{percent}}%",
+    "goal": "Cel",
+    "goalPercent": "{{percent}}% drogi"
   },
   "screens": {
     "lessonTitle": "Lekcja · Jedzenie",
@@ -328,7 +330,31 @@
     "ago2d": "2 dni temu",
     "ago3d": "3 dni temu",
     "ago1h": "1 godz. temu",
-    "ago4d": "4 dni temu"
+    "ago4d": "4 dni temu",
+    "kicker": "Analiza błędów",
+    "subtitle": "Słowa, znaki, tony i gramatyka: wszystko, w czym popełniasz błędy, w jednym miejscu",
+    "tabs": {
+      "words": "Słowa",
+      "writing": "Pisanie",
+      "tones": "Tony",
+      "grammar": "Gramatyka"
+    },
+    "byLesson": "WEDŁUG LEKCJI",
+    "emptyWriting": "Na razie brak błędów w pisaniu.",
+    "emptyTones": "Nie ćwiczyłeś(-aś) jeszcze tonów.",
+    "emptyGrammar": "Na razie brak błędów w gramatyce.",
+    "justNow": "przed chwilą",
+    "dismiss": "Oznacz jako opanowane",
+    "writeMistakes": "Błędów przy pisaniu: {{count}}",
+    "writeAttempts": "Prób: {{count}}",
+    "write": "Napisz",
+    "toneAvg": "Średnio: {{percent}}%",
+    "attempts": "Prób: {{count}}",
+    "weak": "Słabo",
+    "train": "Ćwicz",
+    "grammarPercent": "Poprawnie: {{percent}}%",
+    "answers": "Odpowiedzi: {{count}}",
+    "openTopic": "Otwórz temat"
   },
   "reviews": {
     "doneTitle": "Sesja zakończona!",
@@ -936,6 +962,54 @@
       "next": "Następny krok na twojej ścieżce: lekcja «{{lesson}}».",
       "due": "Słów do powtórki: {{count}}. Powtórz je, a potem kontynuuj lekcję «{{lesson}}».",
       "weak": "Najmniej poprawnych odpowiedzi masz w umiejętności «{{skill}}» ({{percent}}%). W lekcji «{{lesson}}» będzie więcej takich zadań."
+    },
+    "heroKicker": "Polecane dla ciebie",
+    "moreRecs": "Więcej rekomendacji",
+    "phraseKicker": "Fraza dnia",
+    "cta": {
+      "lesson": "Do lekcji",
+      "review": "Powtórz",
+      "mistakes": "Omów błędy",
+      "tones": "Ćwicz tony",
+      "writing": "Pisz",
+      "grammar": "Do tematu",
+      "read": "Czytaj"
+    },
+    "pill": {
+      "words": "Słów: {{count}}",
+      "minutes": "~{{count}} min",
+      "cards": "Kart: {{count}}",
+      "strokes": "Po kreskach"
+    },
+    "task": {
+      "words": "Poznaj nowych słów: {{count}}",
+      "reviews": "Powtórz kart: {{count}}",
+      "minutes": "Ucz się {{count}} min",
+      "tones": "Prób w tonach: {{count}}",
+      "writes": "Napisz znaków: {{count}}",
+      "nothing": "Dziś nie ma czego powtarzać"
+    },
+    "tasks": {
+      "title": "Zadania na dziś",
+      "plan": "Plan dnia"
+    },
+    "plan": {
+      "title": "Plan na dziś",
+      "hint": "Dostosuj obciążenie do siebie: zadania na stronie głównej się zaktualizują.",
+      "newWords": "Nowe słowa",
+      "reviews": "Powtórki",
+      "minutes": "Minuty nauki",
+      "tones": "Próby w tonach",
+      "writes": "Znaki",
+      "save": "Zapisz",
+      "cancel": "Anuluj"
+    },
+    "activity": {
+      "title": "Aktywność",
+      "week": "W tym tygodniu: {{count}} min",
+      "minutes": "{{count}} min",
+      "less": "Mniej",
+      "more": "Więcej"
     }
   },
   "toneLab": {
@@ -1000,7 +1074,8 @@
     "subtitle": "Wszystkie tematy według poziomów HSK: tylko wyjaśnienia i przykłady, bez ćwiczeń",
     "back": "Do profilu",
     "empty": "Tematy tego poziomu pojawią się wkrótce",
-    "pattern": "Wzór"
+    "pattern": "Wzór",
+    "subtitle2": "Wybierz temat: teoria, przykłady i mini-ćwiczenia"
   },
   "reading": {
     "bannerKicker": "Twój poziom: HSK {{level}}",
@@ -1012,7 +1087,32 @@
     "noTranslation": "Brak tłumaczenia",
     "playAll": "Odtwórz tekst",
     "markRead": "Oznacz jako przeczytane",
-    "readDone": "Przeczytane"
+    "readDone": "Przeczytane",
+    "readNow": "Czytaj",
+    "min": "{{count}} min",
+    "pinyin": "Pinyin",
+    "lessonVocab": "SŁOWA Z HISTORII",
+    "notes": "NOTATKI KULTUROWE",
+    "empty": "Brak historii dla tego filtra",
+    "topic": {
+      "legends": "Legendy",
+      "etiquette": "Etykieta",
+      "modern": "Współczesne Chiny"
+    },
+    "notesItems": {
+      "tea": {
+        "title": "Ceremonia herbaty",
+        "text": "Gongfu Cha — ceremonia parzenia herbaty — to sztuka wymagająca precyzji, cierpliwości i szacunku dla procesu."
+      },
+      "table": {
+        "title": "Etykieta przy stole",
+        "text": "Nigdy nie wbijaj pałeczek pionowo w ryż — symbolizuje to śmierć. Przekazuj jedzenie obiema rękami."
+      },
+      "colors": {
+        "title": "Symbolika kolorów",
+        "text": "Czerwień (红 hóng) to kolor szczęścia i pomyślności. Biały kolor jest kojarzony z żałobą."
+      }
+    }
   },
   "writing": {
     "kicker": "Kaligrafia",
@@ -1048,5 +1148,163 @@
       "3": "Idealnie!"
     },
     "mistakesTotal": "Błędów: {{count}}"
+  },
+  "back": {
+    "to": "Wróć: {{name}}"
+  },
+  "recommend": {
+    "title": {
+      "review": "Powtórka słów",
+      "mistakes": "Praca nad błędami",
+      "tones": "Trening tonów",
+      "writing": "Napisz «{{char}}»",
+      "grammar": "Gramatyka",
+      "read": "Czytanie"
+    },
+    "reason": {
+      "start": "Zacznij od pierwszej lekcji: wyjaśni, jak zbudowany jest język chiński.",
+      "next": "Następny krok na twojej ścieżce: lekcja «{{lesson}}».",
+      "weak": "Najmniej poprawnych odpowiedzi masz w umiejętności «{{skill}}» ({{percent}}%). W lekcji «{{lesson}}» będzie więcej takich zadań.",
+      "due": "Słów do powtórki: {{count}}. Odśwież je, zanim je zapomnisz.",
+      "mistakes": "W błędach zebrało się słów: {{count}}. Omów je, aby utrwalić.",
+      "tone": "{{tone}} wychodzi ci najgorzej: średnio {{percent}}%. Poćwicz go.",
+      "toneNew": "Jeszcze nie próbowałeś(-aś) tonów. Zacznij od najprostszego: płaskiego pierwszego.",
+      "write": "Znak «{{char}}» sprawił błędów: {{count}}. Napisz go jeszcze raz.",
+      "writeNew": "Spróbuj napisać znak «{{char}}» zgodnie z kolejnością kresek.",
+      "grammar": "W tym temacie masz tylko {{percent}}% poprawnych odpowiedzi. Przeczytaj teorię i rozwiąż mini-ćwiczenia.",
+      "grammarNew": "Zajrzyj do bazy gramatyki: krótka teoria i ćwiczenia utrwalą lekcje.",
+      "read": "Przeczytaj historię na swoim poziomie: słowa z lekcji utrwalą się w kontekście."
+    }
+  },
+  "goals": {
+    "title": "Cele i nagrody",
+    "subtitle": "Wybierz cel, śledź tydzień i zbieraj nagrody",
+    "unlocked": "nagrody",
+    "unlockedOf": "Odblokowano: {{count}} z {{total}}",
+    "examGoal": "Cel egzaminacyjny",
+    "examHint": "Wybierz realistyczny cel: twój poziom to teraz HSK {{level}}, dostępne są do dwóch poziomów wyżej.",
+    "words": "{{learned}} z {{needed}} słów",
+    "eta": "W twoim tempie: około {{weeks}} tyg.",
+    "etaUnknown": "Na razie za mało danych do prognozy",
+    "etaDone": "Potrzebna liczba słów jest już poznana",
+    "weeklyTitle": "Cele tygodnia",
+    "achievements": "Nagrody",
+    "weekly": {
+      "minutes": "Minuty nauki",
+      "words": "Nowe słowa",
+      "lessons": "Lekcje",
+      "tones": "Próby w tonach",
+      "writes": "Napisane znaki",
+      "reads": "Przeczytane historie"
+    },
+    "rank": {
+      "0": "Nowicjusz",
+      "1": "Uczeń",
+      "2": "Znawca",
+      "3": "Mistrz",
+      "4": "Ekspert"
+    }
+  },
+  "achievements": {
+    "firstLesson": {
+      "title": "Pierwszy krok",
+      "desc": "Ukończ pierwszą lekcję"
+    },
+    "lessons5": {
+      "title": "Pięć lekcji",
+      "desc": "Ukończ 5 lekcji"
+    },
+    "lessons15": {
+      "title": "Pewna droga",
+      "desc": "Ukończ 15 lekcji"
+    },
+    "words50": {
+      "title": "Zasób słów",
+      "desc": "Poznaj 50 słów"
+    },
+    "words150": {
+      "title": "Pierwsza setka",
+      "desc": "Poznaj 150 słów"
+    },
+    "words500": {
+      "title": "Znawca słów",
+      "desc": "Poznaj 500 słów"
+    },
+    "streak3": {
+      "title": "Trzy dni z rzędu",
+      "desc": "Ucz się 3 dni z rzędu"
+    },
+    "streak7": {
+      "title": "Tydzień bez przerw",
+      "desc": "Ucz się 7 dni z rzędu"
+    },
+    "streak30": {
+      "title": "Miesiąc wytrwałości",
+      "desc": "Ucz się 30 dni z rzędu"
+    },
+    "tones10": {
+      "title": "Śpiewający głos",
+      "desc": "Wykonaj 10 prób w tonach"
+    },
+    "toneMaster": {
+      "title": "Mistrz tonów",
+      "desc": "Wszystkie cztery tony ze średnią od 80%"
+    },
+    "writer5": {
+      "title": "Kaligraf",
+      "desc": "Napisz 5 znaków na co najmniej 2 gwiazdki"
+    },
+    "writer20": {
+      "title": "Mistrz pędzla",
+      "desc": "Napisz 20 znaków na co najmniej 2 gwiazdki"
+    },
+    "reader3": {
+      "title": "Czytelnik",
+      "desc": "Przeczytaj 3 historie"
+    },
+    "reader10": {
+      "title": "Mól książkowy",
+      "desc": "Przeczytaj 10 historii"
+    },
+    "grammar20": {
+      "title": "Gramatyk",
+      "desc": "Udziel 20 poprawnych odpowiedzi z gramatyki"
+    },
+    "sharp": {
+      "title": "Celny uczeń",
+      "desc": "Trafność 90% po 50 odpowiedziach"
+    }
+  },
+  "grammarPage": {
+    "backToList": "Do listy tematów",
+    "theory": "Teoria",
+    "mistake": "Typowy błąd",
+    "examples": "Przykłady",
+    "practice": "Mini-ćwiczenia",
+    "practiceText": "Utrwal temat: ułóż zdanie, uzupełnij słowo i wybierz tłumaczenie.",
+    "stats": "Twoje odpowiedzi: {{correct}} poprawnych z {{total}}",
+    "start": "Zacznij ćwiczenia",
+    "again": "Jeszcze raz",
+    "done": "Ćwiczenia ukończone"
+  },
+  "reviewsPage": {
+    "kicker": "Powtórki interwałowe",
+    "subtitle": "Odświeżaj słowa we właściwym momencie, zanim je zapomnisz",
+    "cardOf": "Fiszka {{current}} z {{total}}",
+    "show": "Pokaż",
+    "know": "Znam",
+    "dontKnow": "Nie znam",
+    "queueTitle": "KOLEJKA",
+    "sessionTitle": "WYNIKI SESJI",
+    "known": "Znam",
+    "toLearn": "Powtórz później",
+    "doneTitle": "Sesja zakończona",
+    "doneText": "Powtórzone fiszki: {{count}}.",
+    "again": "Jeszcze raz",
+    "emptyTitle": "Dziś nie ma czego powtarzać",
+    "emptyText": "Wszystkie słowa są powtórzone na czas. Chcesz poćwiczyć te najsłabsze?",
+    "noWeak": "Na razie nie ma słabych słów: czas ruszać dalej z lekcjami.",
+    "weakBtn": "Powtórz słabe słowa ({{count}})",
+    "weakMode": "Słabe słowa"
   }
 }

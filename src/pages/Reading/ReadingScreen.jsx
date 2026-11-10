@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { Lock, Check, Volume2 } from "lucide-react";
+import { Lock, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
-import { STORIES, CHENGYU } from "../../data/stories";
+import { STORIES } from "../../data/stories";
 import { nodeById } from "../../data/path";
 import PageBanner from "../../components/ui/PageBanner";
-import { speakZh, ttsSupported } from "../../lib/tts";
 import StoryReader from "./StoryReader";
 import styles from "./Reading.module.css";
 
@@ -28,18 +27,17 @@ const NOTES = [
   { key: "colors", hanzi: "红" },
 ];
 
-export default function ReadingScreen() {
+export default function ReadingScreen({ initialStoryId }) {
   const { t, i18n } = useTranslation();
   const { state, markStoryRead } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
   const [filter, setFilter] = useState("all");
-  const [openId, setOpenId] = useState(null);
+  const [openId, setOpenId] = useState(initialStoryId || null);
 
   const pick = (obj) => obj?.[lang] || obj?.ru || "";
   const storyTitle = (s) => (s.titleKey ? t(s.titleKey) : pick(s.title));
   const currentLevel = Math.max(1, nodeById(state.activeNodeId)?.level ?? state.hskLevel ?? 1);
   const readSet = useMemo(() => new Set(state.readStories || []), [state.readStories]);
-  const chengyu = CHENGYU[Math.floor(Date.now() / 86400000) % CHENGYU.length];
 
   const filtered = useMemo(() => {
     const f = FILTERS.find((x) => x.id === filter);
@@ -77,26 +75,6 @@ export default function ReadingScreen() {
         subtitle={t("reading.bannerSubtitle", { open: openCount, total: STORIES.length })}
       />
 
-      <div className={styles.chengyuCard}>
-        <span className={styles.chengyuWatermark}>成</span>
-        <div className={styles.chengyuMain}>
-          <p className={styles.chengyuLabel}>{t("reading.chengyuOfDay")}</p>
-          <div className={styles.chengyuRow}>
-            <h2 className={styles.chengyuZh}>{chengyu.zh}</h2>
-            {ttsSupported() && (
-              <button type="button" className={styles.chengyuSpeak} onClick={() => speakZh(chengyu.zh, 0.8)}>
-                <Volume2 size={20} strokeWidth={1.8} />
-              </button>
-            )}
-            <p className={styles.chengyuPy}>{chengyu.py}</p>
-          </div>
-        </div>
-        <div className={styles.chengyuMeaning}>
-          <p className={styles.chengyuLiteral}>“{pick(chengyu.literal)}”</p>
-          <p>{pick(chengyu.meaning)}</p>
-        </div>
-      </div>
-
       <div className={styles.filters}>
         {FILTERS.map((f) => (
           <button
@@ -119,7 +97,7 @@ export default function ReadingScreen() {
           return (
             <article key={s.id} className={`${styles.card} ${locked ? styles.cardLocked : ""}`}>
               <div className={`${styles.cardTop} ${styles[`tint_${s.topic}`] || ""}`}>
-                <span className={styles.cardHanzi}>{s.titleZh[0]}</span>
+                {s.imageUrl ? <img className={styles.cardImage} src={s.imageUrl} alt="" /> : <span className={styles.cardHanzi}>{s.titleZh[0]}</span>}
                 {locked && <span className={styles.lockBadge}><Lock size={18} strokeWidth={2} /></span>}
                 {done && <span className={styles.doneBadge}><Check size={16} strokeWidth={3} /></span>}
               </div>

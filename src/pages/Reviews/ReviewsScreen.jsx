@@ -1,80 +1,154 @@
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Volume2 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useState } from "react";
+import { Volume2, Check, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useAppState } from "../../state/AppState";
+import { dueCards } from "../../lib/srs";
+import { vocabByHanzi, wordMeaning } from "../../data/vocab";
+import PageBanner from "../../components/ui/PageBanner";
+import { speakZh, ttsSupported } from "../../lib/tts";
 import styles from "./Reviews.module.css";
 
-const flashcards = [
-  { id: 1, hanzi: "饺子", pinyin: "jiǎozi", polish: "pierożki", example: "我喜欢 eat 饺子。", exampleTranslation: "Lubię jeść pierożki.", hsk: 2, dueIn: "teraz" },
-  { id: 2, hanzi: "星期三", pinyin: "xīngqīsān", polish: "środa", example: "今天是星期三。", exampleTranslation: "Dzisiaj jest środa.", hsk: 1, dueIn: "teraz" },
-  { id: 3, hanzi: "商店", pinyin: "shāngdiàn", polish: "sklep", example: "那个商店很大。", exampleTranslation: "Ten sklep jest bardzo duży.", hsk: 2, dueIn: "za 10 min" },
-  { id: 4, hanzi: "便宜", pinyin: "piányí", polish: "tani", example: "这件衣服很便宜。", exampleTranslation: "To ubranie jest bardzo tanie.", hsk: 2, dueIn: "za 10 min" },
-  { id: 5, hanzi: "漂亮", pinyin: "piàoliang", polish: "piękny/ładny", example: "she很漂亮。", exampleTranslation: "Ona jest bardzo piękna.", hsk: 2, dueIn: "jutro" },
-];
+const SESSION_SIZE = 20;
 
-function MiZiGeGrid({ hanzi, size = 220 }) {
-  const s = size; const half = s / 2; const pad = 12;
+function resolveHanzi(card, wordsMap) {
+  if (typeof card === "string") return card;
+  if (card?.hanzi) return card.hanzi;
+  for (const [key, value] of Object.entries(wordsMap || {})) {
+    if (value === card) return key;
+  }
+  const json = JSON.stringify(card);
+  for (const [key, value] of Object.entries(wordsMap || {})) {
+    if (JSON.stringify(value) === json) return key;
+  }
+  return null;
+}
+
+function buildDueQueue(wordsMap) {
+  const seen = new Set();
+  const out = [];
+  for (const card of dueCards(wordsMap)) {
+    const hanzi = resolveHanzi(card, wordsMap);
+    const word = hanzi && vocabByHanzi(hanzi);
+    if (word && !seen.has(hanzi)) {
+      seen.add(hanzi);
+      out.push(word);
+    }
+    if (out.length >= SESSION_SIZE) break;
+  }
+  return out;
+}
+
+function buildWeakQueue(mistakes) {
+  return [...(mistakes || [])]
+    .sort((a, b) => b.count - a.count)
+    .map((m) => vocabByHanzi(m.hanzi))
+    .filter(Boolean)
+    .slice(0, 10);
+}
+
+function MiZiGeGrid({ hanzi, size = 230 }) {
+  const half = size / 2;
+  const pad = 12;
   return (
-    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} style={{ display: "block" }}>
-      <rect x={pad} y={pad} width={s - pad*2} height={s - pad*2} rx={4} fill="none" stroke="#C83E34" strokeWidth={1.5} strokeDasharray="5 3" opacity={0.7} />
-      <line x1={pad} y1={half} x2={s-pad} y2={half} stroke="#C83E34" strokeWidth={0.8} strokeDasharray="4 4" opacity={0.35} />
-      <line x1={half} y1={pad} x2={half} y2={s-pad} stroke="#C83E34" strokeWidth={0.8} strokeDasharray="4 4" opacity={0.35} />
-      <line x1={pad} y1={pad} x2={s-pad} y2={s-pad} stroke="#C83E34" strokeWidth={0.6} strokeDasharray="3 5" opacity={0.2} />
-      <line x1={s-pad} y1={pad} x2={pad} y2={s-pad} stroke="#C83E34" strokeWidth={0.6} strokeDasharray="3 5" opacity={0.2} />
-      {[[pad,pad],[s-pad,pad],[pad,s-pad],[s-pad,s-pad]].map(([cx,cy],i) => <circle key={i} cx={cx} cy={cy} r={2.5} fill="#C83E34" opacity={0.4} />)}
-      {[[half,pad],[half,s-pad],[pad,half],[s-pad,half]].map(([cx,cy],i) => <circle key={i} cx={cx} cy={cy} r={1.5} fill="#C83E34" opacity={0.25} />)}
-      <text x={half} y={half+2} textAnchor="middle" dominantBaseline="central"
-        fontSize={hanzi.length === 1 ? s * 0.52 : s * 0.36}
-        fontFamily="'Noto Serif SC', serif" fontWeight={700} fill="#1A1A1A" opacity={0.9}
-      >{hanzi}</text>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: "block", color: "var(--foreground)", maxWidth: "100%" }}>
+      <rect x={pad} y={pad} width={size - pad * 2} height={size - pad * 2} rx={6} fill="none" stroke="#C83E34" strokeWidth={1.6} strokeDasharray="5 3" opacity={0.7} />
+      <line x1={pad} y1={half} x2={size - pad} y2={half} stroke="#C83E34" strokeWidth={0.8} strokeDasharray="4 4" opacity={0.35} />
+      <line x1={half} y1={pad} x2={half} y2={size - pad} stroke="#C83E34" strokeWidth={0.8} strokeDasharray="4 4" opacity={0.35} />
+      <line x1={pad} y1={pad} x2={size - pad} y2={size - pad} stroke="#C83E34" strokeWidth={0.6} strokeDasharray="3 5" opacity={0.2} />
+      <line x1={size - pad} y1={pad} x2={pad} y2={size - pad} stroke="#C83E34" strokeWidth={0.6} strokeDasharray="3 5" opacity={0.2} />
+      <text
+        x={half}
+        y={half + 2}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={hanzi.length === 1 ? size * 0.52 : hanzi.length === 2 ? size * 0.34 : size * 0.24}
+        fontFamily="'Noto Serif SC', serif"
+        fontWeight={700}
+        fill="currentColor"
+      >
+        {hanzi}
+      </text>
     </svg>
   );
 }
 
-export default function PowtorkiScreen({ onBack }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [cardState, setCardState] = useState("hidden");
-  const [swipeResult, setSwipeResult] = useState(null);
-  const [done, setDone] = useState(false);
-  const [results, setResults] = useState({ know: 0, dontknow: 0 });
+export default function ReviewsScreen() {
+  const { t, i18n } = useTranslation();
+  const { state, reviewResult } = useAppState();
+  const lang = i18n.resolvedLanguage || "ru";
 
-  const card = flashcards[currentIndex];
-  const remaining = flashcards.length - currentIndex;
+  const [mode, setMode] = useState("due");
+  const [queue, setQueue] = useState(() => buildDueQueue(state.words));
+  const [index, setIndex] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [results, setResults] = useState({ know: 0, dont: 0 });
 
-  function handleAnswer(result) {
-    setSwipeResult(result);
-    setResults((r) => ({ ...r, [result]: r[result] + 1 }));
-    setTimeout(() => {
-      setSwipeResult(null);
-      if (currentIndex < flashcards.length - 1) { 
-        setCurrentIndex((i) => i + 1); 
-        setCardState("hidden"); 
-      } else {
-        setDone(true);
-      }
-    }, 380);
+  const finished = queue.length > 0 && index >= queue.length;
+  const word = queue[index];
+
+  function answer(know) {
+    reviewResult(word.hanzi, know);
+    setResults((r) => ({ know: r.know + (know ? 1 : 0), dont: r.dont + (know ? 0 : 1) }));
+    setIndex((i) => i + 1);
+    setRevealed(false);
   }
 
-  if (done) {
+  function restart(nextMode) {
+    const next = nextMode === "weak" ? buildWeakQueue(state.mistakes) : buildDueQueue(state.words);
+    setMode(nextMode);
+    setQueue(next);
+    setIndex(0);
+    setRevealed(false);
+    setResults({ know: 0, dont: 0 });
+  }
+
+  const banner = (
+    <PageBanner color="#D4A843" hanzi="复" kicker={t("reviewsPage.kicker")} title={t("screens.reviewsTitle")} subtitle={t("reviewsPage.subtitle")}>
+      {queue.length > 0 && !finished && (
+        <span className={styles.bannerChip}>{t("reviewsPage.cardOf", { current: index + 1, total: queue.length })}</span>
+      )}
+    </PageBanner>
+  );
+
+  if (queue.length === 0) {
+    const weak = buildWeakQueue(state.mistakes);
     return (
-      <div className={styles.endContainer}>
-        <div className={styles.endContent}>
-          <span className={styles.endIcon}>完</span>
-          <h2 className={styles.endTitle}>Sesja zakończona!</h2>
-          <p className={styles.endDesc}>Przerobiłeś {flashcards.length} fiszek.</p>
-          <div className={styles.endResults}>
-            <div className={styles.resultBlock}>
-              <p className={styles.endValue} style={{ color: "var(--accent)" }}>{results.know}</p>
-              <p className={styles.endLabel}>Znam</p>
+      <div className={styles.container}>
+        {banner}
+        <div className={styles.emptyCard}>
+          <span className={styles.emptyIcon}>完</span>
+          <h3 className={styles.emptyTitle}>{t("reviewsPage.emptyTitle")}</h3>
+          <p className={styles.emptyText}>{weak.length ? t("reviewsPage.emptyText") : t("reviewsPage.noWeak")}</p>
+          {weak.length > 0 && (
+            <button type="button" className={styles.primary} onClick={() => restart("weak")}>
+              {t("reviewsPage.weakBtn", { count: weak.length })}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (finished) {
+    return (
+      <div className={styles.container}>
+        {banner}
+        <div className={styles.emptyCard}>
+          <span className={styles.emptyIcon}>完</span>
+          <h3 className={styles.emptyTitle}>{t("reviewsPage.doneTitle")}</h3>
+          <p className={styles.emptyText}>{t("reviewsPage.doneText", { count: queue.length })}</p>
+          <div className={styles.resultRow}>
+            <div>
+              <p className={styles.resultValue} style={{ color: "var(--accent)" }}>{results.know}</p>
+              <p className={styles.resultLabel}>{t("reviewsPage.known")}</p>
             </div>
             <div className={styles.resultDivider} />
-            <div className={styles.resultBlock}>
-              <p className={styles.endValue} style={{ color: "var(--primary)" }}>{results.dontknow}</p>
-              <p className={styles.endLabel}>Do nauki</p>
+            <div>
+              <p className={styles.resultValue} style={{ color: "var(--primary)" }}>{results.dont}</p>
+              <p className={styles.resultLabel}>{t("reviewsPage.toLearn")}</p>
             </div>
           </div>
-          <button onClick={onBack} className={styles.endButton}>
-            Wróć do profilu
-          </button>
+          <button type="button" className={styles.primary} onClick={() => restart("due")}>{t("reviewsPage.again")}</button>
         </div>
       </div>
     );
@@ -82,167 +156,76 @@ export default function PowtorkiScreen({ onBack }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.headerRow}>
-        <p className={styles.counterText}>
-          FISZKA {currentIndex + 1} Z {flashcards.length}
-        </p>
-        <div className={styles.progressWrapper}>
-          <div className="flex gap-1.5">
-            {flashcards.map((_, i) => (
-              <div key={i} className="h-1.5 rounded-full transition-all duration-300"
-                style={{ width: i === currentIndex ? "28px" : "10px", backgroundColor: i < currentIndex ? "var(--accent)" : i === currentIndex ? "var(--primary)" : "var(--muted)" }}
-              />
-            ))}
-          </div>
-          <div className={styles.remainingBadge}>
-            <span className={styles.remainingText}>
-              {remaining} pozostało
-            </span>
-          </div>
-        </div>
-      </div>
-      
-      <div className={styles.mainGrid}>
-        <div className={styles.flexCol}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, scale: 0.96, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0, rotate: swipeResult === "know" ? 3 : swipeResult === "dontknow" ? -3 : 0, x: swipeResult === "know" ? 40 : swipeResult === "dontknow" ? -40 : 0 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: swipeResult ? 0.32 : 0.22, ease: "easeOut" }}
-            >
-              <div className={styles.card}>
-                <div className={styles.cardHeader}>
-                  <div className={styles.metaWrapper}>
-                    <div className={styles.hskBadge}>
-                      <span className={styles.hskText}>HSK {card.hsk}</span>
-                    </div>
-                    <span className={styles.dueText}>· {card.dueIn}</span>
-                  </div>
-                  <button className={styles.audioButton}>
-                    <Volume2 size={15} color="var(--primary)" strokeWidth={1.5} />
-                  </button>
-                </div>
-                <div className={styles.canvasWrapper}>
-                  <MiZiGeGrid hanzi={card.hanzi} size={220} />
-                </div>
-                <AnimatePresence>
-                  {cardState === "revealed" ? (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
-                      <div className={styles.revealedContent}>
-                        <p className={styles.pinyinText}>{card.pinyin}</p>
-                        <p className={styles.polishText}>{card.polish}</p>
-                        <div className={styles.exampleDivider}>
-                          <p className={styles.exampleHanzi}>{card.example}</p>
-                          <p className={styles.exampleTranslation}>{card.exampleTranslation}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      <p className={styles.hiddenDots}>· · ·</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+      {banner}
+      <div className={styles.grid}>
+        <div className={styles.col}>
+          <div className={styles.card}>
+            <div className={styles.cardTop}>
+              <span className={styles.hskBadge}>HSK {word.hsk}</span>
+              {mode === "weak" && <span className={styles.weakBadge}>{t("reviewsPage.weakMode")}</span>}
+              {ttsSupported() && (
+                <button type="button" className={styles.audio} onClick={() => speakZh(word.hanzi, 0.8)} aria-label="audio">
+                  <Volume2 size={16} strokeWidth={1.8} />
+                </button>
+              )}
+            </div>
+            <div className={styles.gridWrap}>
+              <MiZiGeGrid hanzi={word.hanzi} />
+            </div>
+            {revealed ? (
+              <div className={styles.revealed}>
+                <p className={styles.pinyin}>{word.pinyin}</p>
+                <p className={styles.meaning}>{wordMeaning(word, lang)}</p>
+                {word.example && <p className={styles.example}>{word.example}</p>}
               </div>
-            </motion.div>
-          </AnimatePresence>
-          <div>
-            {cardState === "hidden" ? (
-              <button
-                onClick={() => setCardState("revealed")}
-                className={styles.revealButton}
-              >
-                Odkryj kartę
-              </button>
             ) : (
-              <div className={styles.actionsRow}>
-                <button onClick={() => handleAnswer("dontknow")} className={styles.dontKnowButton}>
-                  <X size={24} color="var(--primary)" strokeWidth={2} />
-                  <span className={styles.dontKnowText}>Nie znam</span>
-                </button>
-                <button onClick={() => handleAnswer("know")} className={styles.knowButton}>
-                  <Check size={24} color="var(--accent)" strokeWidth={2} />
-                  <span className={styles.knowText}>Znam</span>
-                </button>
-              </div>
+              <p className={styles.dots}>· · ·</p>
             )}
+          </div>
 
-            <div className={styles.navRow}>
-              <button
-                onClick={() => { if (currentIndex > 0) { setCurrentIndex((i) => i-1); setCardState("hidden"); } }}
-                disabled={currentIndex === 0}
-                className={styles.navButton}
-                style={{ opacity: currentIndex === 0 ? 0.3 : 0.7 }}
-              >
-                <ChevronLeft size={14} strokeWidth={2} /> Poprzednia
+          {!revealed ? (
+            <button type="button" className={styles.primary} onClick={() => setRevealed(true)}>{t("reviewsPage.show")}</button>
+          ) : (
+            <div className={styles.answers}>
+              <button type="button" className={styles.dontKnow} onClick={() => answer(false)}>
+                <X size={22} strokeWidth={2.4} />
+                {t("reviewsPage.dontKnow")}
               </button>
-              <button
-                onClick={() => { if (currentIndex < flashcards.length-1) { setCurrentIndex((i) => i+1); setCardState("hidden"); } }}
-                disabled={currentIndex === flashcards.length-1}
-                className={styles.navButton}
-                style={{ opacity: currentIndex === flashcards.length-1 ? 0.3 : 0.7 }}
-              >
-                Następna <ChevronRight size={14} strokeWidth={2} />
+              <button type="button" className={styles.know} onClick={() => answer(true)}>
+                <Check size={22} strokeWidth={2.4} />
+                {t("reviewsPage.know")}
               </button>
             </div>
-          </div>
+          )}
         </div>
 
-        <div className={styles.flexCol}>
-          <div className={styles.sidebarCard}>
-            <p className={styles.sidebarTitle}>KOLEJKA FISZEK</p>
-            <div className={styles.queueList}>
-              {flashcards.map((fc, i) => (
-                <div
-                  key={fc.id}
-                  className={styles.queueItem}
-                  style={{
-                    backgroundColor: i === currentIndex ? "rgba(200,62,52,0.05)" : "transparent",
-                    border: i === currentIndex ? "1px solid rgba(200,62,52,0.15)" : "1px solid transparent",
-                    opacity: i < currentIndex ? 0.4 : 1,
-                  }}
-                >
-                  <div
-                    className={styles.queueIndex}
-                    style={{
-                      backgroundColor: i < currentIndex ? "var(--accent)" : i === currentIndex ? "var(--primary)" : "var(--muted)",
-                      border: i < currentIndex ? "none" : i === currentIndex ? "none" : "1px solid var(--border)",
-                    }}
-                  >
-                    {i < currentIndex ? (
-                      <span style={{ fontSize: "10px", color: "white" }}>✓</span>
-                    ) : (
-                      <span className={styles.queueIndexText} style={{ color: i === currentIndex ? "white" : "var(--muted-foreground)" }}>
-                        {i+1}
-                      </span>
-                    )}
-                  </div>
-                  <span className={styles.queueHanzi} style={{ color: i === currentIndex ? "var(--primary)" : "var(--foreground)" }}>
-                    {fc.hanzi}
-                  </span>
-                  <span className={styles.queuePinyin}>{fc.pinyin}</span>
-                  <span className={styles.queueDue}>{fc.dueIn}</span>
+        <div className={styles.col}>
+          <section className={styles.side}>
+            <p className={styles.kicker}>{t("reviewsPage.queueTitle")}</p>
+            <div className={styles.queue}>
+              {queue.map((w, i) => (
+                <div key={w.hanzi} className={`${styles.queueItem} ${i === index ? styles.queueActive : ""} ${i < index ? styles.queueDone : ""}`}>
+                  <span className={styles.queueNum}>{i < index ? "✓" : i + 1}</span>
+                  <span className={styles.queueHanzi}>{w.hanzi}</span>
+                  <span className={styles.queuePinyin}>{i <= index ? w.pinyin : ""}</span>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className={styles.sidebarCard}>
-            <p className={styles.sidebarTitle}>WYNIKI SESJI</p>
-            <div className={styles.resultsRow}>
-              <div className={styles.resultBlock}>
+          </section>
+          <section className={styles.side}>
+            <p className={styles.kicker}>{t("reviewsPage.sessionTitle")}</p>
+            <div className={styles.resultRow}>
+              <div>
                 <p className={styles.resultValue} style={{ color: "var(--accent)" }}>{results.know}</p>
-                <p className={styles.resultLabel}>Znam</p>
+                <p className={styles.resultLabel}>{t("reviewsPage.known")}</p>
               </div>
               <div className={styles.resultDivider} />
-              <div className={styles.resultBlock}>
-                <p className={styles.resultValue} style={{ color: "var(--primary)" }}>{results.dontknow}</p>
-                <p className={styles.resultLabel}>Do nauki</p>
+              <div>
+                <p className={styles.resultValue} style={{ color: "var(--primary)" }}>{results.dont}</p>
+                <p className={styles.resultLabel}>{t("reviewsPage.toLearn")}</p>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
-import { examReadiness } from "../../lib/readiness";
+import { goalProgress } from "../../lib/activity";
 import logo from '../../assets/images/logo.png';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar({ isMain, activeTab, goMain }) {
   const { t } = useTranslation();
   const { state } = useAppState();
-  const exam = examReadiness(state);
+  const goal = goalProgress(state);
 
   const menuItems = [
     { id: "dashboard", label: t("nav.dashboard"), hanzi: "主", sublabel: t("nav.dashboardSub") },
@@ -66,9 +66,12 @@ export default function Sidebar({ isMain, activeTab, goMain }) {
       </div>
       <div className="px-4 pb-5 pt-2">
         <div className={`rounded-xl px-4 py-3 ${styles.forecastWidget}`}>
-          <p className={styles.forecastTitle}>{t("nav.examForecast")}</p>
-          <p className={styles.forecastValue}>HSK {exam.target}</p>
-          <p className={styles.forecastDate}>{t("nav.readiness", { percent: exam.percent })}</p>
+          <p className={styles.forecastTitle}>{t("nav.goal")}</p>
+          <p className={styles.forecastValue}>HSK {goal.target}</p>
+          <div className={styles.forecastBar}>
+            <div className={styles.forecastFill} style={{ width: `${goal.percent}%` }} />
+          </div>
+          <p className={styles.forecastDate}>{t("nav.goalPercent", { percent: goal.percent })}</p>
         </div>
       </div>
     </aside>

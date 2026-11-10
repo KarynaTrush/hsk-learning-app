@@ -20,7 +20,9 @@
     "examForecast": "EXAM FORECAST",
     "writing": "Writing",
     "writingSub": "Characters and strokes",
-    "readiness": "Readiness {{percent}}%"
+    "readiness": "Readiness {{percent}}%",
+    "goal": "Goal",
+    "goalPercent": "{{percent}}% of the way"
   },
   "screens": {
     "lessonTitle": "Lesson · Food",
@@ -328,7 +330,31 @@
     "ago2d": "2 days ago",
     "ago3d": "3 days ago",
     "ago1h": "1 hr ago",
-    "ago4d": "4 days ago"
+    "ago4d": "4 days ago",
+    "kicker": "Mistake analysis",
+    "subtitle": "Words, characters, tones and grammar: everything you got wrong, in one place",
+    "tabs": {
+      "words": "Words",
+      "writing": "Writing",
+      "tones": "Tones",
+      "grammar": "Grammar"
+    },
+    "byLesson": "BY LESSON",
+    "emptyWriting": "No writing mistakes yet.",
+    "emptyTones": "You have not practiced tones yet.",
+    "emptyGrammar": "No grammar mistakes yet.",
+    "justNow": "just now",
+    "dismiss": "Mark as mastered",
+    "writeMistakes": "Writing mistakes: {{count}}",
+    "writeAttempts": "Attempts: {{count}}",
+    "write": "Write",
+    "toneAvg": "Average: {{percent}}%",
+    "attempts": "Attempts: {{count}}",
+    "weak": "Weak",
+    "train": "Practice",
+    "grammarPercent": "Correct: {{percent}}%",
+    "answers": "Answers: {{count}}",
+    "openTopic": "Open the topic"
   },
   "reviews": {
     "doneTitle": "Session complete!",
@@ -936,6 +962,54 @@
       "next": "The next step on your path: the lesson “{{lesson}}”.",
       "due": "Words to review: {{count}}. Review them, then continue the lesson “{{lesson}}”.",
       "weak": "Your lowest accuracy is in “{{skill}}” ({{percent}}%). The lesson “{{lesson}}” will include more of these tasks."
+    },
+    "heroKicker": "Recommended for you",
+    "moreRecs": "More recommendations",
+    "phraseKicker": "Phrase of the day",
+    "cta": {
+      "lesson": "Go to the lesson",
+      "review": "Review",
+      "mistakes": "Work on mistakes",
+      "tones": "Practice tones",
+      "writing": "Write",
+      "grammar": "Open the topic",
+      "read": "Read"
+    },
+    "pill": {
+      "words": "Words: {{count}}",
+      "minutes": "~{{count}} min",
+      "cards": "Cards: {{count}}",
+      "strokes": "Stroke by stroke"
+    },
+    "task": {
+      "words": "Learn new words: {{count}}",
+      "reviews": "Review cards: {{count}}",
+      "minutes": "Study for {{count}} min",
+      "tones": "Tone attempts: {{count}}",
+      "writes": "Write characters: {{count}}",
+      "nothing": "Nothing to review today"
+    },
+    "tasks": {
+      "title": "Today's tasks",
+      "plan": "Daily plan"
+    },
+    "plan": {
+      "title": "Today's plan",
+      "hint": "Adjust the workload to suit you: the tasks on the home page will update.",
+      "newWords": "New words",
+      "reviews": "Reviews",
+      "minutes": "Study minutes",
+      "tones": "Tone attempts",
+      "writes": "Characters",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "activity": {
+      "title": "Activity",
+      "week": "This week: {{count}} min",
+      "minutes": "{{count}} min",
+      "less": "Less",
+      "more": "More"
     }
   },
   "toneLab": {
@@ -1000,7 +1074,8 @@
     "subtitle": "All topics by HSK level: explanations and examples only, no exercises",
     "back": "Back to profile",
     "empty": "Topics for this level are coming soon",
-    "pattern": "Pattern"
+    "pattern": "Pattern",
+    "subtitle2": "Pick a topic: theory, examples and mini-exercises"
   },
   "reading": {
     "bannerKicker": "Your level: HSK {{level}}",
@@ -1012,7 +1087,32 @@
     "noTranslation": "No translation yet",
     "playAll": "Play the text",
     "markRead": "Mark as read",
-    "readDone": "Read"
+    "readDone": "Read",
+    "readNow": "Read",
+    "min": "{{count}} min",
+    "pinyin": "Pinyin",
+    "lessonVocab": "STORY WORDS",
+    "notes": "CULTURAL NOTES",
+    "empty": "No stories match this filter",
+    "topic": {
+      "legends": "Legends",
+      "etiquette": "Etiquette",
+      "modern": "Modern China"
+    },
+    "notesItems": {
+      "tea": {
+        "title": "Tea ceremony",
+        "text": "Gongfu Cha, the tea ceremony, is an art that calls for precision, patience and respect for the process."
+      },
+      "table": {
+        "title": "Table etiquette",
+        "text": "Never stick chopsticks upright in rice, as it symbolizes death. Pass food with both hands."
+      },
+      "colors": {
+        "title": "Color symbolism",
+        "text": "Red (红 hóng) is the color of luck and prosperity. White is associated with mourning."
+      }
+    }
   },
   "writing": {
     "kicker": "Calligraphy",
@@ -1048,5 +1148,163 @@
       "3": "Perfect!"
     },
     "mistakesTotal": "Mistakes: {{count}}"
+  },
+  "back": {
+    "to": "Back: {{name}}"
+  },
+  "recommend": {
+    "title": {
+      "review": "Word review",
+      "mistakes": "Work on mistakes",
+      "tones": "Tone training",
+      "writing": "Write “{{char}}”",
+      "grammar": "Grammar",
+      "read": "Reading"
+    },
+    "reason": {
+      "start": "Start with the first lesson: it explains how Chinese works.",
+      "next": "The next step on your path: the lesson “{{lesson}}”.",
+      "weak": "Your lowest accuracy is in “{{skill}}” ({{percent}}%). The lesson “{{lesson}}” will include more of these tasks.",
+      "due": "Words to review: {{count}}. Refresh them before you forget.",
+      "mistakes": "Words piled up in your mistakes: {{count}}. Go through them to lock them in.",
+      "tone": "{{tone}} is your weakest: {{percent}}% on average. Practice it.",
+      "toneNew": "You have not tried tones yet. Start with the easiest: the flat first tone.",
+      "write": "The character “{{char}}” caused {{count}} mistakes. Write it once more.",
+      "writeNew": "Try writing the character “{{char}}” stroke by stroke.",
+      "grammar": "You have only {{percent}}% correct on this topic. Reread the theory and do the mini-exercises.",
+      "grammarNew": "Take a look at the grammar base: short theory and exercises will reinforce your lessons.",
+      "read": "Read a story at your level: words from the lessons will stick in context."
+    }
+  },
+  "goals": {
+    "title": "Goals and rewards",
+    "subtitle": "Pick a goal, track your week and collect rewards",
+    "unlocked": "rewards",
+    "unlockedOf": "Unlocked: {{count}} of {{total}}",
+    "examGoal": "Exam goal",
+    "examHint": "Choose a realistic goal: your level is now HSK {{level}}, up to two levels higher are available.",
+    "words": "{{learned}} of {{needed}} words",
+    "eta": "At your pace: about {{weeks}} wk.",
+    "etaUnknown": "Not enough data for a forecast yet",
+    "etaDone": "You already know the required number of words",
+    "weeklyTitle": "Weekly goals",
+    "achievements": "Rewards",
+    "weekly": {
+      "minutes": "Study minutes",
+      "words": "New words",
+      "lessons": "Lessons",
+      "tones": "Tone attempts",
+      "writes": "Characters written",
+      "reads": "Stories read"
+    },
+    "rank": {
+      "0": "Beginner",
+      "1": "Student",
+      "2": "Connoisseur",
+      "3": "Master",
+      "4": "Expert"
+    }
+  },
+  "achievements": {
+    "firstLesson": {
+      "title": "First step",
+      "desc": "Complete your first lesson"
+    },
+    "lessons5": {
+      "title": "Five lessons",
+      "desc": "Complete 5 lessons"
+    },
+    "lessons15": {
+      "title": "A steady path",
+      "desc": "Complete 15 lessons"
+    },
+    "words50": {
+      "title": "Word bank",
+      "desc": "Learn 50 words"
+    },
+    "words150": {
+      "title": "The first hundred",
+      "desc": "Learn 150 words"
+    },
+    "words500": {
+      "title": "Word expert",
+      "desc": "Learn 500 words"
+    },
+    "streak3": {
+      "title": "Three days in a row",
+      "desc": "Study 3 days in a row"
+    },
+    "streak7": {
+      "title": "A week without breaks",
+      "desc": "Study 7 days in a row"
+    },
+    "streak30": {
+      "title": "A month of persistence",
+      "desc": "Study 30 days in a row"
+    },
+    "tones10": {
+      "title": "Singing voice",
+      "desc": "Make 10 tone attempts"
+    },
+    "toneMaster": {
+      "title": "Tone master",
+      "desc": "All four tones averaging 80% or more"
+    },
+    "writer5": {
+      "title": "Calligrapher",
+      "desc": "Write 5 characters with at least 2 stars"
+    },
+    "writer20": {
+      "title": "Master of the brush",
+      "desc": "Write 20 characters with at least 2 stars"
+    },
+    "reader3": {
+      "title": "Reader",
+      "desc": "Read 3 stories"
+    },
+    "reader10": {
+      "title": "Bookworm",
+      "desc": "Read 10 stories"
+    },
+    "grammar20": {
+      "title": "Grammarian",
+      "desc": "Give 20 correct grammar answers"
+    },
+    "sharp": {
+      "title": "Sharp learner",
+      "desc": "90% accuracy after 50 answers"
+    }
+  },
+  "grammarPage": {
+    "backToList": "Back to topics",
+    "theory": "Theory",
+    "mistake": "Typical mistake",
+    "examples": "Examples",
+    "practice": "Mini-exercises",
+    "practiceText": "Reinforce the topic: build a sentence, fill in a word and choose the translation.",
+    "stats": "Your answers: {{correct}} correct out of {{total}}",
+    "start": "Start the exercises",
+    "again": "Once more",
+    "done": "Exercises complete"
+  },
+  "reviewsPage": {
+    "kicker": "Spaced repetition",
+    "subtitle": "Refresh words at the right moment, before you forget them",
+    "cardOf": "Card {{current}} of {{total}}",
+    "show": "Show",
+    "know": "I know",
+    "dontKnow": "I don't know",
+    "queueTitle": "QUEUE",
+    "sessionTitle": "SESSION RESULTS",
+    "known": "Known",
+    "toLearn": "Review later",
+    "doneTitle": "Session complete",
+    "doneText": "Cards reviewed: {{count}}.",
+    "again": "Once more",
+    "emptyTitle": "Nothing to review today",
+    "emptyText": "All your words are reviewed on time. Want to practice the weakest ones?",
+    "noWeak": "No weak words yet: a good time to move forward with the lessons.",
+    "weakBtn": "Review weak words ({{count}})",
+    "weakMode": "Weak words"
   }
 }

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Camera, LogOut, Trash2, Sun, Moon, Monitor } from "lucide-react";
+import { Camera, LogOut, Trash2, Monitor } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import * as authApi from "../../api/auth";
 import { uploadAvatar } from "../../api/avatar";
-import { LANG_CODES, LANG_STORAGE_KEY, DATE_LOCALES } from "../../i18n";
+import { DATE_LOCALES } from "../../i18n";
 import styles from "./Account.module.css";
 
 function describeDevice() {
@@ -21,7 +21,7 @@ function Notice({ notice, section }) {
 
 export default function AccountScreen() {
   const { t, i18n } = useTranslation();
-  const { state, updateProfile, changePassword, deleteAccount, logout, toggleTheme } = useAppState();
+  const { state, updateProfile, changePassword, deleteAccount, logout } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
   const user = state.user || {};
   const isGuest = !user.id;
@@ -73,12 +73,6 @@ export default function AccountScreen() {
     } finally {
       setBusy("");
     }
-  }
-
-  function changeLanguage(code) {
-    i18n.changeLanguage(code);
-    localStorage.setItem(LANG_STORAGE_KEY, code);
-    if (!isGuest) updateProfile({ ui_language: code });
   }
 
   function onDelete() {
@@ -207,27 +201,6 @@ export default function AccountScreen() {
             <Notice notice={notice} section="sessions" />
           </section>
         )}
-
-        <section className={styles.card}>
-          <h3 className={styles.cardTitle}>{t("account.preferences")}</h3>
-          <label className={styles.label}>{t("account.language")}</label>
-          <div className={styles.segment}>
-            {Object.entries(LANG_CODES).map(([label, code]) => (
-              <button key={code} type="button" className={`${styles.segBtn} ${lang === code ? styles.segActive : ""}`} onClick={() => changeLanguage(code)}>
-                {label}
-              </button>
-            ))}
-          </div>
-          <label className={styles.label}>{t("account.theme")}</label>
-          <div className={styles.segment}>
-            <button type="button" className={`${styles.segBtn} ${state.theme !== "dark" ? styles.segActive : ""}`} onClick={() => state.theme === "dark" && toggleTheme()}>
-              <Sun size={15} /> {t("account.themeLight")}
-            </button>
-            <button type="button" className={`${styles.segBtn} ${state.theme === "dark" ? styles.segActive : ""}`} onClick={() => state.theme !== "dark" && toggleTheme()}>
-              <Moon size={15} /> {t("account.themeDark")}
-            </button>
-          </div>
-        </section>
 
         <section className={`${styles.card} ${styles.danger}`}>
           <h3 className={styles.cardTitle}>{t("account.danger")}</h3>

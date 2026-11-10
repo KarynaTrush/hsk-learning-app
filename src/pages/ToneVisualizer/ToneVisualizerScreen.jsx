@@ -51,15 +51,15 @@ function average(list) {
   return list && list.length ? Math.round(list.reduce((a, b) => a + b, 0) / list.length) : null;
 }
 
-export default function ToneVisualizerScreen() {
+export default function ToneVisualizerScreen({ initialTone }) {
   const { t } = useTranslation();
   const { state, recordTone, recordExercise } = useAppState();
-  const [activeTone, setActiveTone] = useState(1);
+  const [activeTone, setActiveTone] = useState(initialTone || 1);
   const [phase, setPhase] = useState("idle");
   const [live, setLive] = useState([]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
-  const toneRef = useRef(1);
+  const toneRef = useRef(initialTone || 1);
   const session = useRef(null);
 
   const tone = TONES[activeTone - 1];
