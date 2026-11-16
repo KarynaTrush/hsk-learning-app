@@ -42,3 +42,17 @@
 .result { display: flex; flex-direction: column; gap: 0.8rem; align-items: center; text-align: center; }
 .resultTitle { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 700; color: var(--foreground); }
 @media (max-width: 1000px) { .container { padding: 1.25rem 1rem 3rem; } .topicGrid { grid-template-columns: 1fr; } .practice { position: static; } .list { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
+  .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
+  .tab { min-width: 0; padding: 0.5rem 0.25rem; font-size: 13px; border-radius: 0.85rem; }
+  .topicCard { padding: 0.95rem 1rem; gap: 0.75rem; border-radius: 1.25rem; }
+  .number { width: 2rem; height: 2rem; font-size: 13px; }
+  .cardTitle { font-size: 16px; }
+  .topicPattern { font-size: 12.5px; }
+  .card { padding: 1.15rem; border-radius: 1.35rem; }
+  .theory { font-size: 14px; line-height: 1.6; }
+  .exampleZh { font-size: 18px; }
+  .practice { padding: 1.15rem; border-radius: 1.35rem; }
+  .startBtn { width: 100%; padding: 0.85rem 1rem; font-size: 14px; }
+}

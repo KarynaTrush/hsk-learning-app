@@ -36,8 +36,8 @@ export default function Header({ title, subtitle, onProfileClick, onOpenCharacte
   return (
     <header className={styles.header}>
       <div className={styles.titleWrapper}>
-        <h1 className={styles.mainTitle}>{title}</h1>
-        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+        <h1 className={`${styles.mainTitle} truncate`}>{title}</h1>
+        {subtitle && <p className={`${styles.subtitle} truncate`}>{subtitle}</p>}
       </div>
 
       <div className={styles.actionsWrapper}>
@@ -57,16 +57,16 @@ export default function Header({ title, subtitle, onProfileClick, onOpenCharacte
 
         <button className={styles.iconButton} aria-label={t("header.changeTheme")} onClick={toggleTheme}>
           {state.theme === "dark"
-            ? <Moon size={18} color="var(--muted-foreground)" strokeWidth={1.8} />
-            : <Sun size={18} color="var(--muted-foreground)" strokeWidth={1.8} />}
+            ? <Moon size={16} color="var(--muted-foreground)" strokeWidth={1.8} />
+            : <Sun size={16} color="var(--muted-foreground)" strokeWidth={1.8} />}
         </button>
 
         <button className={styles.iconButton} aria-label={t("header.search")} onClick={() => setPanel("search")}>
-          <Search size={18} color="var(--muted-foreground)" strokeWidth={1.8} />
+          <Search size={16} color="var(--muted-foreground)" strokeWidth={1.8} />
         </button>
 
         <button className={styles.iconButton} aria-label={t("header.notifications")} onClick={() => setPanel("notify")}>
-          <Bell size={18} color="var(--muted-foreground)" strokeWidth={1.8} />
+          <Bell size={16} color="var(--muted-foreground)" strokeWidth={1.8} />
           {(due > 0 || mistakeCount > 0) && <div className={styles.notificationDot} />}
         </button>
 

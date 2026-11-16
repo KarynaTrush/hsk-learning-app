@@ -20,51 +20,48 @@ export default function Sidebar({ isMain, activeTab, goMain }) {
   ];
 
   return (
-    <aside className={`flex-none flex flex-col justify-between ${styles.sidebar}`}>
-      <div className="flex flex-col flex-1">
-        <div className={`flex items-center justify-center px-2 py-2 ${styles.logoWrapper}`}>
-          <img 
-            src={logo} 
-            alt="HSK Platform Logo" 
-            className="w-full h-auto max-h-25 object-contain" 
+    <aside className={styles.sidebar}>
+      <div className={styles.topSection}>
+        <div className={styles.logoWrapper}>
+          <img
+            src={logo}
+            alt="HSK Platform Logo"
+            className="w-full h-auto max-h-25 object-contain"
           />
         </div>
 
-        <nav className={`flex flex-col gap-1 px-3 py-4 flex-1 ${styles.navScrollable}`}>
+        <nav className={styles.navScrollable} aria-label="Primary Navigation">
           {menuItems.map((tab) => {
             const isActive = isMain && activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => goMain(tab.id)}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-left transition-all duration-200 group w-full cursor-pointer ${
-                  isActive ? styles.navButtonActive : styles.navButton
-                }`}
+                className={`${styles.navButton} ${isActive ? styles.navButtonActive : ""}`}
               >
-                <div className={`flex-none w-9 h-9 rounded-lg flex items-center justify-center ${
-                  isActive ? styles.hanziBoxActive : styles.hanziBox
-                }`}>
+                <div className={`${styles.hanziBox} ${isActive ? styles.hanziBoxActive : ""}`}>
                   <span className={isActive ? styles.hanziTextActive : styles.hanziText}>
                     {tab.hanzi}
                   </span>
                 </div>
-                <div className="min-w-0 flex-1">
+                <div className={styles.textGroup}>
                   <p className={`${isActive ? styles.labelActive : styles.label} truncate`}>
                     {tab.label}
                   </p>
-                  <p className={isActive ? styles.sublabelActive : styles.sublabel}>
+                  <p className={`${isActive ? styles.sublabelActive : styles.sublabel} truncate`}>
                     {tab.sublabel}
                   </p>
                 </div>
                 {isActive && (
-                  <div className={`ml-auto w-1.5 h-1.5 rounded-full flex-none ${styles.activeDot}`} />
+                  <div className={styles.activeDot} />
                 )}
               </button>
             );
           })}
         </nav>
       </div>
-      <div className="px-4 pb-5 pt-2">
+
+      <div className={styles.forecastContainer}>
         <div className={`rounded-xl px-4 py-3 ${styles.forecastWidget}`}>
           <p className={styles.forecastTitle}>{t("nav.goal")}</p>
           <p className={styles.forecastValue}>HSK {goal.target}</p>

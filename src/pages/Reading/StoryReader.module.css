@@ -35,3 +35,24 @@
 .readBtn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(40, 80, 30, 0.55); }
 .readBtnDone { background: var(--muted); color: var(--muted-foreground); box-shadow: none; cursor: default; }
 @media (max-width: 800px) { .container { padding: 1.25rem 1rem 3rem; } .line { font-size: 26px; } .text { padding: 1.25rem; } }
+@media (max-width: 640px) {
+  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
+  .tooltipBar { top: 0.5rem; min-height: 3.8rem; gap: 0.85rem; padding: 0.65rem 1rem; border-radius: 1.15rem; }
+  .tipHanzi { font-size: 28px; }
+  .tipPinyin { font-size: 15px; }
+  .tipMeaning { font-size: 13.5px; }
+  .tipHint { font-size: 12.5px; }
+  .controls { gap: 0.45rem; }
+  .ctrl { padding: 0.45rem 0.75rem; font-size: 12px; border-radius: 0.75rem; }
+  .playBtn { width: 100%; justify-content: center; margin-left: 0; padding: 0.65rem 1rem; }
+  .text { padding: 1.15rem; border-radius: 1.35rem; gap: 1.25rem; }
+  .sentence { gap: 0.65rem; }
+  .sentenceAudio { margin-top: 0.45rem; width: 1.85rem; height: 1.85rem; }
+  .line { font-size: 22px; line-height: 2.35; }
+  .rtOn { font-size: 10.5px; }
+  .panel { padding: 1.15rem; border-radius: 1.35rem; }
+  .vocabGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+  .vocabItem { flex-direction: column; align-items: flex-start; gap: 0.25rem; padding: 0.65rem 0.8rem; }
+  .vocabZh { font-size: 19px; min-width: 0; }
+  .readBtn { width: 100%; justify-content: center; padding: 0.85rem 1.5rem; }
+}

@@ -30,17 +30,17 @@ function AppInner() {
   const lang = i18n.resolvedLanguage || "ru";
   const { state, openLesson, authReady, addStudySeconds, logRecommendations } = useAppState();
 
-const hasSession = Boolean(state.user || state.placementDone);
-const needsPlacement = !state.placementDone && !SKIP_PLACEMENT_IN_DEV;
+  const hasSession = Boolean(state.user || state.placementDone);
+  const needsPlacement = !state.placementDone && !SKIP_PLACEMENT_IN_DEV;
 
-const [screen, setScreen] = useState(() => {
-  if (hasSession && !needsPlacement) {
-    const saved = localStorage.getItem("hsk_current_screen");
-    return RESTORABLE_SCREENS.includes(saved) ? saved : "main";
-  }
-  if (hasSession) return "placement";
-  return "auth";
-});
+  const [screen, setScreen] = useState(() => {
+    if (hasSession && !needsPlacement) {
+      const saved = localStorage.getItem("hsk_current_screen");
+      return RESTORABLE_SCREENS.includes(saved) ? saved : "main";
+    }
+    if (hasSession) return "placement";
+    return "auth";
+  });
 
   const [activeTab, setActiveTab] = useState(() => localStorage.getItem("hsk_current_tab") || "dashboard");
   const [focusHanzi, setFocusHanzi] = useState("食");
@@ -179,16 +179,19 @@ const [screen, setScreen] = useState(() => {
 
   const currentHeaderMeta = isSub ? subMeta : tabTitles[activeTab];
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: "var(--background)" }}>
+    <div className="min-h-screen flex w-full overflow-x-hidden" style={{ backgroundColor: "var(--background)" }}>
       <Sidebar isMain={isMain} activeTab={activeTab} goMain={goMain} />
-      <div className="flex-1 flex flex-col min-h-screen" style={{ minWidth: 0 }}>
+      <div className="flex-1 flex flex-col min-h-screen min-w-0 w-full">
         <Header
           title={currentHeaderMeta?.title}
           subtitle={currentHeaderMeta?.subtitle}
           onProfileClick={() => openSub("account")}
           onOpenCharacter={(hanzi) => { setFocusHanzi(hanzi); openSub("character"); }}
         />
-        <main className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+        <main
+          className="flex-1 overflow-y-auto overflow-x-hidden pb-[calc(var(--bottom-nav-height)+1rem)] md:pb-0"
+          style={{ scrollbarWidth: "thin" }}
+        >
           {isSub && screen !== "lesson" && (
             <BackBar
               label={t("back.to", { name: (returnTo?.screen === "main" ? tabTitles[returnTo.tab]?.title : returnTo ? subScreenLabel[returnTo.screen]?.title : tabTitles[DEFAULT_BACK[screen] || "dashboard"]?.title) || "" })}

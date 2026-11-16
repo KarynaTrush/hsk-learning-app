@@ -1,445 +1,61 @@
-.container {
-  padding: 2.5rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.topGrid {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr 340px;
-  margin-bottom: 2rem;
-}
-
-.profileCard {
-  border-radius: 1.25rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01);
-}
-
-.avatarBox {
-  width: 5.5rem;
-  height: 5.5rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 2.5px solid var(--primary);
-  background-color: rgba(200, 62, 52, 0.04);
-}
-
-.avatarText {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 38px;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.profileName {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--foreground);
-  margin-bottom: 6px;
-}
-
-.profileMetaText {
-  font-family: "Inter", sans-serif;
-  font-size: 13.5px;
-  color: var(--muted-foreground);
-  margin-bottom: 14px;
-}
-
-.badgeSuccess {
-  padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  background-color: rgba(79, 121, 66, 0.06);
-  border: 1px solid rgba(79, 121, 66, 0.18);
-}
-
-.badgeSuccessText {
-  font-family: "Inter", sans-serif;
-  font-size: 11.5px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.badgePrimary {
-  padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  background-color: rgba(200, 62, 52, 0.05);
-  border: 1px solid rgba(200, 62, 52, 0.15);
-}
-
-.badgePrimaryText {
-  font-family: "Inter", sans-serif;
-  font-size: 11.5px;
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.editButton {
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  font-family: "Inter", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted-foreground);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-  transition: all 0.2s;
-}
-
-.editButton:hover {
-  background-color: var(--secondary);
-  color: var(--foreground);
-}
-
-.examForecastCard {
-  border-radius: 1.25rem;
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: linear-gradient(135deg, rgba(200, 62, 52, 0.05) 0%, rgba(200, 62, 52, 0.01) 100%);
-  border: 1px solid rgba(200, 62, 52, 0.18);
-  box-shadow: 0 10px 25px rgba(200, 62, 52, 0.03);
-}
-
-.examMeta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.examMetaText {
-  font-family: "Inter", sans-serif;
-  font-size: 10.5px;
-  color: var(--muted-foreground);
-  letter-spacing: 0.06em;
-}
-
-.examLevel {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary);
-  line-height: 1.1;
-}
-
-.examDate {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-top: 2px;
-}
-
-.progressHeader {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.375rem;
-}
-
-.progressLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--muted-foreground);
-}
-
-.progressValue {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.progressBarTrack {
-  height: 0.375rem;
-  border-radius: 9999px;
-  overflow: hidden;
-  background-color: rgba(200, 62, 52, 0.1);
-}
-
-.progressBarFill {
-  height: 100%;
-  border-radius: 9999px;
-  background-color: var(--primary);
-}
-
-.threeColumnGrid {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 310px 1fr 340px;
-  height: 485px; 
-}
-
-.flexCol {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  height: 100%;
-}
-
-.numericStatCard {
-  border-radius: 1.25rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  padding: 1.25rem 1.5rem;
-  box-shadow: 0 8px 24px rgba(59, 56, 56, 0.02);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1; 
-}
-
-.statMetaTitle {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--muted-foreground);
-  letter-spacing: 0.06em;
-  margin-bottom: 6px;
-}
-
-.statValueRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.bigStatNumber {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 44px;
-  font-weight: 700;
-  color: var(--foreground);
-  line-height: 1;
-}
-
-.miniCardsRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  flex: 1;
-}
-
-.miniStatNumber {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 44px;
-  font-weight: 700;
-  color: var(--foreground);
-  line-height: 1;
-  margin-top: 2px;
-  margin-bottom: 4px;
-}
-
-.statTrendText {
-  font-family: "Inter", sans-serif;
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.statSubLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 11.5px;
-  color: var(--muted-foreground);
-}
-
-.chartCard {
-  border-radius: 1.25rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  padding: 1.75rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 485px; 
-  min-height: 485px; 
-}
-
-.chartHeaderColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-shrink: 0;
-}
-
-.chartTitle {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  color: var(--muted-foreground);
-  letter-spacing: 0.06em;
-}
-
-.hskTabsWrapper {
-  display: flex;
-  gap: 0.25rem;
-  background-color: var(--secondary);
-  padding: 0.25rem;
-  border-radius: 0.625rem;
-  width: 100%;
-}
-
-.hskTabButton {
-  flex: 1;
-  text-align: center;
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--muted-foreground);
-  padding: 0.45rem 0;
-  border-radius: 0.45rem;
-  border: none;
-  background: transparent;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.hskTabButton:hover {
-  color: var(--foreground);
-}
-
-.hskTabActive {
-  background-color: var(--card);
-  color: var(--foreground);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.scrollContainer {
-  flex: 1;
-  height: 310px; 
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  padding-right: 6px;
-}
-
-.scrollContainer::-webkit-scrollbar {
-  width: 4px;
-}
-.scrollContainer::-webkit-scrollbar-track {
-  background: transparent;
-}
-.scrollContainer::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 9999px;
-}
-
-.categoryRow {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.categoryLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 13.5px; 
-  color: var(--foreground);
-  font-weight: 500;
-  width: 95px;
-}
-
-.categoryBarTrack {
-  flex: 1;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background-color: var(--secondary);
-  overflow: hidden;
-}
-
-.categoryBarFill {
-  height: 100%;
-  border-radius: 9999px;
-}
-
-.categoryPercent {
-  font-family: "Inter", sans-serif;
-  font-size: 12.5px; 
-  color: var(--muted-foreground);
-  width: 35px;
-  text-align: right;
-  font-weight: 500;
-}
-
-.menuButton {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0;
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-  border-radius: 1.25rem;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  text-align: left;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
-  flex: 1; 
-  transition: all 0.25s ease;
-}
-
-.menuButton:hover {
-  border-color: rgba(var(--foreground), 0.12);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-}
-
-.menuButton:active {
-  transform: scale(0.99);
-}
-
-.menuIconBox {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.menuLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--foreground);
-}
-
-.menuSublabel {
-  font-family: "Inter", sans-serif;
-  font-size: 11.5px;
-  color: var(--muted-foreground);
-  margin-top: 1px;
-}
-
-.menuBadgeBox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.menuBadge {
-  padding: 0.25rem 0.625rem;
-  border-radius: 9999px;
-}
-
-.menuBadgeText {
-  font-family: "Inter", sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-}
+.container { padding: 2.5rem 2rem; max-width: 1200px; margin: 0 auto; }
+.topGrid { display: grid; gap: 1.5rem; grid-template-columns: 1fr 340px; margin-bottom: 2rem; }
+.profileCard { border-radius: 1.25rem; border: 1px solid var(--border); background-color: var(--card); padding: 2rem; display: flex; align-items: center; gap: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01); }
+.avatarBox { width: 5.5rem; height: 5.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2.5px solid var(--primary); background-color: rgba(200, 62, 52, 0.04); }
+.avatarText { font-family: 'Noto Serif SC', serif; font-size: 38px; font-weight: 700; color: var(--primary); }
+.profileName { font-family: 'Noto Serif SC', serif; font-size: 28px; font-weight: 700; color: var(--foreground); margin-bottom: 6px; }
+.profileMetaText { font-family: "Inter", sans-serif; font-size: 13.5px; color: var(--muted-foreground); margin-bottom: 14px; }
+.badgeSuccess { padding: 0.375rem 0.875rem; border-radius: 9999px; background-color: rgba(79, 121, 66, 0.06); border: 1px solid rgba(79, 121, 66, 0.18); }
+.badgeSuccessText { font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--accent); font-weight: 600; }
+.badgePrimary { padding: 0.375rem 0.875rem; border-radius: 9999px; background-color: rgba(200, 62, 52, 0.05); border: 1px solid rgba(200, 62, 52, 0.15); }
+.badgePrimaryText { font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--primary); font-weight: 600; }
+.editButton { padding: 0.5rem 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); background-color: var(--card); font-family: "Inter", sans-serif; font-size: 13px; font-weight: 500; color: var(--muted-foreground); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s; }
+.editButton:hover { background-color: var(--secondary); color: var(--foreground); }
+.examForecastCard { border-radius: 1.25rem; padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(200, 62, 52, 0.05) 0%, rgba(200, 62, 52, 0.01) 100%); border: 1px solid rgba(200, 62, 52, 0.18); box-shadow: 0 10px 25px rgba(200, 62, 52, 0.03); }
+.examMeta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.examMetaText { font-family: "Inter", sans-serif; font-size: 10.5px; color: var(--muted-foreground); letter-spacing: 0.06em; }
+.examLevel { font-family: 'Noto Serif SC', serif; font-size: 24px; font-weight: 700; color: var(--primary); line-height: 1.1; }
+.examDate { font-family: 'Noto Serif SC', serif; font-size: 18px; font-weight: 600; color: var(--foreground); margin-top: 2px; }
+.progressHeader { display: flex; justify-content: space-between; margin-bottom: 0.375rem; }
+.progressLabel { font-family: "Inter", sans-serif; font-size: 11px; color: var(--muted-foreground); }
+.progressValue { font-family: "Inter", sans-serif; font-size: 11px; color: var(--primary); font-weight: 600; }
+.progressBarTrack { height: 0.375rem; border-radius: 9999px; overflow: hidden; background-color: rgba(200, 62, 52, 0.1); }
+.progressBarFill { height: 100%; border-radius: 9999px; background-color: var(--primary); }
+.threeColumnGrid { display: grid; gap: 1.5rem; grid-template-columns: 310px 1fr 340px; height: 485px; }
+.flexCol { display: flex; flex-direction: column; gap: 1rem; height: 100%; }
+.numericStatCard { border-radius: 1.25rem; border: 1px solid var(--border); background-color: var(--card); padding: 1.25rem 1.5rem; box-shadow: 0 8px 24px rgba(59, 56, 56, 0.02); display: flex; flex-direction: column; justify-content: center; flex: 1; }
+.statMetaTitle { font-family: "Inter", sans-serif; font-size: 11px; color: var(--muted-foreground); letter-spacing: 0.06em; margin-bottom: 6px; }
+.statValueRow { display: flex; align-items: center; justify-content: space-between; }
+.bigStatNumber { font-family: 'Noto Serif SC', serif; font-size: 44px; font-weight: 700; color: var(--foreground); line-height: 1; }
+.miniCardsRow { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; flex: 1; }
+.miniStatNumber { font-family: 'Noto Serif SC', serif; font-size: 44px; font-weight: 700; color: var(--foreground); line-height: 1; margin-top: 2px; margin-bottom: 4px; }
+.statTrendText { font-family: "Inter", sans-serif; font-size: 12px; color: var(--accent); font-weight: 600; }
+.statSubLabel { font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--muted-foreground); }
+.chartCard { border-radius: 1.25rem; border: 1px solid var(--border); background-color: var(--card); padding: 1.75rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02); display: flex; flex-direction: column; box-sizing: border-box; height: 485px; min-height: 485px; }
+.chartHeaderColumn { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; flex-shrink: 0; }
+.chartTitle { font-family: "Inter", sans-serif; font-size: 11px; color: var(--muted-foreground); letter-spacing: 0.06em; }
+.hskTabsWrapper { display: flex; gap: 0.25rem; background-color: var(--secondary); padding: 0.25rem; border-radius: 0.625rem; width: 100%; }
+.hskTabButton { flex: 1; text-align: center; font-family: "Inter", sans-serif; font-size: 11px; font-weight: 600; color: var(--muted-foreground); padding: 0.45rem 0; border-radius: 0.45rem; border: none; background: transparent; transition: all 0.2s ease; cursor: pointer; }
+.hskTabButton:hover { color: var(--foreground); }
+.hskTabActive { background-color: var(--card); color: var(--foreground); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); }
+.scrollContainer { flex: 1; height: 310px; overflow-y: auto; display: flex; flex-direction: column; gap: 1.15rem; padding-right: 6px; }
+.scrollContainer::-webkit-scrollbar { width: 4px; }
+.scrollContainer::-webkit-scrollbar-track { background: transparent; }
+.scrollContainer::-webkit-scrollbar-thumb { background: var(--border); border-radius: 9999px; }
+.categoryRow { display: flex; align-items: center; gap: 1.25rem; }
+.categoryLabel { font-family: "Inter", sans-serif; font-size: 13.5px; color: var(--foreground); font-weight: 500; width: 95px; }
+.categoryBarTrack { flex: 1; height: 0.5rem; border-radius: 9999px; background-color: var(--secondary); overflow: hidden; }
+.categoryBarFill { height: 100%; border-radius: 9999px; }
+.categoryPercent { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); width: 35px; text-align: right; font-weight: 500; }
+.menuButton { width: 100%; display: flex; align-items: center; gap: 1rem; padding: 0; padding-left: 1.25rem; padding-right: 1.25rem; border-radius: 1.25rem; border: 1px solid var(--border); background-color: var(--card); text-align: left; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02); flex: 1; transition: all 0.25s ease; }
+.menuButton:hover { border-color: rgba(var(--foreground), 0.12); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04); }
+.menuButton:active { transform: scale(0.99); }
+.menuIconBox { width: 2.75rem; height: 2.75rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.menuLabel { font-family: "Inter", sans-serif; font-size: 14.5px; font-weight: 600; color: var(--foreground); }
+.menuSublabel { font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--muted-foreground); margin-top: 1px; }
+.menuBadgeBox { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+.menuBadge { padding: 0.25rem 0.625rem; border-radius: 9999px; }
+.menuBadgeText { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; }
 .nameRow { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 6px; }
 .levelPill { padding: 0.25rem 0.75rem; border-radius: 9999px; background-color: rgba(200, 62, 52, 0.07); border: 1px solid rgba(200, 62, 52, 0.18); font-family: "Inter", sans-serif; font-size: 12px; font-weight: 600; color: var(--primary); }
 .actionsRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
@@ -465,3 +81,23 @@
 .hskTabButton { border: 2px solid var(--border); border-radius: 0.9rem; background: var(--card); box-shadow: 0 3px 0 var(--border); padding: 0.55rem 0; }
 .hskTabActive { border-color: var(--primary); box-shadow: 0 3px 0 rgba(200, 62, 52, 0.4); }
 @media (max-width: 1100px) { .topGrid, .bottomGrid { grid-template-columns: 1fr; } .actionsRow, .statsRow { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
+  .actionsRow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
+  .actionTile { flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 0.6rem; padding: 0.85rem; border-radius: 1.25rem; position: relative; }
+  .menuIconBox { width: 2.25rem; height: 2.25rem; }
+  .menuLabel { font-size: 13px; line-height: 1.2; }
+  .menuSublabel { font-size: 10.5px; line-height: 1.25; }
+  .menuBadgeBox { position: absolute; top: 0.85rem; right: 0.85rem; }
+  .menuBadgeBox svg { display: none; }
+  .statsRow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
+  .numericStatCard { padding: 0.9rem 1rem; min-height: 6.5rem; border-radius: 1.25rem; }
+  .bigStatNumber, .miniStatNumber { font-size: 30px; }
+  .statValueRow > div:last-child { width: 46px !important; height: 46px !important; }
+  .chartCard { padding: 1.15rem; border-radius: 1.35rem; }
+  .bottomGrid .chartCard { height: auto; min-height: 300px; }
+  .hskTabsWrapper { flex-wrap: wrap; }
+  .hskTabButton { flex: 1 1 calc(33.333% - 0.4rem); padding: 0.45rem 0.25rem; }
+  .categoryRow { gap: 0.65rem; }
+  .categoryLabel { width: 95px; font-size: 12.5px; }
+}
