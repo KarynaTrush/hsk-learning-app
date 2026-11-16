@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import { GRAMMAR } from "../../data/grammar";
 import PageBanner from "../../components/ui/PageBanner";
-import GrammarTopic from "./Grammartopic";
+import GrammarTopic from "./GrammarTopic";
 import styles from "./Grammar.module.css";
 
 export default function GrammarScreen({ initialTopicId }) {
