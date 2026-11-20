@@ -1,0 +1,215 @@
+.footer {
+  width: 100%;
+  margin-top: auto;
+  border-top: 2px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  padding: 32px 32px 36px;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.topRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoMark {
+  font-family: 'Noto Serif SC', serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 3px 0 rgba(150, 40, 33, 0.45);
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-weight: 800;
+  color: var(--foreground);
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  padding: 6px 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.linkBtn:hover {
+  color: var(--primary);
+}
+
+/* Плашки соцсетей и почты (иконка + платформа + @username) */
+.socialsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.socialChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--secondary);
+  border: 2px solid var(--border);
+  text-decoration: none;
+  color: var(--foreground);
+  transition: all 0.15s ease;
+}
+
+.socialChip:hover {
+  border-color: var(--primary);
+  background: rgba(200, 62, 52, 0.07);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 rgba(200, 62, 52, 0.25);
+}
+
+.socialIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  color: var(--foreground);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.socialChip:hover .socialIcon {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.socialIcon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.socialInfo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.socialPlatform {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+}
+
+.socialHandle {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.socialChip:hover .socialHandle {
+  color: var(--primary);
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 0.8125rem;
+}
+
+.dot {
+  opacity: 0.45;
+}
+
+/* Адаптация под мобильные экраны (375px и ниже) */
+@media (max-width: 768px) {
+  .footer {
+    padding: 24px 16px 28px;
+  }
+
+  .topRow {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .brand {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .links {
+    justify-content: center;
+    gap: 14px 18px;
+  }
+
+  .socialsGrid {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .socialChip {
+    width: 100%;
+  }
+
+  .bottomRow {
+    justify-content: center;
+    text-align: center;
+  }
+}

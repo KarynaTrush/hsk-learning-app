@@ -1,4 +1,4 @@
-# XINNA — Adaptive Chinese Language Learning Platform 🇨🇳✨
+# Adaptive Chinese Language Learning Platform 🇨🇳✨
 
 An interactive, aesthetics-driven Mandarin Chinese learning web application tailored to the **HSK 2.0 (Levels 0–6)** standards. Built with a focus on an elegant traditional visual style, seamless UX, and smart ML-powered progress tracking.
 

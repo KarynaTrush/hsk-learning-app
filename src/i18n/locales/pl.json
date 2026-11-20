@@ -1306,5 +1306,8 @@
     "noWeak": "Na razie nie ma słabych słów: czas ruszać dalej z lekcjami.",
     "weakBtn": "Powtórz słabe słowa ({{count}})",
     "weakMode": "Słabe słowa"
+  },
+  "app": {
+    "skipPlacement": "Pomiń test"
   }
 }

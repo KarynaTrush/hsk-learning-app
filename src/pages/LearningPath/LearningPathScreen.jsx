@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Lock, Check, Flame, BookOpen, GraduationCap } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
@@ -19,21 +19,51 @@ function solid(color) {
   return color;
 }
 
-function trailPoints(count) {
-  return Array.from({ length: count }, (_, i) => ({
-    x: ((i + 0.5) / count) * 1000,
-    y: i % 2 === 0 ? 70 : 130,
-  }));
+const ROW_H = 200;
+const TOP_PAD = 58;
+
+function useWidth() {
+  const ref = useRef(null);
+  const [width, setWidth] = useState(0);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    setWidth(el.clientWidth);
+    const ro = new ResizeObserver(([entry]) => setWidth(Math.round(entry.contentRect.width)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, width];
 }
 
-function curve(points, upTo) {
+function layoutPoints(count, width) {
+  const cols = Math.max(2, Math.min(6, Math.floor(width / 190)));
+  const colW = width / cols;
+  const points = Array.from({ length: count }, (_, i) => {
+    const row = Math.floor(i / cols);
+    const c = i % cols;
+    const col = row % 2 === 0 ? c : cols - 1 - c;
+    return { x: (col + 0.5) * colW, y: TOP_PAD + row * ROW_H + (i % 2 === 0 ? 0 : 26), row };
+  });
+  const rows = Math.ceil(count / cols);
+  return { points, cols, colW, height: TOP_PAD + (rows - 1) * ROW_H + ROW_H };
+}
+
+function pathUpTo(points, upTo, colW) {
   if (points.length < 2 || upTo < 1) return "";
   let d = `M ${points[0].x} ${points[0].y}`;
   for (let i = 1; i <= Math.min(upTo, points.length - 1); i++) {
     const a = points[i - 1];
     const b = points[i];
-    const mid = (a.x + b.x) / 2;
-    d += ` C ${mid} ${a.y}, ${mid} ${b.y}, ${b.x} ${b.y}`;
+    if (a.row === b.row) {
+      const mid = (a.x + b.x) / 2;
+      d += ` C ${mid} ${a.y}, ${mid} ${b.y}, ${b.x} ${b.y}`;
+    } else {
+      const dir = a.row % 2 === 0 ? 1 : -1;
+      const bulge = Math.min(colW * 0.45, 70);
+      const edge = dir === 1 ? Math.max(a.x, b.x) + bulge : Math.min(a.x, b.x) - bulge;
+      d += ` C ${edge} ${a.y}, ${edge} ${b.y}, ${b.x} ${b.y}`;
+    }
   }
   return d;
 }
@@ -112,6 +142,41 @@ function Banner({ levelKey, level, done, total, title, progressText }) {
   );
 }
 
+function Trail({ nodes, lastDone, statusOf, colorOf, percentOf, lang, t, onNodeSelect }) {
+  const [ref, width] = useWidth();
+  const layout = width > 0 ? layoutPoints(nodes.length, width) : null;
+
+  return (
+    <div className={styles.trail} ref={ref} style={{ height: layout ? layout.height : ROW_H }}>
+      {layout && (
+        <>
+          <svg className={styles.trailSvg} width={width} height={layout.height} viewBox={`0 0 ${width} ${layout.height}`} aria-hidden="true">
+            <path d={pathUpTo(layout.points, nodes.length - 1, layout.colW)} className={styles.trailBase} />
+            <path d={pathUpTo(layout.points, lastDone + 1, layout.colW)} className={styles.trailDone} />
+          </svg>
+          {nodes.map((node, i) => {
+            const status = statusOf(node);
+            return (
+              <Seal
+                key={node.id}
+                node={node}
+                status={status}
+                color={colorOf(status)}
+                pct={percentOf(node)}
+                title={nodeTitle(node, lang)}
+                sublabel={status === "completed" ? t("path.completed") : t("path.words", { count: node.wordCount })}
+                startLabel={t("path.start")}
+                onSelect={() => onNodeSelect(node.id)}
+                style={{ left: layout.points[i].x, top: layout.points[i].y, width: Math.max(110, layout.colW - 10) }}
+              />
+            );
+          })}
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function LearningPathScreen({ onNodeSelect }) {
   const { t, i18n } = useTranslation();
   const { state } = useAppState();
@@ -131,10 +196,13 @@ export default function LearningPathScreen({ onNodeSelect }) {
     return byLevel;
   }, [completed]);
 
+  const order = useMemo(() => new Map(PATH_NODES.map((n, i) => [n.id, i])), []);
+  const activeIndex = order.get(state.activeNodeId) ?? 0;
+
   function statusOf(node) {
     if (completed.has(node.id)) return "completed";
     if (node.id === state.activeNodeId) return "active";
-    if (!UNLOCK_ALL && node.id > state.activeNodeId) return "locked";
+    if (!UNLOCK_ALL && order.get(node.id) > activeIndex) return "locked";
     return "available";
   }
 
@@ -219,7 +287,6 @@ export default function LearningPathScreen({ onNodeSelect }) {
         <p className={styles.comingSoon}>{t("path.comingSoon")}</p>
       ) : (
         level.groups.map((group, gi) => {
-          const points = trailPoints(group.nodes.length);
           const lastDone = group.nodes.reduce((acc, n, i) => (completed.has(n.id) ? i : acc), -1);
           return (
             <section key={group.position} className={styles.block}>
@@ -230,29 +297,17 @@ export default function LearningPathScreen({ onNodeSelect }) {
                   <p className={styles.blockMeta}>{t("path.lessonsCount", { count: group.nodes.length })}</p>
                 </div>
               </header>
-              <div className={styles.trail}>
-                <svg className={styles.trailSvg} viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
-                  <path d={curve(points, points.length - 1)} className={styles.trailBase} vectorEffect="non-scaling-stroke" />
-                  <path d={curve(points, lastDone + 1)} className={styles.trailDone} vectorEffect="non-scaling-stroke" />
-                </svg>
-                {group.nodes.map((node, i) => {
-                  const status = statusOf(node);
-                  return (
-                    <Seal
-                      key={node.id}
-                      node={node}
-                      status={status}
-                      color={colorOf(status)}
-                      pct={percentOf(node)}
-                      title={nodeTitle(node, lang)}
-                      sublabel={status === "completed" ? t("path.completed") : t("path.words", { count: node.wordCount })}
-                      startLabel={t("path.start")}
-                      onSelect={() => onNodeSelect(node.id)}
-                      style={{ "--x": `${(points[i].x / 1000) * 100}%`, "--y": `${(points[i].y / 200) * 100}%` }}
-                    />
-                  );
-                })}
-              </div>
+              <Trail
+                nodes={group.nodes}
+                lastDone={lastDone}
+                statusOf={statusOf}
+                colorOf={colorOf}
+                percentOf={percentOf}
+                completed={completed}
+                lang={lang}
+                t={t}
+                onNodeSelect={onNodeSelect}
+              />
             </section>
           );
         })

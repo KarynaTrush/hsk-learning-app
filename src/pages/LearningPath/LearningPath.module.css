@@ -34,12 +34,12 @@
 .blockTitle { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; color: var(--foreground); }
 .blockMeta { font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted-foreground); }
 
-.trail { position: relative; height: 290px; }
-.trailSvg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.trail { position: relative; width: 100%; }
+.trailSvg { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
 .trailBase { fill: none; stroke: var(--border); stroke-width: 5; stroke-dasharray: 2 12; stroke-linecap: round; }
 .trailDone { fill: none; stroke: #4F7942; stroke-width: 6; stroke-linecap: round; }
 
-.nodePos { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -45px); width: 11rem; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.nodePos { position: absolute; transform: translate(-50%, -46px); display: flex; flex-direction: column; align-items: center; text-align: center; }
 .seal { position: relative; width: 92px; height: 92px; border-radius: 9999px; border: none; padding: 0; cursor: pointer; background: transparent; transition: transform 0.2s; }
 .seal:hover:not(:disabled) { transform: translateY(-4px) scale(1.05); }
 .seal:disabled { cursor: not-allowed; }
@@ -68,31 +68,10 @@
   .container { padding: 1.25rem 1rem 3rem; }
   .banner { flex-wrap: wrap; padding: 1.25rem; }
   .bannerTitle { font-size: 22px; }
-  .trail { height: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 0.5rem; padding: 2.4rem 0 1rem; }
-  .trailSvg { display: none; }
-  .nodePos { position: static; transform: none; width: auto; }
+  .block { padding: 1rem 0.75rem 0.5rem; }
+  .nodeTitle { font-size: 12.5px; }
+  .nodeSub { font-size: 10.5px; }
   .legend { margin-left: 0; width: 100%; }
 }
 
 .seal_available .sealInner { background: color-mix(in srgb, var(--tone) 8%, var(--card)); }
-@media (max-width: 640px) {
-  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
-  .topStrip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
-  .chip { flex-direction: column; align-items: flex-start; gap: 0.35rem; padding: 0.6rem 0.75rem; border-radius: 0.85rem; }
-  .chipValue { font-size: 16px; }
-  .legend { grid-column: 1 / -1; flex-wrap: wrap; gap: 0.75rem; font-size: 11px; }
-  .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
-  .tab { min-width: 0; padding: 0.5rem 0.25rem; font-size: 13px; border-radius: 0.85rem; }
-  .banner { padding: 1rem 1.15rem; gap: 0.85rem; border-radius: 1.35rem; min-height: auto; }
-  .bannerHanzi { width: 3.75rem; height: 3.75rem; font-size: 32px; border-width: 2px; }
-  .bannerTitle { font-size: 20px; }
-  .bannerRing { width: 4rem; height: 4rem; font-size: 14px; }
-  .block { padding: 1.15rem 1rem 0.75rem; border-radius: 1.35rem; }
-  .blockNumber { width: 2rem; height: 2rem; font-size: 13px; }
-  .blockTitle { font-size: 17px; }
-  .trail { gap: 1.5rem 0.5rem; padding: 2.1rem 0 0.75rem; }
-  .seal { width: 78px; height: 78px; }
-  .sealHanzi { font-size: 28px; }
-  .startBubble { top: -1.9rem; padding: 0.22rem 0.6rem; font-size: 10.5px; }
-  .nodeTitle { font-size: 13px; }
-}

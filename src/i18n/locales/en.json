@@ -1306,5 +1306,8 @@
     "noWeak": "No weak words yet: a good time to move forward with the lessons.",
     "weakBtn": "Review weak words ({{count}})",
     "weakMode": "Weak words"
+  },
+  "app": {
+    "skipPlacement": "Skip the test"
   }
 }

@@ -8,7 +8,9 @@ function slugKey(slug) {
 }
 
 export function buildContent(raw) {
-  const lessons = [...raw.lessons].sort((a, b) => a.hsk_level - b.hsk_level || a.position - b.position);
+  const lessons = [...raw.lessons].sort(
+    (a, b) => a.hsk_level - b.hsk_level || (a.block_position || 1) - (b.block_position || 1) || a.position - b.position
+  );
   const groupBy = (rows) => {
     const map = new Map();
     for (const r of rows || []) {

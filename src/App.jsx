@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
 import AuthScreen from "./pages/Auth/AuthScreen";
 import PlacementTestScreen from "./pages/PlacementTest/PlacementTestScreen";
 import DashboardScreen from "./pages/Dashboard/DashboardScreen";
@@ -28,7 +29,7 @@ const SKIP_PLACEMENT_IN_DEV = import.meta.env.DEV;
 function AppInner() {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage || "ru";
-  const { state, openLesson, authReady, addStudySeconds, logRecommendations } = useAppState();
+  const { state, openLesson, authReady, addStudySeconds, logRecommendations, markPlacementDone } = useAppState();
 
   const hasSession = Boolean(state.user || state.placementDone);
   const needsPlacement = !state.placementDone && !SKIP_PLACEMENT_IN_DEV;
@@ -54,6 +55,7 @@ function AppInner() {
     localStorage.setItem("hsk_current_screen", "main");
     localStorage.setItem("hsk_current_tab", tab);
   }
+
   const saveAndSetScreen = (newScreen) => {
     setScreen(newScreen);
     localStorage.setItem("hsk_current_screen", newScreen);
@@ -112,6 +114,11 @@ function AppInner() {
     saveAndSetScreen("lesson");
   }
 
+  function finishPlacement() {
+    markPlacementDone();
+    goMain("dashboard");
+  }
+
   useEffect(() => {
     if (!authReady) return;
     if (!state.user && screen !== "auth") setScreen("auth");
@@ -130,16 +137,16 @@ function AppInner() {
   const node = nodeById(state.activeNodeId);
 
   const subScreenLabel = {
-    lesson:    {
+    lesson: {
       title: node ? nodeTitle(node, lang) : t("screens.lessonTitle"),
       subtitle: node ? `${node.hanzi} · HSK ${node.level}` : t("screens.lessonSubtitle"),
     },
     character: { title: t("screens.characterTitle"), subtitle: `字卡 · ${focusHanzi}` },
     mistakes: { title: t("screens.mistakesTitle"), subtitle: t("screens.mistakesSubtitle") },
-    reviews:  { title: t("screens.reviewsTitle"), subtitle: t("screens.reviewsSubtitle") },
-    account:  { title: t("account.title"), subtitle: t("account.subtitle") },
-    grammar:  { title: t("grammar.title"), subtitle: t("grammar.kicker") },
-    goals:    { title: t("goals.title"), subtitle: t("goals.subtitle") },
+    reviews: { title: t("screens.reviewsTitle"), subtitle: t("screens.reviewsSubtitle") },
+    account: { title: t("account.title"), subtitle: t("account.subtitle") },
+    grammar: { title: t("grammar.title"), subtitle: t("grammar.kicker") },
+    goals: { title: t("goals.title"), subtitle: t("goals.subtitle") },
   };
 
   if (!authReady) {
@@ -152,7 +159,7 @@ function AppInner() {
 
   const isAuth = screen === "auth" || screen === "placement";
   const isMain = screen === "main";
-  const isSub  = !isAuth && !isMain;
+  const isSub = !isAuth && !isMain;
 
   if (isAuth) {
     return (
@@ -161,7 +168,31 @@ function AppInner() {
           <AuthScreen onAuth={() => saveAndSetScreen(needsPlacement ? "placement" : "main")} />
         )}
         {screen === "placement" && (
-          <PlacementTestScreen onComplete={() => goMain("dashboard")} />
+          <>
+            <PlacementTestScreen onComplete={finishPlacement} />
+            <button
+              type="button"
+              onClick={finishPlacement}
+              style={{
+                position: "fixed",
+                top: 16,
+                right: 16,
+                zIndex: 50,
+                padding: "0.6rem 1.1rem",
+                borderRadius: "0.9rem",
+                border: "2px solid var(--border)",
+                background: "var(--card)",
+                color: "var(--foreground)",
+                fontFamily: "Inter, sans-serif",
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: "pointer",
+                boxShadow: "0 3px 0 var(--border)",
+              }}
+            >
+              {t("app.skipPlacement")}
+            </button>
+          </>
         )}
       </div>
     );
@@ -170,71 +201,85 @@ function AppInner() {
   const subMeta = subScreenLabel[screen];
   const tabTitles = {
     dashboard: { title: t("nav.dashboard"), subtitle: t("nav.dashboardSub") },
-    path:      { title: t("nav.path"),      subtitle: t("nav.pathSub") },
-    tones:     { title: t("nav.tones"),     subtitle: t("nav.tonesSub") },
-    writing:   { title: t("nav.writing"),   subtitle: t("nav.writingSub") },
-    stories:   { title: t("nav.stories"),   subtitle: t("nav.storiesSub") },
-    profile:   { title: t("nav.profile"),   subtitle: t("nav.profileSub") },
+    path: { title: t("nav.path"), subtitle: t("nav.pathSub") },
+    tones: { title: t("nav.tones"), subtitle: t("nav.tonesSub") },
+    writing: { title: t("nav.writing"), subtitle: t("nav.writingSub") },
+    stories: { title: t("nav.stories"), subtitle: t("nav.storiesSub") },
+    profile: { title: t("nav.profile"), subtitle: t("nav.profileSub") },
   };
 
   const currentHeaderMeta = isSub ? subMeta : tabTitles[activeTab];
+  const backName =
+    (returnTo?.screen === "main"
+      ? tabTitles[returnTo.tab]?.title
+      : returnTo
+        ? subScreenLabel[returnTo.screen]?.title
+        : tabTitles[DEFAULT_BACK[screen] || "dashboard"]?.title) || "";
+
   return (
-    <div className="min-h-screen flex w-full overflow-x-hidden" style={{ backgroundColor: "var(--background)" }}>
-      <Sidebar isMain={isMain} activeTab={activeTab} goMain={goMain} />
-      <div className="flex-1 flex flex-col min-h-screen min-w-0 w-full">
-        <Header
-          title={currentHeaderMeta?.title}
-          subtitle={currentHeaderMeta?.subtitle}
-          onProfileClick={() => openSub("account")}
-          onOpenCharacter={(hanzi) => { setFocusHanzi(hanzi); openSub("character"); }}
-        />
-        <main
-          className="flex-1 overflow-y-auto overflow-x-hidden pb-[calc(var(--bottom-nav-height)+1rem)] md:pb-0"
-          style={{ scrollbarWidth: "thin" }}
-        >
-          {isSub && screen !== "lesson" && (
-            <BackBar
-              label={t("back.to", { name: (returnTo?.screen === "main" ? tabTitles[returnTo.tab]?.title : returnTo ? subScreenLabel[returnTo.screen]?.title : tabTitles[DEFAULT_BACK[screen] || "dashboard"]?.title) || "" })}
-              onClick={goBack}
-            />
-          )}
-          {screen === "main" && activeTab === "dashboard" && (
-            <DashboardScreen
-              onOpenRecommendation={openRecommendation}
-              onStartLesson={() => startLesson(state.activeNodeId)}
-              onStartReview={() => openSub("reviews")}
-              onOpenTones={() => goMain("tones")}
-              onOpenWriting={() => goMain("writing")}
-            />
-          )}
-          {screen === "main" && activeTab === "path" && (
-            <LearningPathScreen onNodeSelect={(id) => startLesson(id)} />
-          )}
-          {screen === "main" && activeTab === "tones" && <ToneVisualizerScreen key={`t${focus?.tone || 0}`} initialTone={focus?.tone} />}
-          {screen === "main" && activeTab === "writing" && <WritingScreen key={`w${focus?.char || ""}`} initialChar={focus?.char} />}
-          {screen === "main" && activeTab === "stories" && <ReadingScreen key={`r${focus?.storyId || ""}`} initialStoryId={focus?.storyId} />}
-          {screen === "main" && activeTab === "profile" && (
-            <ProfileScreen onMenuSelect={handleMenuSelect} />
-          )}
-          {screen === "lesson" && (
-            <LessonScreen onComplete={() => goMain("dashboard")} />
-          )}
-          {screen === "character" && <CharacterDetailScreen hanzi={focusHanzi} onBack={goBack} />}
-          {screen === "mistakes" && (
-            <MistakesScreen
-              onOpenTarget={openTarget}
-              onBack={goBack}
-              onPractice={(hanzis) => startLesson(state.activeNodeId, hanzis)}
-            />
-          )}
-          {screen === "account" && <AccountScreen />}
-          {screen === "grammar" && <GrammarScreen key={`g${focus?.topicId || 0}`} initialTopicId={focus?.topicId} />}
-          {screen === "goals" && <GoalsScreen />}
-          {screen === "reviews" && (
-            <ReviewsScreen onBack={goBack} />
-          )}
-        </main>
+    <div className="min-h-screen flex flex-col w-full overflow-x-clip" style={{ backgroundColor: "var(--background)" }}>
+      <div className="flex-1 flex w-full items-stretch">
+        <Sidebar isMain={isMain} activeTab={activeTab} goMain={goMain} />
+        <div className="flex-1 flex flex-col min-w-0 w-full">
+          <Header
+            title={currentHeaderMeta?.title}
+            subtitle={currentHeaderMeta?.subtitle}
+            onProfileClick={() => openSub("account")}
+            onOpenCharacter={(hanzi) => { setFocusHanzi(hanzi); openSub("character"); }}
+          />
+          <main className="flex-1 flex flex-col overflow-x-hidden pb-[calc(var(--bottom-nav-height)+1rem)] md:pb-6">
+            {isSub && screen !== "lesson" && (
+              <BackBar label={t("back.to", { name: backName })} onClick={goBack} />
+            )}
+            {screen === "main" && activeTab === "dashboard" && (
+              <DashboardScreen
+                onOpenRecommendation={openRecommendation}
+                onStartLesson={() => startLesson(state.activeNodeId)}
+                onStartReview={() => openSub("reviews")}
+                onOpenTones={() => goMain("tones")}
+                onOpenWriting={() => goMain("writing")}
+              />
+            )}
+            {screen === "main" && activeTab === "path" && (
+              <LearningPathScreen onNodeSelect={(id) => startLesson(id)} />
+            )}
+            {screen === "main" && activeTab === "tones" && (
+              <ToneVisualizerScreen key={`t${focus?.tone || 0}`} initialTone={focus?.tone} />
+            )}
+            {screen === "main" && activeTab === "writing" && (
+              <WritingScreen key={`w${focus?.char || ""}`} initialChar={focus?.char} />
+            )}
+            {screen === "main" && activeTab === "stories" && (
+              <ReadingScreen key={`r${focus?.storyId || ""}`} initialStoryId={focus?.storyId} />
+            )}
+            {screen === "main" && activeTab === "profile" && (
+              <ProfileScreen onMenuSelect={handleMenuSelect} />
+            )}
+            {screen === "lesson" && (
+              <LessonScreen onComplete={() => goMain("dashboard")} />
+            )}
+            {screen === "character" && (
+              <CharacterDetailScreen hanzi={focusHanzi} onBack={goBack} />
+            )}
+            {screen === "mistakes" && (
+              <MistakesScreen
+                onOpenTarget={openTarget}
+                onBack={goBack}
+                onPractice={(hanzis) => startLesson(state.activeNodeId, hanzis)}
+              />
+            )}
+            {screen === "account" && <AccountScreen />}
+            {screen === "grammar" && (
+              <GrammarScreen key={`g${focus?.topicId || 0}`} initialTopicId={focus?.topicId} />
+            )}
+            {screen === "goals" && <GoalsScreen />}
+            {screen === "reviews" && <ReviewsScreen onBack={goBack} />}
+          </main>
+        </div>
       </div>
+      {screen !== "lesson" && (
+        <Footer onNavigateTab={goMain} onOpenSub={openSub} />
+      )}
     </div>
   );
 }

@@ -1,48 +1,43 @@
 .sidebar {
-  width: 17rem;
-  min-height: 100vh;
-  height: 100vh;
+  width: 16.5rem;
   background: var(--card);
   border-right: 2px solid var(--border);
-  position: sticky;
-  top: 0;
-  align-self: flex-start;
+  align-self: stretch;
   flex: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   z-index: 30;
 }
 
 .topSection {
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 0;
+  max-height: 100vh;
 }
 
 .logoWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 0.75rem 0.75rem 0.65rem;
   border-bottom: 2px solid var(--border);
 }
 
 .navScrollable {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem 0.75rem;
-  flex: 1;
+  gap: 0.3rem;
+  padding: 0.85rem 0.75rem;
   overflow-y: auto;
 }
 
 .navButton {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  padding: 0.625rem 0.875rem;
+  gap: 0.8rem;
+  padding: 0.55rem 0.8rem;
   border-radius: 0.75rem;
   text-align: left;
   width: 100%;
@@ -60,13 +55,13 @@
 .navButtonActive {
   border: 2px solid var(--primary);
   background: rgba(200, 62, 52, 0.07);
-  box-shadow: 0 4px 0 rgba(200, 62, 52, 0.3);
+  box-shadow: 0 3px 0 rgba(200, 62, 52, 0.3);
 }
 
 .hanziBox {
   flex: none;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.15rem;
+  height: 2.15rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,19 +74,19 @@
   background: var(--primary);
   border: 2px solid var(--primary);
   border-radius: 9999px;
-  box-shadow: 0 3px 0 rgba(150, 40, 33, 0.5);
+  box-shadow: 0 2px 0 rgba(150, 40, 33, 0.5);
 }
 
 .hanziText {
   font-family: 'Noto Serif SC', serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--muted-foreground);
 }
 
 .hanziTextActive {
   font-family: 'Noto Serif SC', serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
 }
@@ -137,20 +132,90 @@
   background: var(--primary);
 }
 
-.forecastContainer {
-  padding: 0.5rem 1rem 1.25rem;
+/* Вытягивающаяся плашка экзамена HSK */
+.forecastDrawer {
+  margin: 0.25rem 0.75rem 1rem;
+  border-radius: 1rem;
+  border: 2px solid var(--border);
+  background: var(--secondary);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.forecastDrawer:hover,
+.forecastDrawerOpen {
+  border-color: var(--accent);
+  box-shadow: 0 3px 0 var(--border);
+}
+
+.forecastHandle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.handleBadge {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  flex: none;
+}
+
+.handleText {
+  flex: 1;
+  font-family: "Inter", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.handleArrow {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  flex: none;
+}
+
+/* Скрытое тело карточки: плавно вытягивается при клике или наведении */
+.forecastBody {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.22s ease;
+}
+
+.forecastDrawer:hover .forecastBody,
+.forecastDrawerOpen .forecastBody {
+  max-height: 120px;
+  opacity: 1;
 }
 
 .forecastWidget {
-  border-radius: 1.25rem;
-  border: 2px solid var(--border);
-  background: var(--secondary);
-  box-shadow: 0 4px 0 var(--border);
+  padding: 0.25rem 0.75rem 0.75rem;
+  border-top: 1px dashed var(--border);
+}
+
+.forecastHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .forecastTitle {
   font-family: "Inter", sans-serif;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -159,15 +224,14 @@
 
 .forecastValue {
   font-family: 'Noto Serif SC', serif;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--accent);
   line-height: 1.2;
-  margin-top: 2px;
 }
 
 .forecastBar {
-  height: 0.55rem;
+  height: 0.5rem;
   border-radius: 9999px;
   background: var(--muted);
   overflow: hidden;
@@ -183,7 +247,7 @@
 
 .forecastDate {
   font-family: "Inter", sans-serif;
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--muted-foreground);
 }
 
@@ -200,7 +264,7 @@
   .sublabel,
   .sublabelActive,
   .activeDot,
-  .forecastContainer {
+  .forecastDrawer {
     display: none;
   }
   .label,
@@ -227,12 +291,14 @@
   }
 
   .topSection {
+    position: static;
     flex-direction: row;
     width: 100%;
+    max-height: none;
   }
 
   .logoWrapper,
-  .forecastContainer,
+  .forecastDrawer,
   .sublabel,
   .sublabelActive,
   .activeDot {

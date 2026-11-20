@@ -450,6 +450,9 @@ export function AppStateProvider({ children }) {
       });
       logEvent(`grammar:${topicId}`, correct, "lesson", ms, { type: type || "grammar", skill: "grammar" });
     },
+    markPlacementDone() {
+      setState((s) => (s.placementDone ? s : { ...s, placementDone: true, startedAt: s.startedAt || new Date().toISOString() }));
+    },
     setPlan(plan) {
       setState((s) => ({ ...s, plan: { ...s.plan, ...plan } }));
     },
