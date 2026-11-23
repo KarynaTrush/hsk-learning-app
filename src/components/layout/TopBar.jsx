@@ -7,6 +7,12 @@ import StandardSwitch from "../ui/StandardSwitch";
 import logo from "../../assets/images/logo.png";
 import styles from "./TopBar.module.css";
 
+const CODES = Array.isArray(LANG_CODES)
+  ? LANG_CODES
+  : LANG_CODES instanceof Set
+    ? Array.from(LANG_CODES)
+    : Object.keys(LANG_CODES || {});
+
 export default function TopBar({ title, onSkip }) {
   const { t, i18n } = useTranslation();
   const { state, toggleTheme, setStandard } = useAppState();
@@ -26,7 +32,7 @@ export default function TopBar({ title, onSkip }) {
       <div className={styles.actions}>
         <StandardSwitch value={state.hskStandard || "2.0"} onChange={setStandard} t={t} compact />
         <div className={styles.lang}>
-          {LANG_CODES.map((code) => (
+          {CODES.map((code) => (
             <button key={code} type="button" className={`${styles.langBtn} ${current === code ? styles.langActive : ""}`} onClick={() => changeLanguage(code)}>
               {code.toUpperCase()}
             </button>
