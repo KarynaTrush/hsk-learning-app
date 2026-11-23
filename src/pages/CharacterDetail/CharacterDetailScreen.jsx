@@ -1,235 +1,262 @@
-import { useState } from "react";
-import { Play, Pause, FileText, Volume2 } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import HanziWriter from "hanzi-writer";
+import { Volume2, RotateCcw, PenLine, BookOpen, ChevronRight, Turtle } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useAppState } from "../../state/AppState";
+import { DICT } from "../../data/dictionary";
+import { HSK_LEVELS, nodeById, nodeTitle } from "../../data/path";
+import { vocabByHanzi, wordMeaning } from "../../data/vocab";
+import { STORIES } from "../../data/stories";
+import { shortMeaning } from "../../lib/placement";
+import { speakZh, ttsSupported } from "../../lib/tts";
+import PageBanner from "../../components/ui/PageBanner";
 import styles from "./CharacterDetail.module.css";
 
-function MiZiGeGrid({ hanzi, size = 200, highlight }) {
-  const s = size;
-  const half = s / 2;
-  const brd = 14;
+const UNLOCK_ALL = import.meta.env.VITE_UNLOCK_ALL === "true";
+const isCjk = (c) => /[\u4e00-\u9fff]/.test(c);
+
+function Grid({ children, size = 220 }) {
   return (
-    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} aria-label={`Siatka Mi-zi-ge dla znaku ${hanzi}`}>
-      <rect x={brd} y={brd} width={s - brd * 2} height={s - brd * 2} rx={3} fill="#FEFCF5" />
-      <rect x={brd} y={brd} width={s - brd * 2} height={s - brd * 2} rx={3} fill="none" stroke="#C83E34" strokeWidth={1.4} strokeDasharray="5 3" opacity={0.75} />
-      <line x1={brd} y1={half} x2={s - brd} y2={half} stroke="#C83E34" strokeWidth={0.7} strokeDasharray="4 4" opacity={0.3} />
-      <line x1={half} y1={brd} x2={half} y2={s - brd} stroke="#C83E34" strokeWidth={0.7} strokeDasharray="4 4" opacity={0.3} />
-      <line x1={brd} y1={brd} x2={s - brd} y2={s - brd} stroke="#C83E34" strokeWidth={0.5} strokeDasharray="3 5" opacity={0.18} />
-      <line x1={s - brd} y1={brd} x2={brd} y2={s - brd} stroke="#C83E34" strokeWidth={0.5} strokeDasharray="3 5" opacity={0.18} />
-      {[[brd, brd], [s - brd, brd], [brd, s - brd], [s - brd, s - brd]].map(([cx, cy], i) => (
-        <circle key={`c${i}`} cx={cx} cy={cy} r={2.2} fill="#C83E34" opacity={0.5} />
-      ))}
-      {[[half, brd], [half, s - brd], [brd, half], [s - brd, half]].map(([cx, cy], i) => (
-        <circle key={`m${i}`} cx={cx} cy={cy} r={1.5} fill="#C83E34" opacity={0.28} />
-      ))}
-      <text x={half} y={half + 1} textAnchor="middle" dominantBaseline="central"
-        fontSize={hanzi.length === 1 ? s * 0.55 : s * 0.38}
-        fontFamily="'Noto Serif SC', serif" fontWeight={700} fill="#1A1A1A"
-        opacity={highlight !== undefined ? 0.08 : 0.88}
-      >
-        {hanzi}
-      </text>
-    </svg>
+    <div className={styles.grid} style={{ width: size, height: size }}>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={styles.gridLines} aria-hidden="true">
+        <rect x="0.5" y="0.5" width="99" height="99" className={styles.gridFrame} />
+        <line x1="50" y1="0" x2="50" y2="100" className={styles.gridLine} />
+        <line x1="0" y1="50" x2="100" y2="50" className={styles.gridLine} />
+        <line x1="0" y1="0" x2="100" y2="100" className={styles.gridLine} />
+        <line x1="100" y1="0" x2="0" y2="100" className={styles.gridLine} />
+      </svg>
+      {children}
+    </div>
   );
 }
 
-const STROKES_SHI = [
-  { label: "1", desc: "Prawa kreska ukośna (点) — skos w prawo-dół", path: "M 106 22 C 110 26, 116 34, 118 42", type: "diǎn" },
-  { label: "2", desc: "Pozioma kreska (横 héng) — od lewej do prawej", path: "M 76 46 L 128 46", type: "héng" },
-  { label: "3", desc: "Lewy skos (撇 piě) — ukos w lewo-dół", path: "M 100 55 C 94 65, 82 80, 72 92", type: "piě" },
-  { label: "4", desc: "Prawy skos (捺 nà) — ukos w prawo-dół", path: "M 100 55 C 108 67, 118 82, 130 94", type: "nà" },
-  { label: "5", desc: "Pionowa kreska z haczykiem (竖钩 shùgōu)", path: "M 100 98 L 100 148 C 100 152, 97 156, 92 158", type: "shùgōu" },
-  { label: "6", desc: "Lewa dolna kreska (撇) — skos w lewo", path: "M 100 114 C 90 122, 78 136, 70 152", type: "piě" },
-  { label: "7", desc: "Prawa dolna kreska (横折)", path: "M 100 114 C 108 118, 116 128, 120 148", type: "héngzhé" },
-  { label: "8", desc: "Zamknięcie (横) — dolna pozioma kreska", path: "M 68 160 L 132 160", type: "héng" },
-  { label: "9", desc: "Pionowa (竖) — wewnętrzna", path: "M 100 166 L 100 180", type: "shù" },
-];
+function StrokeAnimation({ char, theme, t }) {
+  const boxRef = useRef(null);
+  const writerRef = useRef(null);
+  const [failed, setFailed] = useState(false);
 
-const STROKE_COLORS = ["#C8B4A0","#B8A090","#A89080","#987060","#885050","#784040","#683030","#582020","#1A1A1A"];
+  useEffect(() => {
+    const box = boxRef.current;
+    if (!box) return undefined;
+    box.innerHTML = "";
+    setFailed(false);
+    const colors = theme === "dark" ? { stroke: "#F2EDE4", outline: "#5A544A" } : { stroke: "#1A1A1A", outline: "#D9D2C5" };
+    const writer = HanziWriter.create(box, char, {
+      width: 220,
+      height: 220,
+      padding: 12,
+      showOutline: true,
+      strokeColor: colors.stroke,
+      outlineColor: colors.outline,
+      radicalColor: "#4F7942",
+      strokeAnimationSpeed: 1,
+      delayBetweenStrokes: 300,
+      onLoadCharDataError: () => setFailed(true),
+    });
+    writerRef.current = writer;
+    writer.animateCharacter();
+    return () => {
+      writerRef.current = null;
+      box.innerHTML = "";
+    };
+  }, [char, theme]);
 
-function StrokeCanvas({ visible }) {
   return (
-    <svg width={200} height={200} viewBox="0 0 200 200" style={{ display: "block" }}>
-      <rect x={4} y={4} width={192} height={192} rx={3} fill="#FEFCF5" />
-      <rect x={4} y={4} width={192} height={192} rx={3} fill="none" stroke="#C83E34" strokeWidth={1.2} strokeDasharray="5 3" opacity={0.55} />
-      <line x1={4} y1={100} x2={196} y2={100} stroke="#C83E34" strokeWidth={0.6} strokeDasharray="4 4" opacity={0.22} />
-      <line x1={100} y1={4} x2={100} y2={196} stroke="#C83E34" strokeWidth={0.6} strokeDasharray="4 4" opacity={0.22} />
-      <text x={100} y={102} textAnchor="middle" dominantBaseline="central" fontSize={108} fontFamily="'Noto Serif SC', serif" fontWeight={700} fill="#1A1A1A" opacity={0.06}>食</text>
-      {STROKES_SHI.slice(0, visible).map((stroke, i) => {
-        const isActive = i === visible - 1;
-        return (
-          <path key={i} d={stroke.path} stroke={isActive ? "#C83E34" : STROKE_COLORS[i]}
-            strokeWidth={isActive ? 7 : 6} strokeLinecap="round" strokeLinejoin="round" fill="none" opacity={isActive ? 1 : 0.85} />
-        );
-      })}
-      {visible > 0 && (() => {
-        const match = STROKES_SHI[visible - 1].path.match(/M\s*([\d.]+)\s+([\d.]+)/);
-        if (!match) return null;
-        return <circle cx={parseFloat(match[1])} cy={parseFloat(match[2])} r={4} fill="#C83E34" opacity={0.9} />;
-      })()}
-    </svg>
+    <div className={styles.strokeBox}>
+      <Grid>
+        <div ref={boxRef} className={styles.writer} />
+      </Grid>
+      {failed ? (
+        <p className={styles.muted}>{t("char.noStrokes")}</p>
+      ) : (
+        <button type="button" className={styles.secondary} onClick={() => writerRef.current?.animateCharacter()}>
+          <RotateCcw size={15} strokeWidth={2.2} />
+          {t("char.replay")}
+        </button>
+      )}
+    </div>
   );
 }
 
-export default function CharacterDetailScreen({ onBack }) {
-  const [animating, setAnimating] = useState(false);
-  const [strokeVisible, setStrokeVisible] = useState(0);
-  const [intervalRef, setIntervalRef] = useState(null);
+function Highlighted({ text, word }) {
+  const parts = text.split(word);
+  return parts.map((part, i) => (
+    <React.Fragment key={i}>
+      {part}
+      {i < parts.length - 1 && <mark className={styles.mark}>{word}</mark>}
+    </React.Fragment>
+  ));
+}
 
-  function handleAnimate() {
-    if (animating) {
-      if (intervalRef) clearInterval(intervalRef);
-      setIntervalRef(null);
-      setAnimating(false);
-      return;
-    }
-    setStrokeVisible(0);
-    setAnimating(true);
-    let step = 0;
-    const iv = setInterval(() => {
-      step++;
-      setStrokeVisible(step);
-      if (step >= STROKES_SHI.length) {
-        clearInterval(iv);
-        setIntervalRef(null);
-        setAnimating(false);
+export default function CharacterDetailScreen({ hanzi, onPractice, onOpenTarget, onOpenWord, onStartLesson }) {
+  const { t, i18n } = useTranslation();
+  const { state } = useAppState();
+  const lang = i18n.resolvedLanguage || "ru";
+  const [charIndex, setCharIndex] = useState(0);
+
+  useEffect(() => setCharIndex(0), [hanzi]);
+
+  const entry = useMemo(() => {
+    const word = vocabByHanzi(hanzi);
+    if (word) return { pinyin: word.pinyin, hsk: word.hsk, meaning: wordMeaning(word, lang), nodeId: word.nodeId };
+    const d = DICT.get(hanzi);
+    if (d) return { pinyin: d.pinyin, hsk: d.hsk, meaning: d.meaning?.[lang] || d.meaning?.en || "", nodeId: null };
+    return null;
+  }, [hanzi, lang]);
+
+  const chars = useMemo(() => [...hanzi].filter(isCjk), [hanzi]);
+  const currentLevel = Math.max(1, nodeById(state.activeNodeId)?.level ?? 1);
+
+  const examples = useMemo(() => {
+    const out = [];
+    for (const story of STORIES) {
+      if (!UNLOCK_ALL && story.hsk > currentLevel) continue;
+      for (const s of story.sentences) {
+        if (s.zh.includes(hanzi)) out.push({ story, zh: s.zh });
+        if (out.length >= 4) return out;
       }
-    }, 420);
-    setIntervalRef(iv);
+    }
+    return out;
+  }, [hanzi, currentLevel]);
+
+  const related = useMemo(
+    () =>
+      [...DICT.values()]
+        .filter((e) => e.hanzi !== hanzi && chars.some((c) => e.hanzi.includes(c)))
+        .sort((a, b) => a.hsk - b.hsk || a.hanzi.length - b.hanzi.length)
+        .slice(0, 8),
+    [hanzi, chars]
+  );
+
+  if (!entry) {
+    return (
+      <div className={styles.container}>
+        <PageBanner color="#C83E34" hanzi={hanzi[0] || "字"} kicker={t("char.kicker")} title={hanzi} />
+        <div className={styles.card}>
+          <p className={styles.muted}>{t("char.noData")}</p>
+        </div>
+      </div>
+    );
   }
+
+  const levelInfo = HSK_LEVELS[String(entry.hsk)];
+  const color = levelInfo?.color || "#C83E34";
+  const node = entry.nodeId ? nodeById(entry.nodeId) : null;
+  const mistake = state.mistakes?.find((m) => m.hanzi === hanzi);
+  const writeMistakes = chars.reduce((sum, c) => sum + (state.writingStats?.[c]?.mistakes || 0), 0);
+  const inReviews = Boolean(state.words?.[hanzi]);
+  const activeChar = chars[Math.min(charIndex, chars.length - 1)];
 
   return (
     <div className={styles.container}>
-      <div className={styles.mainGrid}>
-        <div className={styles.flexCol}>
-          <div className={styles.mizigeCard}>
-            <p className={styles.mizigeLabel}>
-              SIATKA KALIGRAFII · 米字格
-            </p>
-            <MiZiGeGrid hanzi="食" size={240} />
-            <div className={styles.pinyinSection}>
-              <button className={styles.audioButton}>
-                <Volume2 size={18} color="var(--primary)" strokeWidth={1.5} />
-              </button>
-              <div>
-                <p className={styles.pinyinValue}>shí</p>
-                <p className={styles.pinyinLabel}>Wymów głośno</p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.actionsRow}>
-            <button
-              onClick={handleAnimate}
-              className={styles.animateButton}
-            >
-              {animating ? <Pause size={16} strokeWidth={2} /> : <Play size={16} strokeWidth={2} />}
-              <span>{animating ? "Pauza" : "Uruchom animację"}</span>
-            </button>
-            <button className={styles.pdfButton}>
-              <FileText size={16} color="var(--foreground)" strokeWidth={1.5} />
-              <span className={styles.pdfButtonText}>Pobierz PDF</span>
-            </button>
-          </div>
-          <div className={styles.metaCard}>
-            <div className={styles.metaGrid}>
-              {[
-                { label: "PINYIN", value: "shí", isPin: true },
-                { label: "RADYKAŁ", value: "食 (shí)" },
-                { label: "ZNACZENIE", value: "jeść / jedzenie" },
-                { label: "HSK", value: "Poziom 1" },
-                { label: "KRESK", value: "9 kresek" },
-                { label: "TONY", value: "2. ton (wznoszący)" },
-              ].map((item) => (
-                <div key={item.label}>
-                  <p className={styles.metaLabel}>{item.label}</p>
-                  <p className={item.isPin ? styles.metaValuePinyin : styles.metaValueHanzi}>
-                    {item.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className={styles.flexCol}>
-          <div className={styles.visualizerCard}>
-            <div className={styles.visualizerHeader}>
-              <div>
-                <p className={styles.visTitle}>Kolejność kresek</p>
-                <p className={styles.visSub}>
-                  {STROKES_SHI.length} kresek łącznie · {strokeVisible > 0 ? `Kreska ${strokeVisible} z ${STROKES_SHI.length}` : "Naciśnij animuj"}
-                </p>
-              </div>
-              {strokeVisible > 0 && strokeVisible <= STROKES_SHI.length && (
-                <div className={styles.typeBadge}>
-                  <span className={styles.typeBadgeText}>
-                    {STROKES_SHI[strokeVisible - 1].type}
-                  </span>
-                </div>
-              )}
-            </div>
+      <PageBanner color={color} hanzi={hanzi[0]} kicker={`${t("char.kicker")} · HSK ${entry.hsk}`} title={hanzi} subtitle={entry.pinyin} />
 
-            <div className={styles.canvasWrapper}>
-              <StrokeCanvas visible={strokeVisible} />
-            </div>
-
-            {strokeVisible > 0 && strokeVisible <= STROKES_SHI.length && (
-              <div className={styles.descriptionRow}>
-                <p className={styles.descriptionText}>
-                  <span className={styles.stepNumberAccent}>Kreska {strokeVisible}:</span>{" "}
-                  {STROKES_SHI[strokeVisible - 1].desc}
-                </p>
-              </div>
+      <section className={`${styles.card} ${styles.hero}`}>
+        <Grid size={200}>
+          <span className={styles.bigHanzi} style={{ fontSize: hanzi.length === 1 ? 110 : hanzi.length === 2 ? 76 : 54 }}>{hanzi}</span>
+        </Grid>
+        <div className={styles.heroInfo}>
+          <p className={styles.label}>{t("char.meaning")}</p>
+          <p className={styles.meaning}>{shortMeaning(entry.meaning) || entry.meaning}</p>
+          <p className={styles.pinyin}>{entry.pinyin}</p>
+          <div className={styles.heroActions}>
+            {ttsSupported() && (
+              <>
+                <button type="button" className={styles.primary} onClick={() => speakZh(hanzi, 1)}>
+                  <Volume2 size={16} strokeWidth={2} />
+                  {t("char.listen")}
+                </button>
+                <button type="button" className={styles.secondary} onClick={() => speakZh(hanzi, 0.5)}>
+                  <Turtle size={16} strokeWidth={2} />
+                  {t("char.listenSlow")}
+                </button>
+              </>
             )}
           </div>
+        </div>
+      </section>
 
-          <div className={styles.stepsCard}>
-            <p className={styles.stepsTitle}>
-              KROKI ANIMACJI
-            </p>
-            <div className={styles.stepsGrid}>
-              {STROKES_SHI.map((stroke, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setStrokeVisible(i + 1); setAnimating(false); if (intervalRef) clearInterval(intervalRef); }}
-                  className={styles.stepButton}
-                >
-                  <div
-                    className={styles.stepBox}
-                    style={{
-                      backgroundColor: i < strokeVisible ? (i === strokeVisible - 1 ? "rgba(200,62,52,0.1)" : "rgba(79,121,66,0.08)") : "var(--secondary)",
-                      borderColor: i < strokeVisible ? (i === strokeVisible - 1 ? "var(--primary)" : "rgba(79,121,66,0.3)") : "var(--border)",
-                    }}
-                  >
-                    <span
-                      className={styles.stepBoxHanzi}
-                      style={{
-                        color: i < strokeVisible ? (i === strokeVisible - 1 ? "var(--primary)" : "var(--accent)") : "var(--muted-foreground)",
-                        opacity: i < strokeVisible ? 1 : 0.35
-                      }}
-                    >
-                      {stroke.label}
-                    </span>
-                  </div>
+      <div className={styles.columns}>
+        <div className={styles.col}>
+          <section className={styles.card}>
+            <p className={styles.label}>{t("char.strokesTitle")}</p>
+            {chars.length > 1 && (
+              <div className={styles.tabs}>
+                {chars.map((c, i) => (
+                  <button key={`${c}${i}`} type="button" className={`${styles.tab} ${i === charIndex ? styles.tabActive : ""}`} onClick={() => setCharIndex(i)}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+            )}
+            {activeChar && <StrokeAnimation char={activeChar} theme={state.theme} t={t} />}
+            {activeChar && (
+              <button type="button" className={styles.secondary} onClick={() => onOpenTarget({ type: "writing", target: { char: activeChar } })}>
+                <PenLine size={16} strokeWidth={2} />
+                {t("char.practiceWrite")}
+              </button>
+            )}
+          </section>
+
+          <section className={styles.card}>
+            <p className={styles.label}>{t("char.examplesTitle")}</p>
+            {examples.length === 0 && <p className={styles.muted}>{t("char.noExamples")}</p>}
+            {examples.map((ex, i) => (
+              <div key={i} className={styles.example}>
+                <p className={styles.exampleZh}>
+                  <Highlighted text={ex.zh} word={hanzi} />
+                </p>
+                <button type="button" className={styles.link} onClick={() => onOpenTarget({ type: "read", target: { storyId: ex.story.id } })}>
+                  <BookOpen size={14} strokeWidth={2} />
+                  {t("char.openStory")}
                 </button>
-              ))}
-            </div>
-          </div>
-          <div className={styles.relatedCard}>
-            <p className={styles.relatedTitle}>
-              POWIĄZANE SŁOWA
-            </p>
-            <div className={styles.relatedFlex}>
-              {[
-                { word: "食物", meaning: "jedzenie" },
-                { word: "食堂", meaning: "stołówka" },
-                { word: "饮食", meaning: "żywienie" },
-                { word: "食谱", meaning: "przepis" },
-              ].map((item) => (
-                <div key={item.word} className={styles.relatedItem}>
-                  <span className={styles.relatedHanzi}>{item.word}</span>
-                  <span className={styles.relatedMeaning}>{item.meaning}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            ))}
+          </section>
+        </div>
+
+        <div className={styles.col}>
+          <section className={styles.card}>
+            <p className={styles.label}>{t("char.progressTitle")}</p>
+            <ul className={styles.facts}>
+              <li className={inReviews ? styles.good : ""}>{inReviews ? t("char.inReviews") : t("char.notInReviews")}</li>
+              <li className={mistake ? styles.bad : styles.good}>{mistake ? t("char.mistakes", { count: mistake.count }) : t("char.noMistakes")}</li>
+              {writeMistakes > 0 && <li className={styles.bad}>{t("char.writeMistakes", { count: writeMistakes })}</li>}
+            </ul>
+            <button type="button" className={styles.primary} onClick={() => onPractice([hanzi])}>
+              {t("char.practiceBtn")}
+            </button>
+          </section>
+
+          <section className={styles.card}>
+            <p className={styles.label}>{t("char.lessonTitle")}</p>
+            {node ? (
+              <button type="button" className={styles.lessonRow} onClick={() => onStartLesson(node.id)}>
+                <span className={styles.lessonSeal}>{node.hanzi?.[0] || "字"}</span>
+                <span className={styles.lessonName}>{nodeTitle(node, lang)}</span>
+                <ChevronRight size={16} strokeWidth={2.2} />
+              </button>
+            ) : (
+              <p className={styles.muted}>{t("char.noLesson")}</p>
+            )}
+          </section>
+
+          {related.length > 0 && (
+            <section className={styles.card}>
+              <p className={styles.label}>{t("char.relatedTitle")}</p>
+              <div className={styles.related}>
+                {related.map((e) => (
+                  <button key={e.hanzi} type="button" className={styles.relatedItem} onClick={() => onOpenWord(e.hanzi)}>
+                    <span className={styles.relatedZh}>{e.hanzi}</span>
+                    <span className={styles.relatedText}>
+                      <span className={styles.relatedPy}>{e.pinyin}</span>
+                      <span className={styles.relatedMeaning}>{shortMeaning(e.meaning?.[lang] || e.meaning?.en)}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

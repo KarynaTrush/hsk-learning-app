@@ -133,7 +133,8 @@
     "qWord": "Co oznacza to słowo?",
     "resultTitle": "Test zakończony",
     "assigned": "Zalecany start: HSK {{level}}",
-    "continue": "Przejdź do nauki"
+    "continue": "Przejdź do nauki",
+    "bar": "Test poziomu"
   },
   "dashboard": {
     "goodDay": "DZIEŃ DOBRY, KARINA · {{date}}",
@@ -1010,7 +1011,8 @@
       "minutes": "{{count}} min",
       "less": "Mniej",
       "more": "Więcej"
-    }
+    },
+    "allGood": "Na razie nie ma innych rekomendacji. Tak trzymaj!"
   },
   "toneLab": {
     "kicker": "Wymowa",
@@ -1309,5 +1311,104 @@
   },
   "app": {
     "skipPlacement": "Pomiń test"
+  },
+  "pt": {
+    "title": "Sprawdźmy twój poziom",
+    "subtitle": "Krótki test adaptacyjny",
+    "introText": "Test z 8–14 pytań dobierze twój poziom startowy. Dostosowuje się do odpowiedzi: gdy odpowiadasz pewnie, słowa robią się trudniejsze, a gdy nie, łatwiejsze.",
+    "tip1": "Pinyin nie jest pokazywany w pytaniach: sprawdzamy prawdziwą wiedzę.",
+    "tip2": "Jeśli nie znasz słowa, naciśnij «Nie wiem». Zgadywanie obniża dokładność wyniku.",
+    "tip3": "Pytania są za każdym razem inne: słowa są losowane.",
+    "tip4": "To zajmie około dwóch minut.",
+    "start": "Zacznij test",
+    "counter": "Pytanie {{n}}",
+    "dontKnow": "Nie wiem",
+    "listen": "Odsłuchaj słowo",
+    "q": {
+      "meaning": "Co oznacza to słowo?",
+      "hanzi": "Które słowo oznacza:",
+      "pinyin": "Jak czyta się to słowo?",
+      "listen": "Posłuchaj słowa i wybierz znaczenie"
+    },
+    "resultKicker": "Wynik",
+    "level": "Poziom HSK {{level}}",
+    "levelZero": "Początkujący (HSK 0)",
+    "confidence": "Pewność oceny: {{percent}}%",
+    "startAt": "Zaczniemy od poziomu HSK {{level}}. Lekcje wcześniejszych poziomów pozostaną dostępne do powtórki.",
+    "startBasics": "Zaczniemy od podstaw (HSK 0): czym jest chiński, pinyin, tony i znaki.",
+    "how": "Ocena uwzględnia, na jakim poziomie słów odpowiadałeś(-aś) poprawnie, gdzie się myliłeś(-aś) i gdzie wybierałeś(-aś) «Nie wiem». Słupki pokazują prawdopodobieństwo każdego poziomu.",
+    "begin": "Zacznij naukę",
+    "noQuestions": "Nie udało się dobrać pytań. Zaczniemy od podstaw.",
+    "retake": {
+      "title": "Sprawdzenie poziomu",
+      "subtitle": "Zrób test jeszcze raz, aby zobaczyć, jak daleko zaszedłeś(-aś)",
+      "cardTitle": "Poziom",
+      "cardLast": "Ostatni test: HSK {{level}} · {{date}}",
+      "cardNone": "Nie robiłeś(-aś) jeszcze testu poziomu.",
+      "cardHint": "Test można zrobić w każdej chwili. Postęp nie zginie: wynik zostanie zastosowany tylko wtedy, gdy jest wyższy niż twoje obecne miejsce na mapie.",
+      "cardBtn": "Sprawdź swój poziom",
+      "ahead": "Wynik jest wyższy niż twoje obecne miejsce na mapie. Możesz przejść na poziom HSK {{level}}: ukończone lekcje zostaną zachowane.",
+      "apply": "Przejdź na HSK {{level}}",
+      "keep": "Zostaw bez zmian",
+      "same": "Twój obecny postęp nie jest niższy niż wynik testu. Nic nie trzeba zmieniać.",
+      "done": "Gotowe"
+    }
+  },
+  "standard": {
+    "title": "Standard HSK",
+    "hint": "Wybierz, według którego standardu się uczysz. Na razie dostępny jest HSK 2.0, a HSK 3.0 pojawi się później.",
+    "soon": "wkrótce",
+    "soonHint": "HSK 3.0 pojawi się później"
+  },
+  "resetPw": {
+    "forgotTitle": "Odzyskiwanie hasła",
+    "forgotText": "Podaj adres e-mail użyty przy rejestracji. Wyślemy link do utworzenia nowego hasła.",
+    "email": "Adres e-mail",
+    "send": "Wyślij link",
+    "sending": "Wysyłamy…",
+    "sent": "Jeśli konto z adresem {{email}} istnieje, wysłaliśmy na niego wiadomość z linkiem.",
+    "sentHint": "Wiadomość może przyjść z opóźnieniem. Sprawdź folder «Spam». Link jest ważny krótko.",
+    "back": "Wróć do logowania",
+    "newTitle": "Nowe hasło",
+    "newText": "Wymyśl nowe hasło: co najmniej 8 znaków.",
+    "password": "Nowe hasło",
+    "confirm": "Powtórz hasło",
+    "save": "Zapisz hasło",
+    "saving": "Zapisujemy…",
+    "done": "Hasło zostało zmienione. Możesz kontynuować naukę.",
+    "continue": "Kontynuuj",
+    "errors": {
+      "invalid_email": "Podaj poprawny adres e-mail.",
+      "password_short": "Hasło musi mieć co najmniej 8 znaków.",
+      "password_mismatch": "Hasła nie są takie same.",
+      "password_same": "Nowe hasło musi różnić się od starego.",
+      "rate_limited": "Zbyt wiele prób. Poczekaj chwilę i spróbuj ponownie.",
+      "network": "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
+      "server_error": "Nie udało się wykonać akcji. Spróbuj później."
+    }
+  },
+  "char": {
+    "kicker": "Karta słowa",
+    "noData": "Tego słowa nie ma w słowniku.",
+    "meaning": "Znaczenie",
+    "listen": "Posłuchaj",
+    "listenSlow": "Wolno",
+    "strokesTitle": "Kolejność kresek",
+    "noStrokes": "Dla tego znaku nie ma danych o kreskach.",
+    "replay": "Pokaż jeszcze raz",
+    "practiceWrite": "Poćwicz pisanie",
+    "examplesTitle": "Przykłady z historii",
+    "noExamples": "Na razie brak przykładów: słowo pojawi się w historiach później.",
+    "openStory": "Otwórz historię",
+    "progressTitle": "Twój postęp",
+    "inReviews": "Słowo jest w powtórkach",
+    "notInReviews": "Jeszcze nie w powtórkach",
+    "mistakes": "Błędów w słowie: {{count}}",
+    "noMistakes": "W tym słowie nie ma błędów",
+    "writeMistakes": "Błędów przy pisaniu: {{count}}",
+    "practiceBtn": "Poćwicz słowo",
+    "lessonTitle": "Gdzie się uczyć",
+    "noLesson": "To słowo nie należy jeszcze do lekcji mapy wiedzy.",
+    "relatedTitle": "Słowa z tym znakiem"
   }
 }

@@ -1,188 +1,261 @@
-import { useState } from "react";
-import { Check } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Volume2, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAppState } from "../../state/AppState";
+import { PATH_NODES, firstNodeOfLevel } from "../../data/path";
+import { DICT } from "../../data/dictionary";
+import { vocabByHanzi, wordMeaning } from "../../data/vocab";
+import { speakZh, ttsSupported } from "../../lib/tts";
+import {
+  MAX_QUESTIONS,
+  buildQuestion,
+  estimate,
+  initialPosterior,
+  nextLevel,
+  shouldStop,
+  updatePosterior,
+} from "../../lib/placement";
+import PageBanner from "../../components/ui/PageBanner";
 import styles from "./PlacementTest.module.css";
 
-const questions = [
-  {
-    hanzi: "吃", pinyin: "chī", questionKey: "placement.qChar",
-    options: [
-      { pinyin: "chī", meaningKey: "吃" },
-      { pinyin: "hē", meaningKey: "喝" },
-      { pinyin: "zuò", meaningKey: "坐" },
-      { pinyin: "zǒu", meaningKey: "走" },
-    ],
-    correct: 0,
-  },
-  {
-    hanzi: "美", pinyin: "měi", questionKey: "placement.qChar",
-    options: [
-      { pinyin: "hǎo", meaningKey: "好" },
-      { pinyin: "měi", meaningKey: "美" },
-      { pinyin: "dà", meaningKey: "大" },
-      { pinyin: "xiǎo", meaningKey: "小" },
-    ],
-    correct: 1,
-  },
-  {
-    hanzi: "朋友", pinyin: "péngyou", questionKey: "placement.qWord",
-    options: [
-      { pinyin: "jiārén", meaningKey: "家人" },
-      { pinyin: "lǎoshī", meaningKey: "老师" },
-      { pinyin: "péngyou", meaningKey: "朋友" },
-      { pinyin: "tóngxué", meaningKey: "同学" },
-    ],
-    correct: 2,
-  },
-];
+function buildPool() {
+  return [...DICT.values()].map((e) => {
+    const v = vocabByHanzi(e.hanzi);
+    if (!v) return e;
+    return {
+      hanzi: e.hanzi,
+      pinyin: e.pinyin,
+      hsk: e.hsk,
+      meaning: { ru: wordMeaning(v, "ru"), pl: wordMeaning(v, "pl"), en: wordMeaning(v, "en") || e.meaning?.en },
+    };
+  });
+}
 
-export default function PlacementTestScreen({ onComplete }) {
-  const { t } = useTranslation();
-  const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [confirmed, setConfirmed] = useState(false);
-  const q = questions[current];
-  const progress = (current / questions.length) * 100;
+export default function PlacementTestScreen({ onComplete, mode = "first" }) {
+  const retake = mode === "retake";
+  const { t, i18n } = useTranslation();
+  const { state, recordPlacementAnswer, completePlacementLevel, savePlacementResult, applyPlacementRetake } = useAppState();
+  const lang = i18n.resolvedLanguage || "ru";
+  const ttsOk = ttsSupported();
 
-  function handleConfirm() {
-    if (selected === null) return;
-    setConfirmed(true);
-    setTimeout(() => {
-      if (current < questions.length - 1) { 
-        setCurrent((c) => c + 1); 
-        setSelected(null); 
-        setConfirmed(false); 
-      } else {
-        onComplete();
+  const pool = useMemo(buildPool, []);
+  const [phase, setPhase] = useState("intro");
+  const [post, setPost] = useState(initialPosterior);
+  const [asked, setAsked] = useState(0);
+  const [question, setQuestion] = useState(null);
+  const [picked, setPicked] = useState(null);
+  const [result, setResult] = useState(null);
+  const used = useRef(new Set());
+  const startedAt = useRef(0);
+  const locked = useRef(false);
+
+  function makeQuestion(posterior, count) {
+    let level = nextLevel(posterior, count);
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const q = buildQuestion({ level, pool, used: used.current, lang, ttsOk });
+      if (q) {
+        used.current.add(q.hanzi);
+        return q;
       }
-    }, 700);
+      level = Math.min(6, Math.max(1, level + (attempt % 2 === 0 ? 1 : -2)));
+    }
+    return null;
   }
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.leftPanel}>
-        <div className={styles.bgCharacter}>
-          <span>{q.hanzi[0]}</span>
-        </div>
+  function start() {
+    used.current = new Set();
+    const q = makeQuestion(post, 0);
+    setQuestion(q);
+    startedAt.current = Date.now();
+    setPhase("question");
+  }
 
-        <div className={styles.leftHeader}>
-          <div className="flex items-center gap-3 mb-12">
-            <div className={styles.logoBox}>
-              <span className={styles.logoHanzi}>漢</span>
-            </div>
-            <div>
-              <p className={styles.logoTitle}>漢語學習</p>
-              <p className={styles.logoSubtitle}>{t("placement.title")}</p>
-            </div>
-          </div>
+  useEffect(() => {
+    if (phase === "question" && question?.type === "listen") speakZh(question.hanzi, 0.8);
+  }, [phase, question]);
 
-          <h2 className={styles.mainHeading}>
-            {t("placement.heading")}<br />
-            <span className={styles.headingAccent}>{t("placement.headingAccent")}</span>
-          </h2>
-          <p className={styles.description}>
-            {t("placement.description")}
-          </p>
-        </div>
+  function answer(index) {
+    if (locked.current || !question) return;
+    locked.current = true;
+    setPicked(index);
+    const kind = index === -1 ? "dk" : index === question.correctIndex ? "correct" : "wrong";
+    const nextPost = updatePosterior(post, kind, question.level);
+    recordPlacementAnswer({ hanzi: question.hanzi, correct: kind === "correct", ms: Date.now() - startedAt.current, type: question.type, level: question.level, retake });
+    const count = asked + 1;
 
-        <div className={styles.progressSection}>
-          <p className={styles.progressLabel}>{t("placement.progress")}</p>
-          <div className={styles.progressBarTrack}>
-            <div className={styles.progressBarFill} style={{ width: `${progress}%` }} />
-          </div>
-          <p className={styles.progressText}>
-            {t("placement.questionOf", { current: current + 1, total: questions.length })}
-          </p>
-        </div>
-      </div>
-      <div className={styles.rightContent}>
-        <div className={styles.formWrapper}>
-          <div className={styles.mobileProgressSection}>
-            <div className={styles.mobileProgressHeader}>
-              <span className={styles.mobileProgressText}>
-                {t("placement.questionOf", { current: current + 1, total: questions.length })}
-              </span>
-            </div>
-            <div className={styles.mobileTrack}>
-              <div className={styles.progressBarFill} style={{ width: `${progress}%` }} />
-            </div>
-          </div>
+    setTimeout(() => {
+      setPost(nextPost);
+      setAsked(count);
+      setPicked(null);
+      if (shouldStop(nextPost, count)) {
+        const est = estimate(nextPost);
+        setResult({ level: est.level, confidence: est.confidence, asked: count, post: nextPost });
+        setPhase("result");
+      } else {
+        setQuestion(makeQuestion(nextPost, count));
+        startedAt.current = Date.now();
+      }
+      locked.current = false;
+    }, 280);
+  }
 
-          <p className={styles.questionMeta}>{t(q.questionKey)}</p>
-          
-          <div className={styles.promptCard}>
-            <span className={styles.hanziText}>{q.hanzi}</span>
-            <span className={styles.pinyinText}>{q.pinyin}</span>
-          </div>
+  function finish() {
+    const info = completePlacementLevel({ level: result.level, confidence: result.confidence, asked: result.asked });
+    onComplete(info);
+  }
 
-          <div className={styles.optionsGrid}>
-            {q.options.map((opt, i) => {
-              const isSelected = selected === i;
-              const isCorrect  = confirmed && i === q.correct;
-              const isWrong    = confirmed && isSelected && i !== q.correct;
+  function applyRetake() {
+    applyPlacementRetake({ level: result.level, confidence: result.confidence, asked: result.asked });
+    onComplete({});
+  }
 
-              return (
-                <button
-                  key={i}
-                  onClick={() => !confirmed && setSelected(i)}
-                  className={styles.optionButton}
-                  style={{
-                    backgroundColor: isCorrect ? "rgba(79,121,66,0.07)" : isWrong ? "rgba(200,62,52,0.05)" : isSelected ? "rgba(200,62,52,0.04)" : "var(--card)",
-                    borderColor: isCorrect ? "var(--accent)" : isWrong ? "var(--primary)" : isSelected ? "var(--primary)" : "var(--border)",
-                    boxShadow: isSelected && !confirmed ? "0 0 0 2px rgba(200,62,52,0.15)" : "none",
-                  }}
-                >
-                  <div
-                    className={styles.radioIndicator}
-                    style={{
-                      borderColor: isCorrect ? "var(--accent)" : isSelected ? "var(--primary)" : "var(--border)",
-                      backgroundColor: isCorrect ? "var(--accent)" : isSelected && !confirmed ? "var(--primary)" : "transparent",
-                    }}
-                  >
-                    {isCorrect ? (
-                      <Check size={14} color="white" strokeWidth={2.5} />
-                    ) : (
-                      <span 
-                        className={styles.radioLabel}
-                        style={{ color: isSelected && !confirmed ? "white" : "var(--muted-foreground)" }}
-                      >
-                        {String.fromCharCode(65 + i)}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <span 
-                      className={styles.optPinyin}
-                      style={{ 
-                        color: isSelected || isCorrect ? "var(--foreground)" : "var(--muted-foreground)", 
-                        fontWeight: isSelected ? 500 : 400 
-                      }}
-                    >
-                      {opt.pinyin}
-                    </span>
-                    <span className={styles.optPolish}>{t(`meanings.${opt.meaningKey}`)}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          <button
-            onClick={handleConfirm}
-            disabled={selected === null}
-            className={`disabled:cursor-not-allowed ${styles.submitButton}`}
-            style={{
-              backgroundColor: selected !== null ? "var(--primary)" : "var(--muted)",
-              color: selected !== null ? "var(--primary-foreground)" : "var(--muted-foreground)",
-              fontFamily: "Inter, sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              boxShadow: selected !== null ? "0 3px 16px rgba(200,62,52,0.25)" : "none",
-              opacity: selected !== null ? 1 : 0.6,
-            }}
-          >
-            {t("placement.confirm")}
+  function keepRetake() {
+    savePlacementResult({ level: result.level, confidence: result.confidence, asked: result.asked });
+    onComplete({});
+  }
+
+  const banner = (
+    <PageBanner color="#4A6FA5" hanzi="测" kicker={`HSK ${state.hskStandard || "2.0"}`} title={retake ? t("pt.retake.title") : t("pt.title")} subtitle={phase === "intro" ? (retake ? t("pt.retake.subtitle") : t("pt.subtitle")) : undefined} />
+  );
+
+  if (phase === "intro") {
+    return (
+      <div className={styles.container}>
+        {banner}
+        <div className={styles.card}>
+          <p className={styles.text}>{t("pt.introText")}</p>
+          <ul className={styles.tips}>
+            {[1, 2, 3, 4].map((n) => (
+              <li key={n}>{t(`pt.tip${n}`)}</li>
+            ))}
+          </ul>
+          <button type="button" className={styles.primary} onClick={start}>
+            {t("pt.start")}
+            <ArrowRight size={18} strokeWidth={2.2} />
           </button>
         </div>
+      </div>
+    );
+  }
+
+  if (phase === "result" && result) {
+    const level = result.level;
+    const wanted = level === 0 ? 0 : Math.min(6, level + 1);
+    const maxLevel = PATH_NODES.length ? Math.max(...PATH_NODES.map((n) => n.level)) : 1;
+    const startLevel = Math.min(wanted, maxLevel);
+    const targetNode = firstNodeOfLevel(startLevel);
+    const indexOfNode = (id) => PATH_NODES.findIndex((n) => n.id === id);
+    const ahead = indexOfNode(targetNode) > indexOfNode(state.activeNodeId);
+    return (
+      <div className={styles.container}>
+        {banner}
+        <div className={styles.card}>
+          <p className={styles.kicker}>{t("pt.resultKicker")}</p>
+          <div className={styles.resultHead}>
+            <span className={styles.levelSeal}>{level}</span>
+            <div>
+              <h3 className={styles.resultTitle}>{level === 0 ? t("pt.levelZero") : t("pt.level", { level })}</h3>
+              <p className={styles.muted}>{t("pt.confidence", { percent: Math.round(result.confidence * 100) })}</p>
+            </div>
+          </div>
+          <p className={styles.text}>{wanted === 0 ? t("pt.startBasics") : t("pt.startAt", { level: wanted })}</p>
+          <div className={styles.bars}>
+            {result.post.map((p, i) => (
+              <div key={i} className={styles.barCol}>
+                <span className={styles.barValue}>{Math.round(p * 100)}%</span>
+                <div className={styles.barTrack}>
+                  <span className={`${styles.bar} ${i === level ? styles.barActive : ""}`} style={{ height: `${Math.max(4, Math.round(p * 100))}%` }} />
+                </div>
+                <span className={styles.barLabel}>{i}</span>
+              </div>
+            ))}
+          </div>
+          <p className={styles.note}>{t("pt.how")}</p>
+          {!retake && (
+            <button type="button" className={styles.primary} onClick={finish}>
+              {t("pt.begin")}
+              <ArrowRight size={18} strokeWidth={2.2} />
+            </button>
+          )}
+          {retake && ahead && (
+            <>
+              <p className={styles.text}>{t("pt.retake.ahead", { level: startLevel })}</p>
+              <button type="button" className={styles.primary} onClick={applyRetake}>
+                {t("pt.retake.apply", { level: startLevel })}
+              </button>
+              <button type="button" className={styles.dontKnow} onClick={keepRetake}>{t("pt.retake.keep")}</button>
+            </>
+          )}
+          {retake && !ahead && (
+            <>
+              <p className={styles.text}>{t("pt.retake.same")}</p>
+              <button type="button" className={styles.primary} onClick={keepRetake}>{t("pt.retake.done")}</button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!question) {
+    return (
+      <div className={styles.container}>
+        {banner}
+        <div className={styles.card}>
+          <p className={styles.text}>{t("pt.noQuestions")}</p>
+          <button type="button" className={styles.primary} onClick={() => onComplete({})}>{t("pt.begin")}</button>
+        </div>
+      </div>
+    );
+  }
+
+  const bigOptions = question.type === "hanzi";
+  return (
+    <div className={styles.container}>
+      {banner}
+      <div className={styles.card}>
+        <div className={styles.topRow}>
+          <span className={styles.counter}>{t("pt.counter", { n: asked + 1 })}</span>
+          <div className={styles.progress}>
+            <span style={{ width: `${Math.min(100, Math.round((asked / (MAX_QUESTIONS - 2)) * 100))}%` }} />
+          </div>
+        </div>
+
+        <p className={styles.kicker}>{t(`pt.q.${question.type}`)}</p>
+        {question.type === "hanzi" ? (
+          <p className={styles.meaningPrompt}>{question.meaning}</p>
+        ) : question.type === "listen" ? (
+          <button type="button" className={styles.listenBtn} onClick={() => speakZh(question.hanzi, 0.8)}>
+            <Volume2 size={32} strokeWidth={1.8} />
+            {t("pt.listen")}
+          </button>
+        ) : (
+          <div className={styles.hanziRow}>
+            <span className={styles.hanzi}>{question.hanzi}</span>
+            {ttsOk && (
+              <button type="button" className={styles.audio} onClick={() => speakZh(question.hanzi, 0.8)} aria-label="audio">
+                <Volume2 size={18} strokeWidth={1.8} />
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className={styles.options}>
+          {question.options.map((option, i) => (
+            <button
+              key={`${question.id}-${i}`}
+              type="button"
+              className={`${styles.option} ${bigOptions ? styles.optionBig : ""} ${picked === i ? styles.optionPicked : ""}`}
+              disabled={picked !== null}
+              onClick={() => answer(i)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+        <button type="button" className={styles.dontKnow} disabled={picked !== null} onClick={() => answer(-1)}>
+          {t("pt.dontKnow")}
+        </button>
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ function mapError(err) {
   if (code === "invalid_credentials" || msg.includes("invalid login credentials")) return new AuthError("invalid_credentials");
   if (code === "user_already_exists" || code === "email_exists" || msg.includes("already registered")) return new AuthError("email_taken");
   if (code === "weak_password") return new AuthError("password_short");
+  if (code === "same_password" || msg.includes("different from the old password")) return new AuthError("password_same");
   if (code === "email_not_confirmed") return new AuthError("confirm_email");
   if (code === "over_request_rate_limit" || code === "over_email_send_rate_limit" || err.status === 429) return new AuthError("rate_limited");
   if (code === "email_address_invalid" || code === "validation_failed") return new AuthError("invalid_email");
@@ -29,12 +30,21 @@ function mapError(err) {
   return unknown;
 }
 
+function detectUserLang() {
+  if (typeof navigator === "undefined") return "en";
+  const raw = (navigator.language || "").toLowerCase().split("-")[0];
+  const supported = ["en", "pl", "ru", "uk", "de", "fr", "es"];
+  return supported.includes(raw) ? raw : "en";
+}
+
 export async function signUp({ name, email, password }) {
   try {
+    const lang = detectUserLang();
+
     const { data, error } = await client().auth.signUp({
       email,
       password,
-      options: { data: { name } }, // имя попадёт в profiles.display_name через триггер в базе
+      options: { data: { name, lang } },
     });
     if (error) throw error;
     if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
@@ -62,7 +72,6 @@ export async function signOut() {
   try {
     await supabase.auth.signOut();
   } catch {
-    /* локальная сессия всё равно сбрасывается */
   }
 }
 export async function changePassword({ email, oldPassword, newPassword }) {
@@ -75,6 +84,25 @@ export async function changePassword({ email, oldPassword, newPassword }) {
     throw mapError(err);
   }
 }
+export async function requestPasswordReset(email) {
+  try {
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { error } = await client().auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) throw error;
+  } catch (err) {
+    throw mapError(err);
+  }
+}
+
+export async function setNewPassword(newPassword) {
+  try {
+    const { error } = await client().auth.updateUser({ password: newPassword });
+    if (error) throw error;
+  } catch (err) {
+    throw mapError(err);
+  }
+}
+
 export async function deleteAccount() {
   try {
     const { error } = await client().rpc("delete_my_account");

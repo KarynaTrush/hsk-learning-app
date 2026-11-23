@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Flame, Check, SlidersHorizontal, Volume2, ArrowRight } from "lucide-react";
+import { Flame, Check, SlidersHorizontal, Volume2, ArrowRight, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DATE_LOCALES } from "../../i18n";
 import { useAppState } from "../../state/AppState";
 import { dueCards } from "../../lib/srs";
 import { dateKey } from "../../lib/dates";
 import { buildRecommendations } from "../../lib/recommender";
-import { heatmap, minutesOn, sumMinutes, todayActivity } from "../../lib/activity";
+import { lastDays, minutesOn, sumMinutes, todayActivity } from "../../lib/activity";
 import { speakZh, ttsSupported } from "../../lib/tts";
 import { PATH_NODES, nodeById, nodeTitle } from "../../data/path";
 import { vocabByNode } from "../../data/vocab";
@@ -26,9 +26,10 @@ export default function DashboardScreen({ onOpenRecommendation, onStartLesson, o
   const { t, i18n } = useTranslation();
   const { state, setPlan, logRecommendations } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
+  const locale = DATE_LOCALES[lang] || "ru-RU";
   const [planOpen, setPlanOpen] = useState(false);
 
-  const today = new Date().toLocaleDateString(DATE_LOCALES[lang] || "ru-RU", { weekday: "long", day: "numeric", month: "long" });
+  const today = new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
   const name = state.user?.name;
   const greeting = name ? t("home.greeting", { name, date: today }) : t("home.greetingNoName", { date: today });
 
@@ -71,32 +72,28 @@ export default function DashboardScreen({ onOpenRecommendation, onStartLesson, o
 
   function describe(rec) {
     const minutes = node ? Math.max(5, Math.round(nodeWords.length * 0.8 + (node.sentences?.length || 0) * 1.2 + (node.notes?.length || 0))) : 5;
-    const toneName = rec.params.tone ? t(`toneLab.tone.${rec.params.tone}.name`) : "";
     const vars = {
       ...rec.params,
       lesson: node ? nodeTitle(node, lang) : "",
       skill: rec.params.skill ? t(`flow.skill.${rec.params.skill}`, { defaultValue: rec.params.skill }) : "",
-      tone: toneName,
+      tone: rec.params.tone ? t(`toneLab.tone.${rec.params.tone}.name`) : "",
     };
     let title = t(`recommend.title.${rec.type}`, vars);
     let icon = ICONS[rec.type] || "字";
-    const pills = [];
+    let meta = "";
     if (rec.type === "lesson" && node) {
       title = nodeTitle(node, lang);
       icon = node.hanzi?.[0] || icon;
-      pills.push(`HSK ${node.level}`, t("home.pill.words", { count: nodeWords.length }), t("home.pill.minutes", { count: minutes }));
+      meta = [`HSK ${node.level}`, t("home.pill.words", { count: nodeWords.length }), t("home.pill.minutes", { count: minutes })].join(" · ");
     }
-    if (rec.type === "review") pills.push(t("home.pill.cards", { count: rec.params.count }));
-    if (rec.type === "mistakes") pills.push(t("home.pill.words", { count: rec.params.count }));
-    if (rec.type === "writing") {
-      icon = rec.params.char || icon;
-      pills.push(t("home.pill.strokes"));
-    }
+    if (rec.type === "review") meta = t("home.pill.cards", { count: rec.params.count });
+    if (rec.type === "mistakes") meta = t("home.pill.words", { count: rec.params.count });
+    if (rec.type === "writing") icon = rec.params.char || icon;
     if (rec.type === "grammar") {
       const g = GRAMMAR.find((x) => x.id === rec.target.topicId);
       if (g) {
         title = pick(g.title);
-        pills.push(`HSK ${g.level}`);
+        meta = `HSK ${g.level}`;
       }
     }
     if (rec.type === "read") {
@@ -104,10 +101,10 @@ export default function DashboardScreen({ onOpenRecommendation, onStartLesson, o
       if (s) {
         title = s.titleKey ? t(s.titleKey) : pick(s.title);
         icon = s.titleZh[0];
-        pills.push(`HSK ${s.hsk >= 4 ? "4+" : s.hsk}`, t("reading.min", { count: s.minutes }));
+        meta = [`HSK ${s.hsk >= 4 ? "4+" : s.hsk}`, t("reading.min", { count: s.minutes })].join(" · ");
       }
     }
-    return { title, icon, pills, color: COLORS[rec.type], reason: t(`recommend.reason.${rec.reason}`, vars), cta: t(`home.cta.${rec.type}`) };
+    return { title, icon, meta, color: COLORS[rec.type], reason: t(`recommend.reason.${rec.reason}`, vars), cta: t(`home.cta.${rec.type}`) };
   }
 
   const hero = recs[0] ? { rec: recs[0], ...describe(recs[0]) } : null;
@@ -130,8 +127,18 @@ export default function DashboardScreen({ onOpenRecommendation, onStartLesson, o
   const doneCount = tasks.filter((x) => x.value >= x.target).length;
 
   const phrase = phraseOfDay();
-  const cells = useMemo(() => heatmap(state.studyLog, state.activityLog, 5), [state.studyLog, state.activityLog]);
+  const week = useMemo(() => {
+    const keys = lastDays(7);
+    const mins = keys.map((k) => minutesOn(state.studyLog, k));
+    const top = Math.max(30, ...mins);
+    return keys.map((k, i) => {
+      const actions = Object.values(state.activityLog?.[k] || {}).reduce((a, b) => a + b, 0);
+      const pct = mins[i] > 0 ? Math.max(12, Math.round((mins[i] / top) * 100)) : actions > 0 ? 10 : 0;
+      return { key: k, minutes: mins[i], pct, label: new Date(`${k}T12:00:00`).toLocaleDateString(locale, { weekday: "short" }).slice(0, 2), isToday: k === dateKey() };
+    });
+  }, [state.studyLog, state.activityLog, locale]);
   const weekMinutes = sumMinutes(state.studyLog, 7);
+  const streak = state.streak?.count || 0;
 
   return (
     <div className={styles.container}>
@@ -139,132 +146,110 @@ export default function DashboardScreen({ onOpenRecommendation, onStartLesson, o
         <div className={styles.bannerChip}>
           <Flame size={20} strokeWidth={1.8} />
           <div>
-            <p className={styles.bannerChipValue}>{state.streak?.count || 0}</p>
+            <p className={styles.bannerChipValue}>{streak}</p>
             <p className={styles.bannerChipLabel}>{t("dashboard.streak")}</p>
           </div>
         </div>
-        <div className={styles.dayRing}>
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="44" className={styles.dayRingTrack} />
-            <circle cx="50" cy="50" r="44" className={styles.dayRingFill} strokeDasharray={`${tasks.length ? (doneCount / tasks.length) * RING : 0} ${RING}`} transform="rotate(-90 50 50)" />
-          </svg>
-          <span>{doneCount}/{tasks.length}</span>
-        </div>
       </PageBanner>
 
-      <div className={styles.grid}>
-        <div className={styles.mainColumn}>
-          {hero && (
-            <section className={styles.hero} style={{ "--tone": hero.color }}>
-              <div className={styles.heroSeal}>
-                <span>{hero.icon}</span>
-              </div>
-              <div className={styles.heroBody}>
-                <p className={styles.heroKicker}>{t("home.heroKicker")}</p>
+      <div className={styles.rowTop}>
+        {hero && (
+          <section className={`${styles.card} ${styles.hero}`} style={{ "--tone": hero.color }}>
+            <p className={styles.label} style={{ color: hero.color }}>{t("home.heroKicker")}</p>
+            <div className={styles.heroHead}>
+              <span className={styles.heroSeal}>{hero.icon}</span>
+              <div className={styles.heroTitleBox}>
                 <h3 className={styles.heroTitle}>{hero.title}</h3>
-                <p className={styles.heroReason}>{hero.reason}</p>
-                {hero.pills.length > 0 && (
-                  <div className={styles.pills}>
-                    {hero.pills.map((p) => (
-                      <span key={p} className={styles.pill}>{p}</span>
-                    ))}
-                  </div>
-                )}
+                {hero.meta && <p className={styles.heroMeta}>{hero.meta}</p>}
               </div>
-              <button type="button" className={styles.heroCta} onClick={() => onOpenRecommendation(hero.rec)}>
-                {hero.cta}
-                <ArrowRight size={18} strokeWidth={2.2} />
-              </button>
-            </section>
-          )}
-
-          {others.length > 0 && (
-            <>
-              <p className={styles.sectionLabel}>{t("home.moreRecs")}</p>
-              <div className={styles.recGrid}>
-                {others.map((o) => (
-                  <button key={o.rec.type} type="button" className={styles.recCard} style={{ "--tone": o.color }} onClick={() => onOpenRecommendation(o.rec)}>
-                    <span className={styles.recSeal}>{o.icon}</span>
-                    <span className={styles.recText}>
-                      <span className={styles.recTitle}>{o.title}</span>
-                      <span className={styles.recReason}>{o.reason}</span>
-                    </span>
-                    <ArrowRight size={16} strokeWidth={2.2} className={styles.recArrow} />
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className={styles.sideColumn}>
-          <section className={styles.phraseCard}>
-            <span className={styles.phraseWatermark}>言</span>
-            <p className={styles.phraseLabel}>{t("home.phraseKicker")}</p>
-            <div className={styles.phraseRow}>
-              <h3 className={`${styles.phraseZh} ${phrase.zh.length > 6 ? styles.phraseZhLong : ""}`}>{phrase.zh}</h3>
-              {ttsSupported() && (
-                <button type="button" className={styles.phraseSpeak} onClick={() => speakZh(phrase.zh, 0.8)} aria-label="audio">
-                  <Volume2 size={18} strokeWidth={1.8} />
-                </button>
-              )}
             </div>
-            <p className={styles.phrasePy}>{phrase.py}</p>
-            <p className={styles.phraseLiteral}>“{pick(phrase.literal)}”</p>
-            <p className={styles.phraseMeaning}>{pick(phrase.meaning)}</p>
+            <p className={styles.heroReason}>{hero.reason}</p>
+            <button type="button" className={styles.heroCta} onClick={() => onOpenRecommendation(hero.rec)}>
+              {hero.cta}
+              <ArrowRight size={18} strokeWidth={2.2} />
+            </button>
           </section>
+        )}
 
-          <section className={styles.card}>
-            <div className={styles.cardHead}>
-              <p className={styles.sectionLabel}>{t("home.tasks.title")}</p>
-              <button type="button" className={styles.planBtn} onClick={() => setPlanOpen(true)}>
-                <SlidersHorizontal size={14} strokeWidth={2} />
-                {t("home.tasks.plan")}
-              </button>
+        <section className={`${styles.card} ${styles.tasksCard}`}>
+          <div className={styles.cardHead}>
+            <p className={styles.label}>{t("home.tasks.title")}</p>
+            <button type="button" className={styles.planBtn} onClick={() => setPlanOpen(true)}>
+              <SlidersHorizontal size={14} strokeWidth={2} />
+              {t("home.tasks.plan")}
+            </button>
+          </div>
+          <div className={styles.tasksBody}>
+            <div className={styles.ring}>
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="44" className={styles.ringTrack} />
+                <circle cx="50" cy="50" r="44" className={styles.ringFill} strokeDasharray={`${tasks.length ? (doneCount / tasks.length) * RING : 0} ${RING}`} transform="rotate(-90 50 50)" />
+              </svg>
+              <span>{doneCount}/{tasks.length}</span>
             </div>
             <div className={styles.taskList}>
               {tasks.map((task) => {
                 const done = task.value >= task.target;
-                const pct = Math.min(100, Math.round((task.value / task.target) * 100));
                 return (
                   <button key={task.id} type="button" className={`${styles.task} ${done ? styles.taskDone : ""}`} onClick={() => task.action && task.action()}>
                     <span className={styles.check} style={{ borderColor: task.color, background: done ? task.color : "transparent" }}>
-                      {done && <Check size={12} color="#fff" strokeWidth={3.5} />}
+                      {done && <Check size={11} color="#fff" strokeWidth={3.5} />}
                     </span>
-                    <span className={styles.taskMain}>
-                      <span className={styles.taskLabel}>{task.label}</span>
-                      <span className={styles.taskTrack}><span style={{ width: `${pct}%`, background: task.color }} /></span>
-                    </span>
+                    <span className={styles.taskLabel}>{task.label}</span>
                     <span className={styles.taskValue}>{Math.min(task.value, task.target)}/{task.target}</span>
                   </button>
                 );
               })}
             </div>
-          </section>
+          </div>
+        </section>
+      </div>
 
-          <section className={styles.card}>
-            <div className={styles.cardHead}>
-              <p className={styles.sectionLabel}>{t("home.activity.title")}</p>
-              <span className={styles.activityMeta}>{t("home.activity.week", { count: weekMinutes })}</span>
-            </div>
-            <div className={styles.heat}>
-              {cells.map((col, w) => (
-                <div key={w} className={styles.heatCol}>
-                  {col.map((c) => (
-                    <span key={c.key} title={`${c.key}: ${t("home.activity.minutes", { count: c.minutes })}`} className={`${styles.cell} ${c.future ? styles.cellFuture : styles[`lvl${c.level}`]}`} />
-                  ))}
+      <div className={styles.rowBottom}>
+        <section className={styles.card}>
+          <p className={styles.label}>{t("home.moreRecs")}</p>
+          <div className={styles.moreList}>
+            {others.length === 0 && <p className={styles.empty}>{t("home.allGood")}</p>}
+            {others.map((o) => (
+              <button key={o.rec.type} type="button" className={styles.moreItem} style={{ "--tone": o.color }} title={o.reason} onClick={() => onOpenRecommendation(o.rec)}>
+                <span className={styles.moreSeal}>{o.icon}</span>
+                <span className={styles.moreTitle}>{o.title}</span>
+                <ChevronRight size={16} strokeWidth={2.2} className={styles.moreArrow} />
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className={`${styles.card} ${styles.phraseCard}`}>
+          <p className={styles.label} style={{ color: "var(--primary)" }}>{t("home.phraseKicker")}</p>
+          <div className={styles.phraseRow}>
+            <h3 className={`${styles.phraseZh} ${phrase.zh.length > 6 ? styles.phraseZhLong : ""}`}>{phrase.zh}</h3>
+            {ttsSupported() && (
+              <button type="button" className={styles.phraseSpeak} onClick={() => speakZh(phrase.zh, 0.8)} aria-label="audio">
+                <Volume2 size={18} strokeWidth={1.8} />
+              </button>
+            )}
+          </div>
+          <p className={styles.phrasePy}>{phrase.py}</p>
+          <p className={styles.phraseMeaning}>{pick(phrase.meaning)}</p>
+        </section>
+
+        <section className={styles.card}>
+          <div className={styles.cardHead}>
+            <p className={styles.label}>{t("home.activity.title")}</p>
+            <span className={styles.activityMeta}>{t("home.activity.week", { count: weekMinutes })}</span>
+          </div>
+          <div className={styles.bars}>
+            {week.map((d) => (
+              <div key={d.key} className={styles.barCol} title={`${d.key}: ${t("home.activity.minutes", { count: d.minutes })}`}>
+                <div className={styles.barTrack}>
+                  <span className={`${styles.bar} ${d.isToday ? styles.barToday : ""}`} style={{ height: `${d.pct}%` }} />
                 </div>
-              ))}
-            </div>
-            <div className={styles.heatLegend}>
-              <span>{t("home.activity.less")}</span>
-              {[0, 1, 2, 3, 4].map((l) => (
-                <span key={l} className={`${styles.cell} ${styles[`lvl${l}`]}`} />
-              ))}
-              <span>{t("home.activity.more")}</span>
-            </div>
-          </section>
-        </div>
+                <span className={`${styles.barLabel} ${d.isToday ? styles.barLabelToday : ""}`}>{d.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       {planOpen && (

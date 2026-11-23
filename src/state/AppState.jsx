@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { createCard, reviewCard } from "../lib/srs";
 import { vocabByHanzi, vocabByNode } from "../data/vocab";
-import { nextNodeId, nodesBeforeLevel, firstNodeOfLevel } from "../data/path";
+import { PATH_NODES, nextNodeId, nodesBeforeLevel, firstNodeOfLevel } from "../data/path";
 import { supabase } from "../api/supabase";
 import * as authApi from "../api/auth";
 import * as profileApi from "../api/profile";
@@ -48,6 +48,7 @@ export function defaultState() {
     stats: { answers: 0, correct: 0 },
     skills: {},
     readStories: [],
+    hskStandard: "2.0",
     activityLog: {},
     writingStats: {},
     grammarStats: {},
@@ -116,6 +117,7 @@ export function AppStateProvider({ children }) {
   });
   const [authReady, setAuthReady] = useState(!supabase);
   const [syncStatus, setSyncStatus] = useState("idle");
+  const [recovery, setRecovery] = useState(() => /type=recovery/.test(`${window.location.hash}${window.location.search}`));
 
   const bootLocalAt = useRef(Number(localStorage.getItem(STATE_AT_KEY) || 0));
   const lastPushed = useRef("");
@@ -167,6 +169,7 @@ export function AppStateProvider({ children }) {
         guest: false,
       },
       startedAt: base.startedAt || authUser.created_at || new Date().toISOString(),
+      placementDone: Boolean(base.placementDone || cloudState || profile?.placement_done),
     };
     next.daily = ensureDaily(next);
     next.streak = bumpStreak(next);
@@ -209,6 +212,7 @@ export function AppStateProvider({ children }) {
     })();
 
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setRecovery(true);
       if (event === "SIGNED_OUT") {
         setTimeout(() => {
           if (userRef.current?.id) resetLocalState();
@@ -306,6 +310,53 @@ export function AppStateProvider({ children }) {
       resetLocalState();
     },
 
+    recordPlacementAnswer({ hanzi, correct, ms, type, level, retake = false }) {
+      logEvent(hanzi, correct, "placement", ms, { type, skill: "placement", policy: `${retake ? "retake-" : ""}placement-L${level}` });
+    },
+    savePlacementResult({ level, confidence, asked }) {
+      setState((s) => ({ ...s, placementResult: { level, confidence, asked, at: new Date().toISOString() } }));
+    },
+    applyPlacementRetake({ level, confidence, asked }) {
+      const wanted = level === 0 ? 0 : Math.min(6, level + 1);
+      const maxLevel = PATH_NODES.length ? Math.max(...PATH_NODES.map((n) => n.level)) : 1;
+      const startLevel = Math.min(wanted, maxLevel);
+      const target = firstNodeOfLevel(startLevel);
+      setState((s) => {
+        const index = (id) => PATH_NODES.findIndex((n) => n.id === id);
+        const forward = index(target) > index(s.activeNodeId);
+        const result = { level, confidence, asked, at: new Date().toISOString() };
+        if (!forward) return { ...s, placementResult: result };
+        return {
+          ...s,
+          placementResult: result,
+          hskLevel: Math.max(s.hskLevel || 1, Math.max(1, level)),
+          targetHsk: Math.max(s.targetHsk || 1, Math.min(6, Math.max(1, startLevel))),
+          activeNodeId: target,
+          completedNodeIds: [...new Set([...(s.completedNodeIds || []), ...nodesBeforeLevel(startLevel)])],
+          streak: bumpStreak(s),
+        };
+      });
+    },
+    completePlacementLevel({ level, confidence, asked }) {
+      const wanted = level === 0 ? 0 : Math.min(6, level + 1);
+      const maxLevel = PATH_NODES.length ? Math.max(...PATH_NODES.map((n) => n.level)) : 1;
+      const startLevel = Math.min(wanted, maxLevel);
+      const completedNodeIds = startLevel === 0 ? [] : nodesBeforeLevel(startLevel);
+      const activeNodeId = firstNodeOfLevel(startLevel);
+      const targetHsk = Math.min(6, Math.max(1, startLevel));
+      setState((s) => ({
+        ...s,
+        placementDone: true,
+        hskLevel: Math.max(1, level),
+        targetHsk,
+        activeNodeId,
+        completedNodeIds,
+        placementResult: { level, confidence, asked, at: new Date().toISOString() },
+        startedAt: s.startedAt || new Date().toISOString(),
+        streak: bumpStreak(s),
+      }));
+      return { level, startLevel, wanted };
+    },
     completePlacement(correctCount, total) {
       const ratio = correctCount / total;
       const hskLevel = ratio >= 0.85 ? 3 : ratio >= 0.5 ? 2 : 1;
@@ -450,6 +501,10 @@ export function AppStateProvider({ children }) {
       });
       logEvent(`grammar:${topicId}`, correct, "lesson", ms, { type: type || "grammar", skill: "grammar" });
     },
+    setStandard(value) {
+      if (value !== "2.0") return;
+      setState((s) => ({ ...s, hskStandard: value }));
+    },
     markPlacementDone() {
       setState((s) => (s.placementDone ? s : { ...s, placementDone: true, startedAt: s.startedAt || new Date().toISOString() }));
     },
@@ -479,7 +534,12 @@ export function AppStateProvider({ children }) {
     },
   }), [state, hydrate, resetLocalState]);
 
-  const value = useMemo(() => ({ ...api, authReady, syncStatus }), [api, authReady, syncStatus]);
+  const finishRecovery = useCallback(() => {
+    setRecovery(false);
+    window.history.replaceState(null, "", window.location.pathname);
+  }, []);
+
+  const value = useMemo(() => ({ ...api, authReady, syncStatus, recovery, finishRecovery }), [api, authReady, syncStatus, recovery, finishRecovery]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

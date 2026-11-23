@@ -5,6 +5,7 @@ import { useAppState } from "../../state/AppState";
 import * as authApi from "../../api/auth";
 import { uploadAvatar } from "../../api/avatar";
 import { DATE_LOCALES } from "../../i18n";
+import StandardSwitch from "../../components/ui/StandardSwitch";
 import styles from "./Account.module.css";
 
 function describeDevice() {
@@ -19,9 +20,9 @@ function Notice({ notice, section }) {
   return <p className={notice.type === "ok" ? styles.noticeOk : styles.noticeError}>{notice.text}</p>;
 }
 
-export default function AccountScreen() {
+export default function AccountScreen({ footer, onRetest }) {
   const { t, i18n } = useTranslation();
-  const { state, updateProfile, changePassword, deleteAccount, logout } = useAppState();
+  const { state, updateProfile, changePassword, deleteAccount, logout, setStandard } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
   const user = state.user || {};
   const isGuest = !user.id;
@@ -202,6 +203,26 @@ export default function AccountScreen() {
           </section>
         )}
 
+        <section className={styles.card}>
+          <h3 className={styles.cardTitle}>{t("pt.retake.cardTitle")}</h3>
+          <p className={styles.hint}>
+            {state.placementResult
+              ? t("pt.retake.cardLast", {
+                  level: state.placementResult.level,
+                  date: new Date(state.placementResult.at).toLocaleDateString(i18n.resolvedLanguage || "ru", { day: "numeric", month: "long", year: "numeric" }),
+                })
+              : t("pt.retake.cardNone")}
+          </p>
+          <p className={styles.hint}>{t("pt.retake.cardHint")}</p>
+          <button type="button" className={styles.primary} onClick={onRetest}>{t("pt.retake.cardBtn")}</button>
+        </section>
+
+        <section className={styles.card}>
+          <h3 className={styles.cardTitle}>{t("standard.title")}</h3>
+          <p className={styles.hint}>{t("standard.hint")}</p>
+          <StandardSwitch value={state.hskStandard || "2.0"} onChange={setStandard} t={t} />
+        </section>
+
         <section className={`${styles.card} ${styles.danger}`}>
           <h3 className={styles.cardTitle}>{t("account.danger")}</h3>
           <button type="button" className={styles.secondary} onClick={logout}>
@@ -214,6 +235,7 @@ export default function AccountScreen() {
           )}
           <Notice notice={notice} section="danger" />
         </section>
+        {footer && <div className="md:hidden">{footer}</div>}
       </div>
     </div>
   );

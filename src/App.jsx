@@ -3,7 +3,9 @@ import { useTranslation } from "react-i18next";
 import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import TopBar from "./components/layout/TopBar";
 import AuthScreen from "./pages/Auth/AuthScreen";
+import ResetPasswordScreen from "./pages/Auth/ResetPasswordScreen";
 import PlacementTestScreen from "./pages/PlacementTest/PlacementTestScreen";
 import DashboardScreen from "./pages/Dashboard/DashboardScreen";
 import LearningPathScreen from "./pages/LearningPath/LearningPathScreen";
@@ -29,7 +31,7 @@ const SKIP_PLACEMENT_IN_DEV = import.meta.env.DEV;
 function AppInner() {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage || "ru";
-  const { state, openLesson, authReady, addStudySeconds, logRecommendations, markPlacementDone } = useAppState();
+  const { state, openLesson, authReady, addStudySeconds, logRecommendations, markPlacementDone, recovery } = useAppState();
 
   const hasSession = Boolean(state.user || state.placementDone);
   const needsPlacement = !state.placementDone && !SKIP_PLACEMENT_IN_DEV;
@@ -123,7 +125,8 @@ function AppInner() {
     if (!authReady) return;
     if (!state.user && screen !== "auth") setScreen("auth");
     if (state.user && screen === "auth") setScreen(needsPlacement ? "placement" : "main");
-  }, [authReady, state.user, screen, needsPlacement]);
+    if (state.user && screen === "placement" && state.placementDone) goMain("dashboard");
+  }, [authReady, state.user, screen, needsPlacement, state.placementDone]);
 
   useEffect(() => {
     const tracked = ["lesson", "reviews", "mistakes", "grammar"].includes(screen) || (screen === "main" && ["tones", "writing", "stories"].includes(activeTab));
@@ -147,6 +150,7 @@ function AppInner() {
     account: { title: t("account.title"), subtitle: t("account.subtitle") },
     grammar: { title: t("grammar.title"), subtitle: t("grammar.kicker") },
     goals: { title: t("goals.title"), subtitle: t("goals.subtitle") },
+    retest: { title: t("pt.retake.title"), subtitle: t("pt.retake.subtitle") },
   };
 
   if (!authReady) {
@@ -157,41 +161,26 @@ function AppInner() {
     );
   }
 
+  if (recovery) return <ResetPasswordScreen />;
+
   const isAuth = screen === "auth" || screen === "placement";
   const isMain = screen === "main";
   const isSub = !isAuth && !isMain;
 
   if (isAuth) {
     return (
-      <div className="min-h-screen bg-background flex">
+      <div className="min-h-screen bg-background flex flex-col">
         {screen === "auth" && (
-          <AuthScreen onAuth={() => saveAndSetScreen(needsPlacement ? "placement" : "main")} />
+          <div className="flex-1 flex">
+            <AuthScreen onAuth={() => saveAndSetScreen(needsPlacement ? "placement" : "main")} />
+          </div>
         )}
         {screen === "placement" && (
           <>
-            <PlacementTestScreen onComplete={finishPlacement} />
-            <button
-              type="button"
-              onClick={finishPlacement}
-              style={{
-                position: "fixed",
-                top: 16,
-                right: 16,
-                zIndex: 50,
-                padding: "0.6rem 1.1rem",
-                borderRadius: "0.9rem",
-                border: "2px solid var(--border)",
-                background: "var(--card)",
-                color: "var(--foreground)",
-                fontFamily: "Inter, sans-serif",
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                boxShadow: "0 3px 0 var(--border)",
-              }}
-            >
-              {t("app.skipPlacement")}
-            </button>
+            <TopBar title={t("placement.bar")} onSkip={finishPlacement} />
+            <div className="flex-1 flex">
+              <PlacementTestScreen onComplete={finishPlacement} />
+            </div>
           </>
         )}
       </div>
@@ -215,6 +204,8 @@ function AppInner() {
       : returnTo
         ? subScreenLabel[returnTo.screen]?.title
         : tabTitles[DEFAULT_BACK[screen] || "dashboard"]?.title) || "";
+
+  const footer = <Footer onNavigateTab={goMain} onOpenSub={openSub} />;
 
   return (
     <div className="min-h-screen flex flex-col w-full overflow-x-clip" style={{ backgroundColor: "var(--background)" }}>
@@ -259,7 +250,13 @@ function AppInner() {
               <LessonScreen onComplete={() => goMain("dashboard")} />
             )}
             {screen === "character" && (
-              <CharacterDetailScreen hanzi={focusHanzi} onBack={goBack} />
+              <CharacterDetailScreen
+                hanzi={focusHanzi}
+                onPractice={(hanzis) => startLesson(state.activeNodeId, hanzis)}
+                onOpenTarget={openTarget}
+                onOpenWord={setFocusHanzi}
+                onStartLesson={startLesson}
+              />
             )}
             {screen === "mistakes" && (
               <MistakesScreen
@@ -268,7 +265,8 @@ function AppInner() {
                 onPractice={(hanzis) => startLesson(state.activeNodeId, hanzis)}
               />
             )}
-            {screen === "account" && <AccountScreen />}
+            {screen === "account" && <AccountScreen footer={footer} onRetest={() => openSub("retest")} />}
+            {screen === "retest" && <PlacementTestScreen mode="retake" onComplete={goBack} />}
             {screen === "grammar" && (
               <GrammarScreen key={`g${focus?.topicId || 0}`} initialTopicId={focus?.topicId} />
             )}
@@ -277,9 +275,7 @@ function AppInner() {
           </main>
         </div>
       </div>
-      {screen !== "lesson" && (
-        <Footer onNavigateTab={goMain} onOpenSub={openSub} />
-      )}
+      {screen !== "lesson" && <div className="hidden md:block">{footer}</div>}
     </div>
   );
 }

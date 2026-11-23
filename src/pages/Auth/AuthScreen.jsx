@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 import styles from "./Auth.module.css";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -15,6 +16,7 @@ export default function AuthScreen({ onAuth }) {
   const [error, setError] = useState("");
   const [detail, setDetail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
 
   const handleInputFocus = (e) => {
     e.target.style.borderColor = "var(--primary)";
@@ -197,7 +199,7 @@ export default function AuthScreen({ onAuth }) {
 
           {mode === "login" && (
             <div className={styles.forgotPasswordRow}>
-              <button type="button" className={styles.forgotPasswordButton}>
+              <button type="button" className={styles.forgotPasswordButton} onClick={() => setForgotOpen(true)}>
                 {t("auth.forgotPassword")}
               </button>
             </div>
@@ -242,6 +244,7 @@ export default function AuthScreen({ onAuth }) {
           </p>
         </form>
       </div>
+      {forgotOpen && <ForgotPasswordModal initialEmail={email.trim()} onClose={() => setForgotOpen(false)} />}
     </div>
   );
 }

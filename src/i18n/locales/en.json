@@ -133,7 +133,8 @@
     "qWord": "What does this word mean?",
     "resultTitle": "Test completed",
     "assigned": "Recommended start: HSK {{level}}",
-    "continue": "Continue to learning"
+    "continue": "Continue to learning",
+    "bar": "Level test"
   },
   "dashboard": {
     "goodDay": "GOOD DAY, KARINA · {{date}}",
@@ -1010,7 +1011,8 @@
       "minutes": "{{count}} min",
       "less": "Less",
       "more": "More"
-    }
+    },
+    "allGood": "No other recommendations for now. Keep it up!"
   },
   "toneLab": {
     "kicker": "Pronunciation",
@@ -1309,5 +1311,104 @@
   },
   "app": {
     "skipPlacement": "Skip the test"
+  },
+  "pt": {
+    "title": "Let's find your level",
+    "subtitle": "A short adaptive test",
+    "introText": "A test of 8–14 questions will find your starting level. It adapts to your answers: if you answer confidently the words get harder, and if not they get easier.",
+    "tip1": "Pinyin is not shown in the questions: your real knowledge is tested.",
+    "tip2": "If you don't know a word, press “I don't know”. Guessing makes the result less accurate.",
+    "tip3": "The questions are different every time: the words are picked at random.",
+    "tip4": "It takes about two minutes.",
+    "start": "Start the test",
+    "counter": "Question {{n}}",
+    "dontKnow": "I don't know",
+    "listen": "Play the word",
+    "q": {
+      "meaning": "What does this word mean?",
+      "hanzi": "Which word means:",
+      "pinyin": "How is this word read?",
+      "listen": "Listen to the word and choose the meaning"
+    },
+    "resultKicker": "Result",
+    "level": "HSK level {{level}}",
+    "levelZero": "Beginner (HSK 0)",
+    "confidence": "Confidence of the estimate: {{percent}}%",
+    "startAt": "We will start at HSK level {{level}}. Lessons of earlier levels stay available for review.",
+    "startBasics": "We will start with the basics (HSK 0): what Chinese is, pinyin, tones and characters.",
+    "how": "The estimate considers at which level of words you answered correctly, where you made mistakes and where you answered “I don't know”. The bars show the probability of each level.",
+    "begin": "Start learning",
+    "noQuestions": "Could not prepare questions. We will start with the basics.",
+    "retake": {
+      "title": "Level check",
+      "subtitle": "Take the test again to see how far you have come",
+      "cardTitle": "Level",
+      "cardLast": "Last test: HSK {{level}} · {{date}}",
+      "cardNone": "You have not taken the level test yet.",
+      "cardHint": "You can take the test at any time. Your progress is safe: the result is applied only if it is higher than your current place on the map.",
+      "cardBtn": "Check your level",
+      "ahead": "The result is higher than your current place on the map. You can move to HSK level {{level}}: completed lessons are kept.",
+      "apply": "Move to HSK {{level}}",
+      "keep": "Keep as it is",
+      "same": "Your current progress is already at or above the test result. Nothing needs to change.",
+      "done": "Done"
+    }
+  },
+  "standard": {
+    "title": "HSK standard",
+    "hint": "Choose which standard you are studying. HSK 2.0 is available now, and HSK 3.0 will come later.",
+    "soon": "soon",
+    "soonHint": "HSK 3.0 will be available later"
+  },
+  "resetPw": {
+    "forgotTitle": "Password recovery",
+    "forgotText": "Enter the email you used to register. We will send a link to create a new password.",
+    "email": "Email",
+    "send": "Send the link",
+    "sending": "Sending…",
+    "sent": "If an account with the address {{email}} exists, we have sent it an email with a link.",
+    "sentHint": "The email may take a while. Check your spam folder. The link is valid for a short time.",
+    "back": "Back to sign in",
+    "newTitle": "New password",
+    "newText": "Choose a new password of at least 8 characters.",
+    "password": "New password",
+    "confirm": "Repeat the password",
+    "save": "Save password",
+    "saving": "Saving…",
+    "done": "Your password has been changed. You can now continue learning.",
+    "continue": "Continue",
+    "errors": {
+      "invalid_email": "Enter a valid email address.",
+      "password_short": "The password must be at least 8 characters long.",
+      "password_mismatch": "The passwords do not match.",
+      "password_same": "The new password must be different from the old one.",
+      "rate_limited": "Too many attempts. Please wait a moment and try again.",
+      "network": "No connection to the server. Check your internet and try again.",
+      "server_error": "Could not complete the action. Please try again later."
+    }
+  },
+  "char": {
+    "kicker": "Word card",
+    "noData": "This word is not in the dictionary.",
+    "meaning": "Meaning",
+    "listen": "Listen",
+    "listenSlow": "Slowly",
+    "strokesTitle": "Stroke order",
+    "noStrokes": "There is no stroke data for this character.",
+    "replay": "Show again",
+    "practiceWrite": "Practice writing",
+    "examplesTitle": "Examples from stories",
+    "noExamples": "No examples yet: the word will appear in stories later.",
+    "openStory": "Open the story",
+    "progressTitle": "Your progress",
+    "inReviews": "The word is in your reviews",
+    "notInReviews": "Not in your reviews yet",
+    "mistakes": "Mistakes in this word: {{count}}",
+    "noMistakes": "No mistakes in this word",
+    "writeMistakes": "Writing mistakes: {{count}}",
+    "practiceBtn": "Practice the word",
+    "lessonTitle": "Where to learn it",
+    "noLesson": "This word is not part of the knowledge map lessons yet.",
+    "relatedTitle": "Words with this character"
   }
 }
