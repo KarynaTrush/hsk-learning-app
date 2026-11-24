@@ -7,12 +7,14 @@ import { PATH_NODES, nodeById } from "../../data/path";
 import { planLesson, cloneForRetry } from "../../lib/exercises";
 import { ttsSupported, stopSpeech } from "../../lib/tts";
 import { NoteStep, WordStep, ChoiceStep, OrderStep, SummaryStep } from "./StepViews";
+import SlideLesson from "./SlideLesson";
 import styles from "./LessonFlow.module.css";
 
 export default function LessonScreen({ onComplete }) {
   const { t, i18n } = useTranslation();
   const { state, recordAnswer, recordExercise, completeLesson } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
+  const activeNode = nodeById(state.activeNodeId);
 
   const [initial] = useState(() => {
     const practiceWords = state.practiceHanzis?.length
@@ -40,6 +42,10 @@ export default function LessonScreen({ onComplete }) {
   const [steps, setSteps] = useState(initial.steps);
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState([]);
+  
+  if (!state.practiceHanzis?.length && activeNode?.slides?.length) {
+  return <SlideLesson node={activeNode} onComplete={onComplete} />;
+  }
 
   const step = steps[index];
   const finished = index >= steps.length;

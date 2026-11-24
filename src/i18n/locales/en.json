@@ -1410,5 +1410,41 @@
     "lessonTitle": "Where to learn it",
     "noLesson": "This word is not part of the knowledge map lessons yet.",
     "relatedTitle": "Words with this character"
+  },
+  "slides": {
+    "kind": {
+      "fact": "Fun fact",
+      "words": "New words",
+      "game": "Warm-up",
+      "theory": "Theory",
+      "quiz": "Let's check",
+      "text": "Reading",
+      "recall": "Word check"
+    },
+    "continue": "Continue",
+    "finishLesson": "Finish the lesson",
+    "next": "Next",
+    "finishBlock": "Done",
+    "check": "Check",
+    "correct": "Correct!",
+    "wrong": "Not quite.",
+    "answerIs": "The correct answer:",
+    "true": "True",
+    "false": "False",
+    "typeAnswer": "Type your answer",
+    "tapTiles": "Tap the words in order",
+    "tapWord": "Tap a card to hear the word and see an example.",
+    "matchHint": "Match the pairs: tap on the left, then on the right.",
+    "whatHeard": "What did you hear?",
+    "whichWordFits": "Which word fits the picture?",
+    "pinyin": "Pinyin",
+    "translation": "Translation",
+    "toQuestions": "To the questions",
+    "whatMeans": "What does this word mean?",
+    "whichWord": "Which word means:",
+    "isTranslation": "Is this the correct translation:",
+    "recallWords": "Recall the words",
+    "recallTruth": "True or false?",
+    "recallBuild": "Build the sentence"
   }
 }

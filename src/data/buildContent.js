@@ -23,6 +23,7 @@ export function buildContent(raw) {
   const notesByLesson = groupBy(raw.lessonNotes);
   const sentencesByLesson = groupBy(raw.lessonSentences);
   const quizByLesson = groupBy(raw.lessonQuiz);
+  const slidesByLesson = groupBy(raw.lessonSlides);
 
   const wordsByLesson = new Map();
   for (const row of raw.lessonWords) {
@@ -32,9 +33,9 @@ export function buildContent(raw) {
   }
 
   const nodes = [];
-  const vocabMap = new Map(); // hanzi -> слово (слова с двумя чтениями объединяем)
+  const vocabMap = new Map();
 
-  lessons.forEach((l, i) => {
+  lessons.forEach((l) => {
     const nodeId = l.hsk_level * 100 + l.position;
     const key = slugKey(l.slug);
     const rows = (wordsByLesson.get(l.id) || []).sort((a, b) => a.position - b.position);
@@ -116,8 +117,17 @@ export function buildContent(raw) {
         correct: z.correct,
         explain: { ru: z.explain_ru, pl: z.explain_pl, en: z.explain_en },
       })),
+      slides: (slidesByLesson.get(l.id) || []).map((s) => ({
+        id: s.id,
+        position: s.position,
+        kind: s.kind,
+        payload: s.payload,
+        payload_pl: s.payload_pl,
+        payload_en: s.payload_en,
+      })),
     });
   });
+
   const sentencesByText = new Map();
   for (const s of raw.sentences) {
     if (!sentencesByText.has(s.text_id)) sentencesByText.set(s.text_id, []);

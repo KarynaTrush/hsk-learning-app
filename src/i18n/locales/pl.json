@@ -1410,5 +1410,41 @@
     "lessonTitle": "Gdzie się uczyć",
     "noLesson": "To słowo nie należy jeszcze do lekcji mapy wiedzy.",
     "relatedTitle": "Słowa z tym znakiem"
+  },
+  "slides": {
+    "kind": {
+      "fact": "Ciekawostka",
+      "words": "Nowe słowa",
+      "game": "Rozgrzewka",
+      "theory": "Teoria",
+      "quiz": "Sprawdźmy",
+      "text": "Czytamy",
+      "recall": "Sprawdzian słów"
+    },
+    "continue": "Dalej",
+    "finishLesson": "Zakończ lekcję",
+    "next": "Dalej",
+    "finishBlock": "Gotowe",
+    "check": "Sprawdź",
+    "correct": "Dobrze!",
+    "wrong": "Niezupełnie.",
+    "answerIs": "Poprawna odpowiedź:",
+    "true": "Prawda",
+    "false": "Fałsz",
+    "typeAnswer": "Wpisz odpowiedź",
+    "tapTiles": "Naciskaj słowa po kolei",
+    "tapWord": "Naciśnij kartę: usłyszysz słowo i zobaczysz przykład.",
+    "matchHint": "Połącz pary: naciśnij po lewej, potem po prawej.",
+    "whatHeard": "Co usłyszałeś(-aś)?",
+    "whichWordFits": "Które słowo pasuje do obrazka?",
+    "pinyin": "Pinyin",
+    "translation": "Tłumaczenie",
+    "toQuestions": "Do pytań",
+    "whatMeans": "Co znaczy to słowo?",
+    "whichWord": "Które słowo znaczy:",
+    "isTranslation": "Czy to poprawne tłumaczenie:",
+    "recallWords": "Przypomnij słowa",
+    "recallTruth": "Prawda czy fałsz?",
+    "recallBuild": "Ułóż zdanie"
   }
 }
