@@ -10,7 +10,6 @@ import { setDictionary } from "../data/dictionary";
 const CACHE_KEY = "xinna_content_v5";
 const CACHE_TTL_MS = import.meta.env.DEV ? 5 * 60 * 1000 : 6 * 60 * 60 * 1000;
 const LANGS = ["ru", "pl", "en"];
-
 async function fetchAll(build) {
   const out = [];
   const size = 1000;
@@ -25,7 +24,7 @@ async function fetchAll(build) {
 
 async function fetchRaw() {
   if (!supabase) throw new Error("Supabase не настроен (.env.local)");
-  const [lessons, lessonWords, texts, sentences, textVocab, lessonNotes, lessonSentences, lessonQuiz, lessonSlides, grammar, dictionary] = await Promise.all([
+  const [lessons, lessonWords, texts, sentences, textVocab, lessonNotes, lessonSentences, lessonQuiz, grammar, dictionary, lessonSlides] = await Promise.all([
     fetchAll(() => supabase.from("lessons").select("*").order("hsk_level").order("position")),
     fetchAll(() =>
       supabase
@@ -40,13 +39,13 @@ async function fetchRaw() {
     fetchAll(() => supabase.from("lesson_notes").select("*").order("lesson_id").order("position")),
     fetchAll(() => supabase.from("lesson_sentences").select("*").order("lesson_id").order("position")),
     fetchAll(() => supabase.from("lesson_quiz").select("*").order("lesson_id").order("position")),
-    fetchAll(() => supabase.from("lesson_slides").select("*").order("lesson_id").order("position")).catch(() => []),
     fetchAll(() => supabase.from("grammar_points").select("*").order("hsk_level").order("position")).catch(() => []),
     fetchAll(() =>
       supabase.from("words").select("hanzi, pinyin, hsk_level, meaning_en, meaning_ru, meaning_pl").order("id")
     ).catch(() => []),
+    fetchAll(() => supabase.from("lesson_slides").select("*").order("lesson_id").order("position")).catch(() => []),
   ]);
-  return { lessons, lessonWords, texts, sentences, textVocab, lessonNotes, lessonSentences, lessonQuiz, lessonSlides, grammar, dictionary };
+  return { lessons, lessonWords, texts, sentences, textVocab, lessonNotes, lessonSentences, lessonQuiz, grammar, dictionary, lessonSlides };
 }
 
 function readCache() {
@@ -61,9 +60,9 @@ function readCache() {
 function writeCache(raw) {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), raw }));
-  } catch {}
+  } catch {
+  }
 }
-
 function registerTranslations({ nodes, vocab, stories }) {
   const add = (lng, key, value) => i18n.addResource(lng, "translation", key, value);
   for (const lng of LANGS) {

@@ -6,8 +6,8 @@ const ARG = process.argv.slice(2);
 const target = ARG.find((a) => !a.startsWith("--"));
 const chunkArg = ARG.find((a) => a.startsWith("--chunk="));
 const CHUNK = chunkArg ? Number(chunkArg.split("=")[1]) : 8;
-const KINDS = new Set(["fact", "words", "game", "theory", "quiz", "text", "recall"]);
-const GAMES = new Set(["match", "listen", "emoji", "build"]);
+const KINDS = new Set(["fact", "words", "game", "theory", "quiz", "text", "recall", "write"]);
+const GAMES = new Set(["match", "listen", "emoji", "build", "tone_visualizer", "bughunt", "radical_puzzle", "radical_build", "chatsim"]);
 const BLOCKS = new Set(["p", "tip", "ex", "chart", "table"]);
 const PUNCT = new Set("，。！？、：；“”‘’（）,.!?:;()\" ".split(""));
 
@@ -63,7 +63,7 @@ function checkSlide(where, s) {
     if (!pl.items?.length) err(where, "слова: пустой список");
     for (const it of pl.items || []) if (!it.hanzi || !it.pinyin || !it.m) err(where, `слово без иероглифа, пиньиня или значения: ${JSON.stringify(it)}`);
   }
-  if (s.kind === "game") {
+if (s.kind === "game") {
     if (!GAMES.has(pl.type)) return err(where, `неизвестная игра «${pl.type}»`);
     if (pl.type === "match") {
       if (!pl.pairs || pl.pairs.length < 2) err(where, "пары: нужно минимум две");
@@ -73,11 +73,25 @@ function checkSlide(where, s) {
       }
     } else if (pl.type === "build") {
       for (const it of pl.items || []) if (!Array.isArray(it.answer) || it.answer.length < 2) err(where, "сборка: нужен ответ из минимум двух частей");
+    } else if (pl.type === "chatsim") {
+      if (!pl.messages || !pl.messages.length) err(where, "WeChat чат без сообщений");
+    } else if (pl.type === "radical_puzzle") {
+      if (!pl.hanzi || !pl.correctRadicals) err(where, "пазл иероглифа: нет знака или радикалов");
+    } else if (pl.type === "radical_build") {
+      if (!pl.items || !pl.items.length) err(where, "сборка из радикалов без заданий");
+    } else if (pl.type === "bughunt") {
+      if (!pl.cases || !pl.cases.length) err(where, "детектив ошибок без кейсов");
+      for (const c of pl.cases || []) {
+        if (!Array.isArray(c.options) || c.options.length < 2) err(where, "детектив: нужно минимум два варианта ответа");
+        if (!Number.isInteger(c.correct) || c.correct < 0 || c.correct >= c.options.length) err(where, `детектив: номер верного ответа вне диапазона`);
+      }
+    } else if (pl.type === "tone_visualizer") {
     } else {
       for (const it of pl.items || []) checkQuestion(where, it);
       if (!pl.items?.length) err(where, "игра без заданий");
     }
   }
+
   if (s.kind === "theory") {
     if (!pl.blocks?.length) err(where, "теория без блоков");
     for (const b of pl.blocks || []) {

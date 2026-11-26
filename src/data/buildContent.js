@@ -33,9 +33,9 @@ export function buildContent(raw) {
   }
 
   const nodes = [];
-  const vocabMap = new Map();
+  const vocabMap = new Map(); // hanzi -> слово (слова с двумя чтениями объединяем)
 
-  lessons.forEach((l) => {
+  lessons.forEach((l, i) => {
     const nodeId = l.hsk_level * 100 + l.position;
     const key = slugKey(l.slug);
     const rows = (wordsByLesson.get(l.id) || []).sort((a, b) => a.position - b.position);
@@ -88,6 +88,12 @@ export function buildContent(raw) {
           en: l.block_en || `Block ${l.block_position || 1}`,
         },
       },
+      slides: (slidesByLesson.get(l.id) || []).map((sl) => ({
+        id: sl.id,
+        position: sl.position,
+        kind: sl.kind,
+        payloads: { ru: sl.payload, pl: sl.payload_pl || null, en: sl.payload_en || null },
+      })),
       wordCount: new Set(rows.map((r) => r.words.hanzi)).size,
       wordHanzi: [...new Set(rows.map((r) => r.words.hanzi))],
       notes: (notesByLesson.get(l.id) || []).map((n) => ({
@@ -117,17 +123,8 @@ export function buildContent(raw) {
         correct: z.correct,
         explain: { ru: z.explain_ru, pl: z.explain_pl, en: z.explain_en },
       })),
-      slides: (slidesByLesson.get(l.id) || []).map((s) => ({
-        id: s.id,
-        position: s.position,
-        kind: s.kind,
-        payload: s.payload,
-        payload_pl: s.payload_pl,
-        payload_en: s.payload_en,
-      })),
     });
   });
-
   const sentencesByText = new Map();
   for (const s of raw.sentences) {
     if (!sentencesByText.has(s.text_id)) sentencesByText.set(s.text_id, []);

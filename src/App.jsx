@@ -247,7 +247,7 @@ function AppInner() {
               <ProfileScreen onMenuSelect={handleMenuSelect} />
             )}
             {screen === "lesson" && (
-              <LessonScreen onComplete={() => goMain("dashboard")} />
+              <LessonScreen onComplete={() => goMain("path")} />
             )}
             {screen === "character" && (
               <CharacterDetailScreen
@@ -276,7 +276,7 @@ function AppInner() {
         </div>
       </div>
       {screen !== "lesson" && <div className="hidden md:block">{footer}</div>}
-    </div>
+    </div> 
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { Lock, Check, Flame, BookOpen, GraduationCap } from "lucide-react";
+import { Lock, Check, Flame, BookOpen, GraduationCap, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import { HSK_LEVELS, PATH_NODES, nodeById, nodeTitle, blockTitle } from "../../data/path";
@@ -36,14 +36,25 @@ function useWidth() {
   return [ref, width];
 }
 
+// Обновленная функция layoutPoints с поддержкой центрирования рядов и сохранения адаптивности
 function layoutPoints(count, width) {
   const cols = Math.max(2, Math.min(6, Math.floor(width / 190)));
   const colW = width / cols;
   const points = Array.from({ length: count }, (_, i) => {
     const row = Math.floor(i / cols);
     const c = i % cols;
-    const col = row % 2 === 0 ? c : cols - 1 - c;
-    return { x: (col + 0.5) * colW, y: TOP_PAD + row * ROW_H + (i % 2 === 0 ? 0 : 26), row };
+    
+    // Считаем реальное количество элементов в текущей строке для центрирования
+    const itemsInThisRow = Math.min(cols, count - row * cols);
+    const rowWidth = itemsInThisRow * colW;
+    const rowOffset = (width - rowWidth) / 2;
+
+    const col = row % 2 === 0 ? c : itemsInThisRow - 1 - c;
+    return { 
+      x: rowOffset + (col + 0.5) * colW, 
+      y: TOP_PAD + row * ROW_H + (i % 2 === 0 ? 0 : 26), 
+      row 
+    };
   });
   const rows = Math.ceil(count / cols);
   return { points, cols, colW, height: TOP_PAD + (rows - 1) * ROW_H + ROW_H };
@@ -142,12 +153,12 @@ function Banner({ levelKey, level, done, total, title, progressText }) {
   );
 }
 
-function Trail({ nodes, lastDone, statusOf, colorOf, percentOf, lang, t, onNodeSelect }) {
+function Trail({ nodes, lastDone, statusOf, colorOf, percentOf, lang, t, onNodeSelect, levelColor }) {
   const [ref, width] = useWidth();
   const layout = width > 0 ? layoutPoints(nodes.length, width) : null;
 
   return (
-    <div className={styles.trail} ref={ref} style={{ height: layout ? layout.height : ROW_H }}>
+    <div className={styles.trail} ref={ref} style={{ height: layout ? layout.height : ROW_H, "--level": levelColor }}>
       {layout && (
         <>
           <svg className={styles.trailSvg} width={width} height={layout.height} viewBox={`0 0 ${width} ${layout.height}`} aria-hidden="true">
@@ -183,8 +194,18 @@ export default function LearningPathScreen({ onNodeSelect }) {
   const lang = i18n.resolvedLanguage || "ru";
 
   const [activeTab, setActiveTab] = useState(() => String(nodeById(state.activeNodeId)?.level ?? state.hskLevel ?? 1));
+  const [collapsedGroups, setCollapsedGroups] = useState(new Set()); // Стейт для свернутых глав
   const completed = useMemo(() => new Set(state.completedNodeIds || []), [state.completedNodeIds]);
   const level = HSK_LEVELS[activeTab];
+
+  function toggleGroup(position) {
+    setCollapsedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(position)) next.delete(position);
+      else next.add(position);
+      return next;
+    });
+  }
 
   const totals = useMemo(() => {
     const byLevel = {};
@@ -215,9 +236,9 @@ export default function LearningPathScreen({ onNodeSelect }) {
   }
 
   function colorOf(status) {
-    if (status === "completed") return COMPLETED;
-    if (status === "active") return ACTIVE;
-    if (status === "locked") return LOCKED;
+    if (status === "completed") return solid(level.color); 
+    if (status === "active") return ACTIVE;                
+    if (status === "locked") return LOCKED;                
     return solid(level.color);
   }
 
@@ -225,6 +246,7 @@ export default function LearningPathScreen({ onNodeSelect }) {
   const allDone = Object.values(totals).reduce((a, v) => a + v.done, 0);
   const allTotal = PATH_NODES.length;
   const wordsCount = Object.keys(state.words || {}).length;
+  const currentLevelColor = solid(level.color);
 
   return (
     <div className={styles.container}>
@@ -287,27 +309,44 @@ export default function LearningPathScreen({ onNodeSelect }) {
         <p className={styles.comingSoon}>{t("path.comingSoon")}</p>
       ) : (
         level.groups.map((group, gi) => {
+          const isCollapsed = collapsedGroups.has(group.position);
           const lastDone = group.nodes.reduce((acc, n, i) => (completed.has(n.id) ? i : acc), -1);
           return (
             <section key={group.position} className={styles.block}>
-              <header className={styles.blockHeader}>
-                <span className={styles.blockNumber} style={{ background: solid(level.color) }}>{gi + 1}</span>
-                <div>
+              <header 
+                className={styles.blockHeader} 
+                onClick={() => toggleGroup(group.position)}
+                style={{ cursor: "pointer", userSelect: "none" }}
+              >
+                <span className={styles.blockNumber} style={{ background: currentLevelColor }}>{gi + 1}</span>
+                <div style={{ flex: 1 }}>
                   <h3 className={styles.blockTitle}>{blockTitle(group, lang)}</h3>
                   <p className={styles.blockMeta}>{t("path.lessonsCount", { count: group.nodes.length })}</p>
                 </div>
+                <ChevronDown 
+                  size={20} 
+                  strokeWidth={2} 
+                  style={{ 
+                    transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)", 
+                    transition: "transform 0.2s ease",
+                    color: "var(--muted-foreground)" 
+                  }} 
+                />
               </header>
-              <Trail
-                nodes={group.nodes}
-                lastDone={lastDone}
-                statusOf={statusOf}
-                colorOf={colorOf}
-                percentOf={percentOf}
-                completed={completed}
-                lang={lang}
-                t={t}
-                onNodeSelect={onNodeSelect}
-              />
+              {!isCollapsed && (
+                <Trail
+                  nodes={group.nodes}
+                  lastDone={lastDone}
+                  statusOf={statusOf}
+                  colorOf={colorOf}
+                  percentOf={percentOf}
+                  completed={completed}
+                  lang={lang}
+                  t={t}
+                  onNodeSelect={onNodeSelect}
+                  levelColor={currentLevelColor}
+                />
+              )}
             </section>
           );
         })

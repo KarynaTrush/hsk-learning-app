@@ -37,7 +37,7 @@
 .trail { position: relative; width: 100%; }
 .trailSvg { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
 .trailBase { fill: none; stroke: var(--border); stroke-width: 5; stroke-dasharray: 2 12; stroke-linecap: round; }
-.trailDone { fill: none; stroke: #4F7942; stroke-width: 6; stroke-linecap: round; }
+.trailDone { fill: none; stroke: var(--level, #4F7942); stroke-width: 6; stroke-linecap: round; }
 
 .nodePos { position: absolute; transform: translate(-50%, -46px); display: flex; flex-direction: column; align-items: center; text-align: center; }
 .seal { position: relative; width: 92px; height: 92px; border-radius: 9999px; border: none; padding: 0; cursor: pointer; background: transparent; transition: transform 0.2s; }
