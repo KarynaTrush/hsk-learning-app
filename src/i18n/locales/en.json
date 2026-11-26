@@ -1017,6 +1017,10 @@
     "allGood": "No other recommendations for now. Keep it up!"
   },
   "toneLab": {
+    "wordsTitle": "Practice words",
+    "wordsSub": "One-syllable words at your level (HSK {{level}} and below). Tap a word to hear it and repeat.",
+    "wordsMore": "Show other words",
+    "wordsEmpty": "There are no words for this tone at your level yet.",
     "kicker": "Pronunciation",
     "subtitle": "Listen to the model and repeat. The app shows the melody of your voice.",
     "target": "Target syllable",
@@ -1119,6 +1123,7 @@
     }
   },
   "writing": {
+    "fromMistakes": "My mistakes",
     "kicker": "Calligraphy",
     "subtitle": "Watch the stroke order, then write the character with your mouse or finger. The app checks every stroke.",
     "fromLesson": "From the lesson",
@@ -1414,6 +1419,12 @@
     "relatedTitle": "Words with this character"
   },
   "slides": {
+    "writeHint": "Trace the outline with your finger or mouse and write the character stroke by stroke.",
+    "writeProgress": "Strokes: {{done}}",
+    "writeUnavailable": "The stroke data could not be loaded. You can skip this slide.",
+    "writeNextChar": "Next character",
+    "writeNextWord": "Next word",
+    "writeSkip": "Skip",
     "kind": {
       "fact": "Fun fact",
       "words": "New words",

@@ -6,7 +6,8 @@ import { useAppState } from "../../state/AppState";
 import { dueCards } from "../../lib/srs";
 import { dateKey } from "../../lib/dates";
 import { DATE_LOCALES } from "../../i18n";
-import { PATH_NODES, nodeById, nodeTitle } from "../../data/path";
+import { PATH_NODES, nodeTitle } from "../../data/path";
+import { frontierLevel } from "../../lib/progress";
 import { evaluateAchievements } from "../../lib/achievements";
 import { vocabByNode } from "../../data/vocab";
 import { GRAMMAR } from "../../data/grammar";
@@ -58,7 +59,7 @@ export default function ProfileScreen({ onMenuSelect }) {
   const user = state.user || {};
   const fullName = [user.name, user.surname].filter(Boolean).join(" ") || t("account.guest");
   const wordsCount = Object.keys(state.words || {}).length;
-  const currentLevel = nodeById(state.activeNodeId)?.level ?? 0;
+  const currentLevel = frontierLevel(state.completedNodeIds) ?? 0;
   const unlockedCount = evaluateAchievements(state).filter((a) => a.unlocked).length;
   const lessonsCount = state.completedNodeIds?.length || 0;
   const mistakesCount = state.mistakes?.length || 0;

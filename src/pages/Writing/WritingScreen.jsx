@@ -4,8 +4,10 @@ import { Play, RotateCcw, PenLine, Eye, ChevronRight, Star } from "lucide-react"
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import PageBanner from "../../components/ui/PageBanner";
-import { HSK_LEVELS, nodeById } from "../../data/path";
+import { HSK_LEVELS } from "../../data/path";
+import { frontierLevel } from "../../lib/progress";
 import { VOCAB, vocabByNode, wordMeaning } from "../../data/vocab";
+import { DICT } from "../../data/dictionary";
 import { isCjk } from "../../lib/segment";
 import styles from "./Writing.module.css";
 
@@ -16,6 +18,13 @@ function charsOf(words) {
   const seen = new Set();
   for (const w of words) for (const c of w.hanzi) if (isCjk(c)) seen.add(c);
   return [...seen];
+}
+
+function writingMark(stat) {
+  if (!stat) return "";
+  if ((stat.bestStars || 0) >= 2) return "done";
+  if (stat.mistakes > 0) return "warn";
+  return "";
 }
 
 function themeColors(theme) {
@@ -41,10 +50,11 @@ export default function WritingScreen({ initialChar }) {
   const { state, recordWriting } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
 
-  const activeLevel = nodeById(state.activeNodeId)?.level ?? 1;
+  const activeLevel = frontierLevel(state.completedNodeIds) ?? 1;
   const [source, setSource] = useState("lesson");
-  const [char, setChar] = useState("");
-  const [custom, setCustom] = useState("");
+  const [char, setChar] = useState(initialChar || "");
+  const [custom, setCustom] = useState(initialChar || "");
+  const [pinned, setPinned] = useState(initialChar || "");
   const [mode, setMode] = useState("trace");
   const [attempt, setAttempt] = useState(0);
   const [mistakes, setMistakes] = useState(0);
@@ -66,22 +76,23 @@ export default function WritingScreen({ initialChar }) {
     if (source === "learned") {
       return charsOf(Object.keys(state.words || {}).map((h) => ({ hanzi: h }))).slice(0, 80);
     }
+    if (source === "mistakes") {
+      const fromWriting = Object.entries(state.writingStats || {}).filter(([, v]) => v.mistakes > 0).map(([c]) => ({ hanzi: c }));
+      const fromWords = (state.mistakes || []).map((m) => ({ hanzi: m.hanzi }));
+      return charsOf([...fromWriting, ...fromWords]);
+    }
     const level = Number(source.replace("level-", ""));
     const nodes = Object.values(HSK_LEVELS[String(level)]?.groups || []).flatMap((g) => g.nodes);
     return charsOf(nodes.flatMap((n) => vocabByNode(n.id)));
-  }, [source, state.activeNodeId, state.words]);
+  }, [source, state.activeNodeId, state.words, state.mistakes, state.writingStats]);
 
   useEffect(() => {
-    if (initialChar) {
-      setChar(initialChar);
-      setCustom(initialChar);
+    if (!chars.length) return;
+    if (!char) {
+      setChar(chars[0]);
+      return;
     }
-  }, [initialChar]);
-
-  useEffect(() => {
-    if (!char || !chars.includes(char)) {
-      if (!custom || char !== custom) setChar(chars[0] || "");
-    }
+    if (!chars.includes(char) && char !== pinned) setChar(chars[0]);
   }, [chars]);
 
   useEffect(() => {
@@ -136,9 +147,14 @@ export default function WritingScreen({ initialChar }) {
       writer.quiz({
         onCorrectStroke: (d) => setProgress(d.strokeNum + 1),
         onMistake: (d) => setMistakes(d.totalMistakes),
-        onComplete: (summary) => {
+        onComplete: async (summary) => {
           const total = summary.totalMistakes;
-          const strokes = charData?.strokes?.length || 1;
+          let strokes = 1;
+          try {
+            strokes = (await writer.getCharacterData()).strokes.length || 1;
+          } catch {
+            strokes = 1;
+          }
           const stars = total === 0 ? 3 : total <= Math.max(2, Math.round(strokes * 0.3)) ? 2 : 1;
           setResult({ mistakes: total, stars });
           recordWriting({ char, mistakes: total, stars, ms: Date.now() - startedAt.current });
@@ -168,15 +184,22 @@ export default function WritingScreen({ initialChar }) {
     if (c) {
       setChar(c);
       setCustom(c);
+      setPinned(c);
     }
   }
 
-  const related = VOCAB.filter((w) => w.hanzi.includes(char)).slice(0, 4);
+  const related = useMemo(() => {
+    if (!char) return [];
+    const own = VOCAB.filter((w) => w.hanzi.includes(char));
+    const extra = own.length >= 4 ? [] : [...DICT.values()].filter((w) => w.hanzi.includes(char) && !own.some((o) => o.hanzi === w.hanzi));
+    return [...own, ...extra].slice(0, 4);
+  }, [char]);
   const total = charData?.strokes?.length || 0;
 
   const sourceTabs = [
     { id: "lesson", label: t("writing.fromLesson") },
     { id: "learned", label: t("writing.learned") },
+    { id: "mistakes", label: t("writing.fromMistakes") },
     ...levelsWithLessons.map((k) => ({ id: `level-${k}`, label: k === "0" ? t("path.level0") : `HSK ${k}` })),
   ];
 
@@ -190,7 +213,10 @@ export default function WritingScreen({ initialChar }) {
             key={s.id}
             type="button"
             className={`${styles.tab} ${source === s.id ? styles.tabActive : ""}`}
-            onClick={() => setSource(s.id)}
+            onClick={() => {
+              setSource(s.id);
+              setPinned("");
+            }}
           >
             {s.label}
           </button>
@@ -209,7 +235,15 @@ export default function WritingScreen({ initialChar }) {
 
       <div className={styles.charRow}>
         {chars.map((c) => (
-          <button key={c} type="button" className={`${styles.charChip} ${c === char ? styles.charChipActive : ""}`} onClick={() => setChar(c)}>
+          <button
+            key={c}
+            type="button"
+            className={`${styles.charChip} ${c === char ? styles.charChipActive : ""} ${writingMark(state.writingStats?.[c]) === "done" ? styles.charChipDone : ""} ${writingMark(state.writingStats?.[c]) === "warn" ? styles.charChipWarn : ""}`}
+            onClick={() => {
+              setChar(c);
+              setPinned("");
+            }}
+          >
             {c}
           </button>
         ))}

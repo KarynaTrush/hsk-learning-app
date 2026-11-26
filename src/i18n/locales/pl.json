@@ -1017,6 +1017,10 @@
     "allGood": "Na razie nie ma innych rekomendacji. Tak trzymaj!"
   },
   "toneLab": {
+    "wordsTitle": "Słowa do ćwiczeń",
+    "wordsSub": "Jednosylabowe słowa na Twoim poziomie (HSK {{level}} i niżej). Kliknij słowo, aby posłuchać i powtórzyć.",
+    "wordsMore": "Pokaż inne słowa",
+    "wordsEmpty": "Dla tego tonu nie ma jeszcze słów na Twoim poziomie.",
     "kicker": "Wymowa",
     "subtitle": "Posłuchaj wzorca i powtórz. Aplikacja pokaże melodię twojego głosu.",
     "target": "Docelowa sylaba",
@@ -1119,6 +1123,7 @@
     }
   },
   "writing": {
+    "fromMistakes": "Moje błędy",
     "kicker": "Kaligrafia",
     "subtitle": "Obejrzyj kolejność kresek, a potem napisz znak myszką lub palcem. Aplikacja sprawdza każdą kreskę.",
     "fromLesson": "Z lekcji",
@@ -1414,6 +1419,12 @@
     "relatedTitle": "Słowa z tym znakiem"
   },
   "slides": {
+    "writeHint": "Prowadź palcem lub myszą po konturze i pisz znak kreska po kresce.",
+    "writeProgress": "Kresek: {{done}}",
+    "writeUnavailable": "Nie udało się wczytać wzoru pisma. Możesz pominąć ten slajd.",
+    "writeNextChar": "Następny znak",
+    "writeNextWord": "Następne słowo",
+    "writeSkip": "Pomiń",
     "kind": {
       "fact": "Ciekawostka",
       "words": "Nowe słowa",

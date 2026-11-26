@@ -2,8 +2,9 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Lock, Check, Flame, BookOpen, GraduationCap, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
-import { HSK_LEVELS, PATH_NODES, nodeById, nodeTitle, blockTitle } from "../../data/path";
+import { HSK_LEVELS, PATH_NODES, nodeTitle, blockTitle } from "../../data/path";
 import { vocabByNode } from "../../data/vocab";
+import { frontierIndex, frontierLevel } from "../../lib/progress";
 import styles from "./LearningPath.module.css";
 
 const UNLOCK_ALL = import.meta.env.VITE_UNLOCK_ALL === "true";
@@ -193,7 +194,7 @@ export default function LearningPathScreen({ onNodeSelect }) {
   const { state } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
 
-  const [activeTab, setActiveTab] = useState(() => String(nodeById(state.activeNodeId)?.level ?? state.hskLevel ?? 1));
+  const [activeTab, setActiveTab] = useState(() => String(frontierLevel(state.completedNodeIds) ?? state.hskLevel ?? 1));
   const [collapsedGroups, setCollapsedGroups] = useState(new Set()); // Стейт для свернутых глав
   const completed = useMemo(() => new Set(state.completedNodeIds || []), [state.completedNodeIds]);
   const level = HSK_LEVELS[activeTab];
@@ -218,12 +219,13 @@ export default function LearningPathScreen({ onNodeSelect }) {
   }, [completed]);
 
   const order = useMemo(() => new Map(PATH_NODES.map((n, i) => [n.id, i])), []);
-  const activeIndex = order.get(state.activeNodeId) ?? 0;
+  const activeIndex = useMemo(() => frontierIndex(completed), [completed]);
 
   function statusOf(node) {
     if (completed.has(node.id)) return "completed";
-    if (node.id === state.activeNodeId) return "active";
-    if (!UNLOCK_ALL && order.get(node.id) > activeIndex) return "locked";
+    const index = order.get(node.id);
+    if (index === activeIndex) return "active";
+    if (!UNLOCK_ALL && index > activeIndex) return "locked";
     return "available";
   }
 

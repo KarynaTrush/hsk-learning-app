@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Volume2, Eye, EyeOff } from "lucide-react";
+import HanziWriter from "hanzi-writer";
+import { Volume2, Eye, EyeOff, RotateCcw, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { speakZh, ttsSupported } from "../../../lib/tts";
+import { isCjk } from "../../../lib/segment";
+import { useAppState } from "../../../state/AppState";
 import { buildRecallQuestions, matchesShort, normalizeQuestion, shuffle } from "../../../lib/slideLogic";
 import styles from "./Slides.module.css";
 
@@ -378,39 +381,189 @@ function MatchGame({ payload, onAnswer, onReady }) {
   );
 }
 
-function WriteSlide({ payload, onReady }) {
+const WRITE_SIZE = 260;
+
+function writeColors(theme) {
+  return theme === "dark"
+    ? { stroke: "#F2EDE4", outline: "#5A544A", radical: "#7FB36B" }
+    : { stroke: "#1A1A1A", outline: "#D9D2C5", radical: "#4F7942" };
+}
+
+function WriteSlide({ payload, onReady, onWrite }) {
   const { t } = useTranslation();
+  const { state } = useAppState();
+  const items = useMemo(() => payload.items || [], [payload]);
   const [active, setActive] = useState(0);
-  useEffect(() => onReady(), []);
-  const item = payload.items?.[active];
+  const [charIdx, setCharIdx] = useState(0);
+  const [attempt, setAttempt] = useState(0);
+  const [mistakes, setMistakes] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [charResult, setCharResult] = useState(null);
+  const [doneWords, setDoneWords] = useState({});
+  const [failed, setFailed] = useState(false);
+  const boxRef = useRef(null);
+  const wordOk = useRef({});
+  const startedAt = useRef(Date.now());
+
+  const item = items[active];
+  const chars = useMemo(() => [...(item?.hanzi || "")].filter(isCjk), [item]);
+  const char = chars[charIdx];
+  const allDone = items.length > 0 && items.every((_, i) => doneWords[i]);
+
+  useEffect(() => {
+    if (allDone || failed || !items.length) onReady();
+  }, [allDone, failed, items.length]);
+
+  useEffect(() => {
+    const box = boxRef.current;
+    if (!box || !char) return undefined;
+    let cancelled = false;
+    box.innerHTML = "";
+    setMistakes(0);
+    setProgress(0);
+    setCharResult(null);
+    setFailed(false);
+    startedAt.current = Date.now();
+    const colors = writeColors(state.theme);
+    const writer = HanziWriter.create(box, char, {
+      width: WRITE_SIZE,
+      height: WRITE_SIZE,
+      padding: 12,
+      showCharacter: false,
+      showOutline: true,
+      strokeColor: colors.stroke,
+      outlineColor: colors.outline,
+      radicalColor: colors.radical,
+      highlightColor: "#C83E34",
+      drawingColor: "#C83E34",
+      drawingWidth: 16,
+      showHintAfterMisses: 2,
+      highlightOnComplete: true,
+      leniency: 1.1,
+      onLoadCharDataError: () => {
+        if (!cancelled) setFailed(true);
+      },
+    });
+    writer.quiz({
+      onCorrectStroke: (d) => {
+        if (!cancelled) setProgress(d.strokeNum + 1);
+      },
+      onMistake: (d) => {
+        if (!cancelled) setMistakes(d.totalMistakes);
+      },
+      onComplete: async (summary) => {
+        const total = summary.totalMistakes;
+        let strokes = 1;
+        try {
+          strokes = (await writer.getCharacterData()).strokes.length || 1;
+        } catch {
+          strokes = 1;
+        }
+        if (cancelled) return;
+        const stars = total === 0 ? 3 : total <= Math.max(2, Math.round(strokes * 0.3)) ? 2 : 1;
+        setCharResult({ stars, mistakes: total });
+        onWrite?.({ kind: "char", char, mistakes: total, stars, ms: Date.now() - startedAt.current });
+        wordOk.current[active] = (wordOk.current[active] ?? true) && stars >= 2;
+        if (charIdx + 1 >= chars.length) {
+          onWrite?.({ kind: "word", hanzi: item.hanzi, correct: wordOk.current[active] });
+          setDoneWords((d) => ({ ...d, [active]: true }));
+        }
+      },
+    });
+    return () => {
+      cancelled = true;
+      try {
+        writer.cancelQuiz();
+      } catch {
+        box.innerHTML = "";
+      }
+      box.innerHTML = "";
+    };
+  }, [active, charIdx, attempt, state.theme]);
+
+  function pickWord(index) {
+    wordOk.current[index] = undefined;
+    setActive(index);
+    setCharIdx(0);
+    setAttempt((a) => a + 1);
+  }
+
+  function nextStep() {
+    if (charIdx + 1 < chars.length) {
+      setCharIdx((i) => i + 1);
+      return;
+    }
+    const next = items.findIndex((_, i) => i !== active && !doneWords[i]);
+    if (next >= 0) pickWord(next);
+  }
+
+  const hasNext = charIdx + 1 < chars.length || items.some((_, i) => i !== active && !doneWords[i]);
 
   return (
     <div className={styles.wordsBox}>
       {payload.title && <h3 className={styles.title}>{payload.title}</h3>}
-      <p className={styles.hint}>{t("slides.tapWord", "Нажмите на иероглиф для просмотра деталей")}</p>
+      <p className={styles.hint}>{t("slides.writeHint")}</p>
       <div className={styles.wordGrid}>
-        {payload.items.map((w, idx) => (
+        {items.map((w, idx) => (
           <button
             key={idx}
             type="button"
             className={`${styles.wordCard} ${idx === active ? styles.wordActive : ""}`}
-            onClick={() => setActive(idx)}
+            onClick={() => pickWord(idx)}
           >
             <span className={styles.wordHanzi}>{w.hanzi}</span>
             <span className={styles.wordPinyin}>{w.pinyin}</span>
-            <span className={styles.wordMeaning}>{w.m}</span>
+            <span className={styles.wordMeaning}>{doneWords[idx] ? "✓ " : ""}{w.m}</span>
           </button>
         ))}
       </div>
       {item && (
-        <div className={styles.exampleBox} style={{ flexDirection: "column", alignItems: "flex-start", gap: "8px" }}>
-          <p style={{ fontSize: "1.2rem", fontWeight: "bold" }}>{item.hanzi} ({item.pinyin}) — {item.m}</p>
-          {item.hint && <p className={styles.exM}>{item.hint}</p>}
-        </div>
+        <p className={styles.writeCaption}>
+          {item.hanzi} ({item.pinyin}) — {item.m}
+          {chars.length > 1 && ` · ${charIdx + 1}/${chars.length}`}
+        </p>
       )}
-      <button type="button" className={styles.primary} style={{ marginTop: "16px" }} onClick={onReady}>
-        {t("slides.continue", "Продолжить")}
-      </button>
+      {failed ? (
+        <p className={styles.writeStatus}>{t("slides.writeUnavailable")}</p>
+      ) : (
+        <>
+          <div className={styles.writeStage}>
+            <svg className={styles.writeGrid} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="50" y1="0" x2="50" y2="100" className={styles.writeGridLine} />
+              <line x1="0" y1="50" x2="100" y2="50" className={styles.writeGridLine} />
+              <line x1="0" y1="0" x2="100" y2="100" className={styles.writeGridLine} />
+              <line x1="100" y1="0" x2="0" y2="100" className={styles.writeGridLine} />
+            </svg>
+            <div ref={boxRef} className={styles.writeBox} />
+          </div>
+          {charResult ? (
+            <p className={styles.writeStatus}>
+              {t(`writing.result.${charResult.stars}`)} · {t("writing.mistakesTotal", { count: charResult.mistakes })}
+            </p>
+          ) : (
+            <p className={styles.writeStatus}>
+              {t("slides.writeProgress", { done: progress })} · {t("writing.mistakes", { count: mistakes })}
+            </p>
+          )}
+        </>
+      )}
+      <div className={styles.writeActions}>
+        {!failed && !charResult && (
+          <button type="button" className={styles.writeSecondary} onClick={() => setAttempt((a) => a + 1)}>
+            <RotateCcw size={15} /> {t("writing.restart")}
+          </button>
+        )}
+        {charResult && hasNext && (
+          <button type="button" className={styles.writePrimary} onClick={nextStep}>
+            <Check size={15} /> {charIdx + 1 < chars.length ? t("slides.writeNextChar") : t("slides.writeNextWord")}
+          </button>
+        )}
+        {!allDone && !failed && (
+          <button type="button" className={styles.writeSecondary} onClick={onReady}>
+            {t("slides.writeSkip")}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -787,8 +940,8 @@ function RecallSlide({ payload, onAnswer, onReady }) {
   );
 }
 
-export function Slide({ slide, payload, onReady, onAnswer }) {
-  const props = { payload, onReady, onAnswer };
+export function Slide({ slide, payload, onReady, onAnswer, onWrite }) {
+  const props = { payload, onReady, onAnswer, onWrite };
   switch (slide.kind) {
     case "fact":
       return <FactSlide {...props} />;

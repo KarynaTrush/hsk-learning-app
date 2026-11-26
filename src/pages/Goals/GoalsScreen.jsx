@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Trophy, Target, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
-import { nodeById } from "../../data/path";
+import { frontierLevel } from "../../lib/progress";
 import { goalOptions, goalProgress } from "../../lib/activity";
 import { evaluateAchievements, rankIndex, weeklyProgress } from "../../lib/achievements";
 import PageBanner from "../../components/ui/PageBanner";
@@ -14,7 +14,7 @@ const RING = 2 * Math.PI * 44;
 export default function GoalsScreen() {
   const { t } = useTranslation();
   const { state, setTarget } = useAppState();
-  const level = nodeById(state.activeNodeId)?.level ?? 0;
+  const level = frontierLevel(state.completedNodeIds) ?? 0;
   const options = goalOptions(level);
   const achievements = useMemo(
     () => evaluateAchievements(state) || [],

@@ -12,7 +12,7 @@ const SKILLS = { game: "recognition", quiz: "knowledge", text: "reading", recall
 
 export default function SlideLesson({ node, onExit }) {
   const { t, i18n } = useTranslation();
-  const { recordAnswer, recordExercise, completeLesson } = useAppState();
+  const { recordAnswer, recordExercise, recordWriting, touchWord, completeLesson } = useAppState();
   const lang = i18n.resolvedLanguage || "ru";
 
   const slides = useMemo(() => node.slides, [node]);
@@ -33,6 +33,15 @@ export default function SlideLesson({ node, onExit }) {
     if (q?.wordRef) recordAnswer(q.wordRef, correct, ms, meta);
     else recordExercise({ ref: q?.ref || `slide:${node.slug}:${index}`, correct, ms, ...meta });
     setResults((r) => [...r, { correct, type: slide.kind, skill }]);
+  }
+
+  function onWrite(info) {
+    if (info.kind === "word") {
+      touchWord(info.hanzi, info.correct);
+      return;
+    }
+    recordWriting({ char: info.char, mistakes: info.mistakes, stars: info.stars, ms: info.ms });
+    setResults((r) => [...r, { correct: info.stars >= 2, type: "write", skill: "writing" }]);
   }
 
   function next() {
@@ -71,7 +80,7 @@ export default function SlideLesson({ node, onExit }) {
         ) : (
           <div className={styles.card} style={{ "--tone": color }}>
             <p className={styles.kicker} style={{ color }}>{t(`slides.kind.${slide.kind}`)}</p>
-            <Slide key={`${node.id}-${index}`} slide={slide} payload={payload} onReady={onReady} onAnswer={onAnswer} />
+            <Slide key={`${node.id}-${index}`} slide={slide} payload={payload} onReady={onReady} onAnswer={onAnswer} onWrite={onWrite} />
             <button type="button" className={`${styles.primary} ${styles.nextBtn}`} style={{ background: ready ? color : undefined }} disabled={!ready} onClick={next}>
               {index + 1 >= slides.length ? t("slides.finishLesson") : t("slides.continue")}
             </button>

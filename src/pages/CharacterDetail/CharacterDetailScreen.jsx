@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import { DICT } from "../../data/dictionary";
 import { HSK_LEVELS, nodeById, nodeTitle } from "../../data/path";
+import { learnerLevel } from "../../lib/progress";
 import { vocabByHanzi, wordMeaning } from "../../data/vocab";
 import { STORIES } from "../../data/stories";
 import { shortMeaning } from "../../lib/placement";
@@ -105,7 +106,7 @@ export default function CharacterDetailScreen({ hanzi, onPractice, onOpenTarget,
   }, [hanzi, lang]);
 
   const chars = useMemo(() => [...hanzi].filter(isCjk), [hanzi]);
-  const currentLevel = Math.max(1, nodeById(state.activeNodeId)?.level ?? 1);
+  const currentLevel = learnerLevel(state);
 
   const examples = useMemo(() => {
     const out = [];

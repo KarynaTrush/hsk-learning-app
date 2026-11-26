@@ -1,7 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { createCard, reviewCard } from "../lib/srs";
 import { vocabByHanzi, vocabByNode } from "../data/vocab";
-import { PATH_NODES, nextNodeId, nodesBeforeLevel, firstNodeOfLevel } from "../data/path";
+import { PATH_NODES, nodesBeforeLevel, firstNodeOfLevel } from "../data/path";
+import { NODE_SCHEME, migrateProgress, frontierNodeId } from "../lib/progress";
 import { supabase } from "../api/supabase";
 import * as authApi from "../api/auth";
 import * as profileApi from "../api/profile";
@@ -38,6 +39,7 @@ export function defaultState() {
     startedAt: null,
     streak: { count: 0, lastDate: null },
     daily: { date: todayKey(), lesson: false, srs: false, tones: false },
+    nodeScheme: NODE_SCHEME,
     completedNodeIds: [],
     activeNodeId: 1,
     practiceHanzis: null,
@@ -62,7 +64,7 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultState();
-    return { ...defaultState(), ...JSON.parse(raw) };
+    return { ...defaultState(), ...migrateProgress(JSON.parse(raw)) };
   } catch {
     return defaultState();
   }
@@ -117,6 +119,7 @@ export function AppStateProvider({ children }) {
   });
   const [authReady, setAuthReady] = useState(!supabase);
   const [syncStatus, setSyncStatus] = useState("idle");
+  const [retryTick, setRetryTick] = useState(0);
   const [recovery, setRecovery] = useState(() => /type=recovery/.test(`${window.location.hash}${window.location.search}`));
 
   const bootLocalAt = useRef(Number(localStorage.getItem(STATE_AT_KEY) || 0));
@@ -151,7 +154,7 @@ export function AppStateProvider({ children }) {
       profileApi.fetchProfile(authUser.id).catch(() => null),
       progressApi.loadProgress(authUser.id),
     ]);
-    const cloudState = progress?.state && Object.keys(progress.state).length ? progress.state : null;
+    const cloudState = progress?.state && Object.keys(progress.state).length ? migrateProgress(progress.state) : null;
     const cloudAt = progress?.updated_at ? new Date(progress.updated_at).getTime() : 0;
     const local = loadState();
 
@@ -251,10 +254,11 @@ export function AppStateProvider({ children }) {
       } catch (e) {
         console.warn("Не удалось сохранить прогресс:", e);
         setSyncStatus("error");
+        setTimeout(() => setRetryTick((n) => n + 1), 8000);
       }
     }, 800);
     return () => clearTimeout(timer);
-  }, [state, authReady]);
+  }, [state, authReady, retryTick]);
 
   function logEvent(hanzi, correct, source, responseMs = null, meta = {}) {
     const u = userRef.current;
@@ -393,6 +397,19 @@ export function AppStateProvider({ children }) {
       });
       logEvent(hanzi, correct, "lesson", responseMs, meta);
     },
+    touchWord(hanzi, correct) {
+      setState((s) => {
+        const prev = s.words[hanzi] || createCard(hanzi, { category: vocabByHanzi(hanzi)?.category });
+        const words = { ...s.words, [hanzi]: reviewCard(prev, correct ? 4 : 1) };
+        const mistakes = [...(s.mistakes || [])];
+        if (!correct) {
+          const i = mistakes.findIndex((m) => m.hanzi === hanzi);
+          if (i >= 0) mistakes[i] = { ...mistakes[i], count: mistakes[i].count + 1, lastAt: Date.now() };
+          else mistakes.push({ hanzi, count: 1, lastAt: Date.now() });
+        }
+        return { ...s, words, mistakes, activityLog: addActivity(s.activityLog, s.words[hanzi] ? null : "words"), wordsLog: logWords(s, words), streak: bumpStreak(s) };
+      });
+    },
     recordExercise({ ref, correct, ms = null, type, skill, lessonId = null, policy = null }) {
       setState((s) => ({
         ...s,
@@ -419,7 +436,7 @@ export function AppStateProvider({ children }) {
           wordsLog: logWords(s, nextWords),
           activityLog: addActivity(addActivity(s.activityLog, "lessons"), "words", added),
           completedNodeIds: [...completed],
-          activeNodeId: nextNodeId(nodeId),
+          activeNodeId: frontierNodeId(completed),
           practiceHanzis: null,
           daily,
           minutesThisWeek: (s.minutesThisWeek || 0) + 0.25,

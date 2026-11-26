@@ -7,7 +7,7 @@ import { setStories } from "../data/stories";
 import { setGrammar } from "../data/grammar";
 import { setDictionary } from "../data/dictionary";
 
-const CACHE_KEY = "xinna_content_v5";
+const CACHE_KEY = "xinna_content_v6";
 const CACHE_TTL_MS = import.meta.env.DEV ? 5 * 60 * 1000 : 6 * 60 * 60 * 1000;
 const LANGS = ["ru", "pl", "en"];
 async function fetchAll(build) {

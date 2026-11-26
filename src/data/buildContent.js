@@ -7,6 +7,17 @@ function slugKey(slug) {
   return slug.replace(/^hsk\d+-/, "");
 }
 
+function slideWordEntries(slideRows) {
+  const out = [];
+  for (const sl of slideRows) {
+    const p = sl.payload;
+    if (!p) continue;
+    const list = sl.kind === "words" || sl.kind === "write" ? p.items : sl.kind === "recall" ? p.words : [];
+    for (const it of list || []) if (it && it.hanzi && it.pinyin) out.push(it);
+  }
+  return out;
+}
+
 export function buildContent(raw) {
   const lessons = [...raw.lessons].sort(
     (a, b) => a.hsk_level - b.hsk_level || (a.block_position || 1) - (b.block_position || 1) || a.position - b.position
@@ -20,6 +31,26 @@ export function buildContent(raw) {
     for (const list of map.values()) list.sort((a, b) => a.position - b.position);
     return map;
   };
+  const dictMap = new Map();
+  for (const w of raw.dictionary || []) {
+    const meaning = {
+      ru: w.meaning_ru || w.meaning_en || "",
+      pl: w.meaning_pl || w.meaning_en || "",
+      en: w.meaning_en || "",
+    };
+    const prev = dictMap.get(w.hanzi);
+    if (!prev) {
+      dictMap.set(w.hanzi, { hanzi: w.hanzi, pinyin: w.pinyin, hsk: w.hsk_level, meaning });
+    } else {
+      if (!prev.pinyin.split(" / ").includes(w.pinyin)) prev.pinyin = `${prev.pinyin} / ${w.pinyin}`;
+      for (const lang of LANGS) {
+        if (meaning[lang] && !prev.meaning[lang].includes(meaning[lang])) {
+          prev.meaning[lang] = prev.meaning[lang] ? `${prev.meaning[lang]}; ${meaning[lang]}` : meaning[lang];
+        }
+      }
+    }
+  }
+
   const notesByLesson = groupBy(raw.lessonNotes);
   const sentencesByLesson = groupBy(raw.lessonSentences);
   const quizByLesson = groupBy(raw.lessonQuiz);
@@ -36,9 +67,27 @@ export function buildContent(raw) {
   const vocabMap = new Map(); // hanzi -> слово (слова с двумя чтениями объединяем)
 
   lessons.forEach((l, i) => {
-    const nodeId = l.hsk_level * 100 + l.position;
+    const nodeId = l.hsk_level * 1000 + l.position;
     const key = slugKey(l.slug);
-    const rows = (wordsByLesson.get(l.id) || []).sort((a, b) => a.position - b.position);
+    const rows = [...(wordsByLesson.get(l.id) || [])].sort((a, b) => a.position - b.position);
+    const knownHanzi = new Set(rows.map((r) => r.words.hanzi));
+    for (const it of slideWordEntries(slidesByLesson.get(l.id) || [])) {
+      if (knownHanzi.has(it.hanzi)) continue;
+      knownHanzi.add(it.hanzi);
+      const d = dictMap.get(it.hanzi);
+      rows.push({
+        position: 1000 + rows.length,
+        words: {
+          id: it.hanzi,
+          hanzi: it.hanzi,
+          pinyin: it.pinyin,
+          hsk_level: d?.hsk ?? l.hsk_level,
+          meaning_ru: it.m || d?.meaning?.ru || "",
+          meaning_pl: d?.meaning?.pl || d?.meaning?.en || it.m || "",
+          meaning_en: d?.meaning?.en || it.m || "",
+        },
+      });
+    }
 
     for (const { words: w } of rows) {
       const meaning = {
@@ -178,26 +227,6 @@ export function buildContent(raw) {
       mistake: { ru: g.mistake_ru, pl: g.mistake_pl, en: g.mistake_en },
       examples: g.examples || [],
     }));
-
-  const dictMap = new Map();
-  for (const w of raw.dictionary || []) {
-    const meaning = {
-      ru: w.meaning_ru || w.meaning_en || "",
-      pl: w.meaning_pl || w.meaning_en || "",
-      en: w.meaning_en || "",
-    };
-    const prev = dictMap.get(w.hanzi);
-    if (!prev) {
-      dictMap.set(w.hanzi, { hanzi: w.hanzi, pinyin: w.pinyin, hsk: w.hsk_level, meaning });
-    } else {
-      if (!prev.pinyin.split(" / ").includes(w.pinyin)) prev.pinyin = `${prev.pinyin} / ${w.pinyin}`;
-      for (const lang of LANGS) {
-        if (meaning[lang] && !prev.meaning[lang].includes(meaning[lang])) {
-          prev.meaning[lang] = prev.meaning[lang] ? `${prev.meaning[lang]}; ${meaning[lang]}` : meaning[lang];
-        }
-      }
-    }
-  }
 
   return { nodes, vocab: [...vocabMap.values()], stories, grammar, dictionary: [...dictMap.values()] };
 }

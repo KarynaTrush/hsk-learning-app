@@ -61,3 +61,13 @@
   .legend { gap: 0.75rem; font-size: 11px; }
   .feedback { padding: 0.85rem 1rem; gap: 0.65rem; }
 }
+.wordsHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.wordsSub { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); margin-top: 2px; }
+.wordsMore { width: 2.25rem; height: 2.25rem; border-radius: 9999px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted-foreground); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: transform 0.15s; }
+.wordsMore:hover { transform: rotate(45deg); }
+.wordGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
+.wordBtn { padding: 0.65rem 0.75rem; border-radius: 1rem; border: 2px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left; transition: transform 0.15s; }
+.wordBtn:hover { transform: translateY(-2px); }
+.wordHanzi { font-family: 'Noto Serif SC', serif; font-size: 26px; font-weight: 700; line-height: 1.15; }
+.wordPinyin { font-family: "Inter", sans-serif; font-size: 13px; font-weight: 700; color: var(--foreground); }
+.wordMeaning { font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--muted-foreground); line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }

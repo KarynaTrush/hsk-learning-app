@@ -82,3 +82,12 @@
 .toggleOn { color: var(--foreground); border-color: var(--tone, var(--primary)); }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 @media (max-width: 700px) { .page { padding: 0.9rem 0.8rem 2.5rem; } .card { padding: 1.15rem; } .options { grid-template-columns: 1fr; } .bigHanzi { font-size: 52px; } .title { font-size: 21px; } .optionBig { font-size: 26px; } }
+.writeCaption { font-family: "Inter", sans-serif; font-size: 15px; font-weight: 700; color: var(--foreground); text-align: center; margin-top: 0.5rem; }
+.writeStage { position: relative; width: 260px; height: 260px; max-width: 100%; margin: 0.5rem auto; border-radius: 1.25rem; background: var(--secondary); border: 2px solid var(--border); touch-action: none; overflow: hidden; }
+.writeGrid { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.writeGridLine { stroke: var(--border); stroke-width: 0.6; stroke-dasharray: 3 3; }
+.writeBox { position: absolute; inset: 0; }
+.writeStatus { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted-foreground); text-align: center; }
+.writeActions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 0.5rem; }
+.writePrimary { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.1rem; border-radius: 9999px; border: none; background: var(--tone, var(--primary)); color: #fff; font-family: "Inter", sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+.writeSecondary { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.1rem; border-radius: 9999px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted-foreground); font-family: "Inter", sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; }

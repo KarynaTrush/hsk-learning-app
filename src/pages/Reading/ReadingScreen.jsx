@@ -3,7 +3,7 @@ import { Lock, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import { STORIES } from "../../data/stories";
-import { nodeById } from "../../data/path";
+import { learnerLevel } from "../../lib/progress";
 import PageBanner from "../../components/ui/PageBanner";
 import StoryReader from "./StoryReader";
 import styles from "./Reading.module.css";
@@ -36,7 +36,7 @@ export default function ReadingScreen({ initialStoryId }) {
 
   const pick = (obj) => obj?.[lang] || obj?.ru || "";
   const storyTitle = (s) => (s.titleKey ? t(s.titleKey) : pick(s.title));
-  const currentLevel = Math.max(1, nodeById(state.activeNodeId)?.level ?? state.hskLevel ?? 1);
+  const currentLevel = learnerLevel(state);
   const readSet = useMemo(() => new Set(state.readStories || []), [state.readStories]);
 
   const filtered = useMemo(() => {

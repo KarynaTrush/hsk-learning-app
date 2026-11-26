@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Mic, Square, Volume2, Info } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Mic, Square, Volume2, Info, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
 import PageBanner from "../../components/ui/PageBanner";
+import { DICT } from "../../data/dictionary";
+import { learnerLevel } from "../../lib/progress";
 import { speakZh } from "../../lib/tts";
 import { detectPitch, contourFromPoints, scoreContour, toSemitones } from "../../lib/pitch";
 import styles from "./ToneVisualizer.module.css";
@@ -13,6 +15,26 @@ const TONES = [
   { number: 3, mark: "ǎ", syllable: "mǎ", hanzi: "马", color: "#D4A843" },
   { number: 4, mark: "à", syllable: "mà", hanzi: "骂", color: "#C83E34" },
 ];
+
+const TONE_CHARS = {
+  1: "āēīōūǖ",
+  2: "áéíóúǘ",
+  3: "ǎěǐǒǔǚ",
+  4: "àèìòùǜ",
+};
+const WORDS_PER_PAGE = 8;
+
+function toneOfSyllable(pinyin) {
+  if (!pinyin || /[\s/'’]/.test(pinyin)) return 0;
+  for (const [tone, chars] of Object.entries(TONE_CHARS)) {
+    if ([...pinyin].some((c) => chars.includes(c))) return Number(tone);
+  }
+  return 0;
+}
+
+function isSingleHanzi(hanzi) {
+  return [...hanzi].length === 1 && /\p{Script=Han}/u.test(hanzi);
+}
 
 const W = 560;
 const H = 200;
@@ -52,9 +74,12 @@ function average(list) {
 }
 
 export default function ToneVisualizerScreen({ initialTone }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { state, recordTone, recordExercise } = useAppState();
+  const lang = i18n.resolvedLanguage || "ru";
   const [activeTone, setActiveTone] = useState(initialTone || 1);
+  const [pickedWord, setPickedWord] = useState(null);
+  const [wordPage, setWordPage] = useState(0);
   const [phase, setPhase] = useState("idle");
   const [live, setLive] = useState([]);
   const [result, setResult] = useState(null);
@@ -63,6 +88,24 @@ export default function ToneVisualizerScreen({ initialTone }) {
   const session = useRef(null);
 
   const tone = TONES[activeTone - 1];
+  const level = learnerLevel(state);
+
+  const wordsByTone = useMemo(() => {
+    const groups = { 1: [], 2: [], 3: [], 4: [] };
+    for (const entry of DICT.values()) {
+      if (!entry.hsk || entry.hsk > level || !isSingleHanzi(entry.hanzi)) continue;
+      const n = toneOfSyllable(entry.pinyin);
+      if (n) groups[n].push(entry);
+    }
+    for (const list of Object.values(groups)) list.sort((a, b) => a.hsk - b.hsk || a.pinyin.localeCompare(b.pinyin));
+    return groups;
+  }, [level]);
+
+  const toneWords = wordsByTone[activeTone] || [];
+  const pageCount = Math.max(1, Math.ceil(toneWords.length / WORDS_PER_PAGE));
+  const shownWords = toneWords.slice((wordPage % pageCount) * WORDS_PER_PAGE, (wordPage % pageCount) * WORDS_PER_PAGE + WORDS_PER_PAGE);
+  const targetSyllable = pickedWord ? pickedWord.pinyin : tone.syllable;
+  const targetHanzi = pickedWord ? pickedWord.hanzi : tone.hanzi;
 
   useEffect(() => {
     toneRef.current = activeTone;
@@ -153,6 +196,8 @@ export default function ToneVisualizerScreen({ initialTone }) {
     if (phase === "recording") release();
     setPhase("idle");
     setActiveTone(n);
+    setPickedWord(null);
+    setWordPage(0);
     setResult(null);
     setLive([]);
     setError("");
@@ -173,8 +218,8 @@ export default function ToneVisualizerScreen({ initialTone }) {
           <div className={styles.card}>
             <p className={styles.kicker}>{t("toneLab.target")}</p>
             <div className={styles.syllableRow}>
-              <span className={styles.syllable} style={{ color: tone.color }}>{tone.syllable}</span>
-              <button type="button" className={styles.audioBtn} onClick={() => speakZh(tone.hanzi, 0.8)} aria-label={t("toneLab.hear")}>
+              <span className={styles.syllable} style={{ color: tone.color }}>{targetSyllable}</span>
+              <button type="button" className={styles.audioBtn} onClick={() => speakZh(targetHanzi, 0.8)} aria-label={t("toneLab.hear")}>
                 <Volume2 size={20} strokeWidth={1.7} />
               </button>
             </div>
@@ -207,6 +252,45 @@ export default function ToneVisualizerScreen({ initialTone }) {
                 </button>
               );
             })}
+          </div>
+
+          <div className={styles.card}>
+            <div className={styles.wordsHeader}>
+              <div>
+                <p className={styles.kicker}>{t("toneLab.wordsTitle")}</p>
+                <p className={styles.wordsSub}>{t("toneLab.wordsSub", { level })}</p>
+              </div>
+              {pageCount > 1 && (
+                <button type="button" className={styles.wordsMore} onClick={() => setWordPage((p) => p + 1)} aria-label={t("toneLab.wordsMore")}>
+                  <RefreshCw size={16} strokeWidth={1.8} />
+                </button>
+              )}
+            </div>
+            {shownWords.length === 0 && <p className={styles.example}>{t("toneLab.wordsEmpty")}</p>}
+            <div className={styles.wordGrid}>
+              {shownWords.map((w) => {
+                const active = pickedWord?.hanzi === w.hanzi;
+                return (
+                  <button
+                    key={w.hanzi}
+                    type="button"
+                    className={styles.wordBtn}
+                    onClick={() => {
+                      setPickedWord(w);
+                      setResult(null);
+                      setLive([]);
+                      setError("");
+                      speakZh(w.hanzi, 0.8);
+                    }}
+                    style={{ borderColor: active ? tone.color : "var(--border)", backgroundColor: active ? `${tone.color}12` : "var(--card)" }}
+                  >
+                    <span className={styles.wordHanzi} style={{ color: tone.color }}>{w.hanzi}</span>
+                    <span className={styles.wordPinyin}>{w.pinyin}</span>
+                    <span className={styles.wordMeaning}>{w.meaning?.[lang] || w.meaning?.en || ""}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className={styles.micWrap}>

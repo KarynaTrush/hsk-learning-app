@@ -148,6 +148,13 @@ for (const l of lessons) {
   linkByLesson.set(l.slug, linked);
 }
 
+const FORCE = ARG.includes("--force");
+const isStub = (l) => l.slides.length === 1 && l.slides[0].kind === "fact" && /Шаблон/.test(l.slides[0].payload?.text || "");
+const stubCount = lessons.filter(isStub).length;
+if (replaceLevel && stubCount > 0 && !FORCE) {
+  err(`уровень ${target}`, `${stubCount} из ${lessons.length} уроков состоят из заглушки «Шаблон…». Сборка остановлена, чтобы не удалить настоящие уроки. Заполните уроки или добавьте --force`);
+}
+
 if (errors.length) {
   console.log("ОШИБКИ (SQL не создан):\n" + errors.map((e) => "  - " + e).join("\n"));
   process.exit(1);
