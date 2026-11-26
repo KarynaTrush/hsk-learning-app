@@ -591,12 +591,13 @@ function ChatSimGame({ payload, onAnswer, onReady }) {
     })),
     [payload]
   );
+  useEffect(() => {
+    if (!questions.length) onReady();
+  }, [questions.length]);
   if (!questions.length) {
-    useEffect(() => onReady(), []);
     return (
       <div className={styles.factBox}>
         <h3 className={styles.title}>{payload.title || "WeChat Чаты"}</h3>
-        <button type="button" className={styles.primary} onClick={onReady} style={{ marginTop: "16px" }}>Продолжить</button>
       </div>
     );
   }
@@ -604,16 +605,12 @@ function ChatSimGame({ payload, onAnswer, onReady }) {
 }
 
 function ToneVizGame({ payload, onReady }) {
-  const { t } = useTranslation();
   useEffect(() => onReady(), []);
   return (
     <div className={styles.factBox}>
       <span className={styles.factEmoji}>🎤</span>
       <h3 className={styles.title}>{payload.title || "Тренажёр тонов"}</h3>
       <p className={styles.bodyText}>Используйте вкладку «Тоны» в боковом меню для записи голоса.</p>
-      <button type="button" className={styles.primary} style={{ marginTop: "16px" }} onClick={onReady}>
-        {t("slides.continue", "Продолжить")}
-      </button>
     </div>
   );
 }
@@ -659,6 +656,7 @@ function RadicalPuzzleGame({ payload, onAnswer, onReady }) {
     const ok = isMatch;
     setCorrect(ok);
     onAnswer?.({ correct: ok, ms: Date.now() - startedAt.current, q: { ref: `puzzle:${payload.hanzi}` } });
+    onReady();
   }
 
   return (
@@ -707,11 +705,7 @@ function RadicalPuzzleGame({ payload, onAnswer, onReady }) {
         />
       )}
 
-      {checked ? (
-        <button type="button" className={styles.primary} onClick={onReady}>
-          {t("slides.next", "Далее")}
-        </button>
-      ) : (
+      {!checked && (
         <button type="button" className={styles.primary} disabled={placed.length === 0} onClick={check}>
           {t("slides.check", "Проверить")}
         </button>
@@ -763,6 +757,7 @@ function RadicalBuildGame({ payload, onAnswer, onReady }) {
     const ok = isMatch;
     setCorrect(ok);
     onAnswer?.({ correct: ok, ms: Date.now() - startedAt.current, q: { ref: `build:${targetHanzi}` } });
+    if (currentIdx + 1 >= items.length) onReady();
   }
 
   function nextItem() {
@@ -815,9 +810,11 @@ function RadicalBuildGame({ payload, onAnswer, onReady }) {
           {t("slides.check", "Проверить")}
         </button>
       ) : (
-        <button type="button" className={styles.primary} onClick={nextItem}>
-          {currentIdx + 1 >= items.length ? t("slides.finishBlock", "Завершить") : t("slides.next", "Далее")}
-        </button>
+        currentIdx + 1 < items.length && (
+          <button type="button" className={styles.primary} onClick={nextItem}>
+            {t("slides.next", "Далее")}
+          </button>
+        )
       )}
     </div>
   );
@@ -852,8 +849,8 @@ function GameSlide({ payload, onAnswer, onReady }) {
       {payload.type === "chatsim" && <ChatSimGame payload={payload} onAnswer={onAnswer} onReady={onReady} />}
       {payload.type === "bughunt" && <BugHuntGame payload={payload} onAnswer={onAnswer} onReady={onReady} />}
       {payload.type === "tone_visualizer" && <ToneVizGame payload={payload} onReady={onReady} />}
-      {payload.type === "radical_puzzle" && <RadicalPuzzleGame payload={payload} onReady={onReady} />}
-      {payload.type === "radical_build" && <RadicalBuildGame payload={payload} onReady={onReady} />}
+      {payload.type === "radical_puzzle" && <RadicalPuzzleGame payload={payload} onAnswer={onAnswer} onReady={onReady} />}
+      {payload.type === "radical_build" && <RadicalBuildGame payload={payload} onAnswer={onAnswer} onReady={onReady} />}
     </div>
   );
 }

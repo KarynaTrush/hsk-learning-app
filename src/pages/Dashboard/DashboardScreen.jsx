@@ -9,6 +9,7 @@ import { buildRecommendations } from "../../lib/recommender";
 import { lastDays, minutesOn, sumMinutes, todayActivity } from "../../lib/activity";
 import { speakZh, ttsSupported } from "../../lib/tts";
 import { PATH_NODES, nodeById, nodeTitle } from "../../data/path";
+import { frontierNodeId } from "../../lib/progress";
 import { vocabByNode } from "../../data/vocab";
 import { GRAMMAR } from "../../data/grammar";
 import { STORIES } from "../../data/stories";
@@ -33,7 +34,7 @@ export default function DashboardScreen({ onOpenRecommendation, onStartLesson, o
   const name = state.user?.name;
   const greeting = name ? t("home.greeting", { name, date: today }) : t("home.greetingNoName", { date: today });
 
-  const node = nodeById(state.activeNodeId) || PATH_NODES[0];
+  const node = nodeById(frontierNodeId(state.completedNodeIds)) || PATH_NODES[0];
   const nodeWords = node ? vocabByNode(node.id) : [];
   const dueCount = dueCards(state.words).length;
   const level = Math.max(1, node?.level ?? 1);

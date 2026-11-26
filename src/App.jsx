@@ -23,6 +23,7 @@ import GoalsScreen from "./pages/Goals/GoalsScreen";
 import BackBar from "./components/ui/BackBar";
 import { useAppState } from "./state/AppState";
 import { nodeById, nodeTitle } from "./data/path";
+import { frontierNodeId } from "./lib/progress";
 import ContentGate from "./state/ContentGate";
 
 const RESTORABLE_SCREENS = ["main", "mistakes", "reviews"];
@@ -225,7 +226,7 @@ function AppInner() {
             {screen === "main" && activeTab === "dashboard" && (
               <DashboardScreen
                 onOpenRecommendation={openRecommendation}
-                onStartLesson={() => startLesson(state.activeNodeId)}
+                onStartLesson={() => startLesson(frontierNodeId(state.completedNodeIds))}
                 onStartReview={() => openSub("reviews")}
                 onOpenTones={() => goMain("tones")}
                 onOpenWriting={() => goMain("writing")}
