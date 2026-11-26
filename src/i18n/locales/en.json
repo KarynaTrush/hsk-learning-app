@@ -22,7 +22,9 @@
     "writingSub": "Characters and strokes",
     "readiness": "Readiness {{percent}}%",
     "goal": "Goal",
-    "goalPercent": "{{percent}}% of the way"
+    "goalPercent": "{{percent}}% of the way",
+    "help": "Guide",
+    "helpSub": "Site instructions"
   },
   "screens": {
     "lessonTitle": "Lesson · Food",

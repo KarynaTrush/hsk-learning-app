@@ -1,242 +1,40 @@
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: nowrap;
-  padding: 0.85rem 2.5rem;
-  padding-top: calc(0.85rem + env(safe-area-inset-top, 0px));
-  background: var(--card);
-  border-bottom: 2px solid var(--border);
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.02);
-  width: 100%;
-  min-width: 0;
-}
-
-.titleWrapper {
-  position: relative;
-  padding-left: 0.85rem;
-  flex: 1;
-  min-width: 0;
-}
-
-.titleWrapper::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.15rem;
-  bottom: 0.15rem;
-  width: 4px;
-  border-radius: 9999px;
-  background: linear-gradient(180deg, var(--primary), #e8534a);
-}
-
-.mainTitle {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--foreground);
-  line-height: 1.2;
-}
-
-.subtitle {
-  font-family: "Inter", sans-serif;
-  font-size: 12px;
-  color: var(--muted-foreground);
-  margin-top: 2px;
-}
-
-.actionsWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
-  flex: none;
-}
-
-.langSelector {
-  display: flex;
-  gap: 0.15rem;
-  padding: 0.2rem;
-  border-radius: 0.85rem;
-  background: var(--secondary);
-  border: 2px solid var(--border);
-}
-
-.langButton {
-  padding: 0.35rem 0.65rem;
-  border: none;
-  border-radius: 0.55rem;
-  background: transparent;
-  color: var(--muted-foreground);
-  font-family: "Inter", sans-serif;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.langButton:hover {
-  color: var(--foreground);
-}
-
-.langButtonActive {
-  background: var(--primary);
-  color: #fff;
-  box-shadow: 0 2px 0 rgba(150, 40, 33, 0.55);
-}
-
-.divider {
-  width: 2px;
-  height: 1.6rem;
-  border-radius: 9999px;
-  background: var(--border);
-}
-
-.iconButton {
-  position: relative;
-  width: 2.5rem;
-  height: 2.5rem;
-  flex: none;
-  border-radius: 9999px;
-  border: 2px solid var(--border);
-  background: var(--card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 3px 0 var(--border);
-  transition: transform 0.12s, border-color 0.2s;
-}
-
-.iconButton:hover {
-  transform: translateY(-2px);
-  border-color: var(--primary);
-}
-
-.iconButton:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 0 var(--border);
-}
-
-.notificationDot {
-  position: absolute;
-  top: 0.15rem;
-  right: 0.15rem;
-  width: 0.65rem;
-  height: 0.65rem;
-  border-radius: 9999px;
-  background: var(--primary);
-  border: 2px solid var(--card);
-}
-
-.profileAvatar {
-  width: 2.75rem;
-  height: 2.75rem;
-  flex: none;
-  border-radius: 9999px;
-  border: 2.5px solid var(--primary);
-  background: rgba(200, 62, 52, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  cursor: pointer;
-  padding: 0;
-  box-shadow: 0 3px 0 rgba(150, 40, 33, 0.35);
-  transition: transform 0.12s;
-}
-
-.profileAvatar:hover {
-  transform: translateY(-2px);
-}
-
-.avatarHanzi {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--primary);
-}
+.header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: nowrap; padding: 1rem 2.5rem; padding-top: calc(1rem + env(safe-area-inset-top, 0px)); background: linear-gradient(180deg, var(--card) 0%, rgba(200, 62, 52, 0.01) 100%); border-bottom: 2px solid var(--border); box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04); width: 100%; min-width: 0; }
+.titleWrapper { position: relative; padding-left: 1rem; flex: 1; min-width: 0; }
+.titleWrapper::before { content: ""; position: absolute; left: 0; top: 0.1rem; bottom: 0.1rem; width: 5px; border-radius: 9999px; background: linear-gradient(180deg, var(--primary), #d94e42); box-shadow: 0 0 10px rgba(200, 62, 52, 0.5); }
+.mainTitle { font-family: 'Noto Serif SC', serif; font-size: 24px; font-weight: 700; color: var(--foreground); line-height: 1.25; letter-spacing: -0.01em; }
+.subtitle { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); margin-top: 3px; font-weight: 500; }
+.actionsWrapper { display: flex; align-items: center; gap: 0.65rem; flex-wrap: nowrap; flex: none; }
+.langSelector { display: flex; gap: 0.2rem; padding: 0.25rem; border-radius: 0.9rem; background: var(--secondary); border: 2px solid var(--border); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04); }
+.langButton { padding: 0.4rem 0.75rem; border: none; border-radius: 0.65rem; background: transparent; color: var(--muted-foreground); font-family: "Inter", sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.langButton:hover { color: var(--foreground); background: rgba(200, 62, 52, 0.05); }
+.langButtonActive { background: linear-gradient(135deg, var(--primary), #b93226); color: #fff; box-shadow: 0 4px 10px rgba(200, 62, 52, 0.4); }
+.divider { width: 2px; height: 1.75rem; border-radius: 9999px; background: var(--border); }
+.iconButton { position: relative; width: 2.65rem; height: 2.65rem; flex: none; border-radius: 9999px; border: 2px solid var(--border); background: linear-gradient(135deg, var(--card), var(--secondary)); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, box-shadow 0.2s; }
+.iconButton:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 6px 16px rgba(200, 62, 52, 0.2); }
+.iconButton:active { transform: translateY(1px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+.notificationDot { position: absolute; top: 0.2rem; right: 0.2rem; width: 0.7rem; height: 0.7rem; border-radius: 9999px; background: var(--primary); border: 2px solid var(--card); box-shadow: 0 0 8px var(--primary); }
+.profileAvatar { width: 2.9rem; height: 2.9rem; flex: none; border-radius: 9999px; border: 2.5px solid var(--primary); background: linear-gradient(135deg, rgba(200, 62, 52, 0.08), rgba(200, 62, 52, 0.2)); display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; padding: 0; box-shadow: 0 5px 14px rgba(200, 62, 52, 0.3); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.profileAvatar:hover { transform: translateY(-3px); box-shadow: 0 7px 18px rgba(200, 62, 52, 0.4); }
+.avatarHanzi { font-family: 'Noto Serif SC', serif; font-size: 19px; font-weight: 700; color: var(--primary); }
 
 @media (max-width: 800px) {
-  .header {
-    padding: 0.65rem 0.85rem;
-    padding-top: calc(0.65rem + env(safe-area-inset-top, 0px));
-    gap: 0.4rem;
-  }
-
-  .titleWrapper {
-    padding-left: 0.6rem;
-  }
-
-  .mainTitle {
-    font-size: 16px;
-  }
-
-  .subtitle,
-  .divider {
-    display: none;
-  }
-
-  .actionsWrapper {
-    gap: 0.3rem;
-  }
-
-  .langSelector {
-    padding: 0.15rem;
-    border-width: 1.5px;
-    border-radius: 0.65rem;
-  }
-
-  .langButton {
-    padding: 0.25rem 0.42rem;
-    font-size: 10.5px;
-    border-radius: 0.45rem;
-  }
-
-  .langButtonActive {
-    box-shadow: none;
-  }
-
-  .iconButton {
-    width: 2.05rem;
-    height: 2.05rem;
-    border-width: 1.5px;
-    box-shadow: 0 2px 0 var(--border);
-  }
-
-  .profileAvatar {
-    width: 2.2rem;
-    height: 2.2rem;
-    border-width: 2px;
-    box-shadow: 0 2px 0 rgba(150, 40, 33, 0.35);
-  }
-
-  .avatarHanzi {
-    font-size: 15px;
-  }
+  .header { padding: 0.75rem 1rem; padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)); gap: 0.5rem; }
+  .titleWrapper { padding-left: 0.65rem; }
+  .mainTitle { font-size: 17px; }
+  .subtitle, .divider { display: none; }
+  .actionsWrapper { gap: 0.35rem; }
+  .langSelector { padding: 0.15rem; border-width: 1.5px; border-radius: 0.7rem; }
+  .langButton { padding: 0.3rem 0.5rem; font-size: 11px; border-radius: 0.5rem; }
+  .langButtonActive { box-shadow: none; }
+  .iconButton { width: 2.25rem; height: 2.25rem; border-width: 1.5px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04); }
+  .profileAvatar { width: 2.35rem; height: 2.35rem; border-width: 2px; box-shadow: 0 3px 8px rgba(150, 40, 33, 0.35); }
+  .avatarHanzi { font-size: 16px; }
 }
 
 @media (max-width: 375px) {
-  .header {
-    padding: 0.55rem 0.6rem;
-  }
-  .mainTitle {
-    font-size: 14.5px;
-  }
-  .langButton {
-    padding: 0.2rem 0.32rem;
-    font-size: 10px;
-  }
-  .iconButton {
-    width: 1.9rem;
-    height: 1.9rem;
-  }
-  .profileAvatar {
-    width: 2rem;
-    height: 2rem;
-  }
+  .header { padding: 0.6rem 0.7rem; }
+  .mainTitle { font-size: 15px; }
+  .langButton { padding: 0.25rem 0.35rem; font-size: 10px; }
+  .iconButton { width: 2rem; height: 2rem; }
+  .profileAvatar { width: 2.1rem; height: 2.1rem; }
 }

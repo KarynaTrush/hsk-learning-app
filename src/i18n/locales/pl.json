@@ -22,7 +22,9 @@
     "writingSub": "Znaki i kreski",
     "readiness": "Gotowość {{percent}}%",
     "goal": "Cel",
-    "goalPercent": "{{percent}}% drogi"
+    "goalPercent": "{{percent}}% drogi",
+    "help": "Przewodnik",
+    "helpSub": "Instrukcja obsługi"
   },
   "screens": {
     "lessonTitle": "Lekcja · Jedzenie",

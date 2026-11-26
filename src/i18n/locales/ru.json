@@ -22,7 +22,9 @@
     "writingSub": "Иероглифы и черты",
     "readiness": "Готовность {{percent}}%",
     "goal": "Цель",
-    "goalPercent": "{{percent}}% пути"
+    "goalPercent": "{{percent}}% пути",
+    "help": "Руководство",
+    "helpSub": "Инструкция по сайту"
   },
   "screens": {
     "lessonTitle": "Урок · Еда",

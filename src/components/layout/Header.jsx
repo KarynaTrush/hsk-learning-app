@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Search, Bell, Sun, Moon } from "lucide-react";
+import { Search, Bell, Sun, Moon, HelpCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LANG_CODES, CODE_TO_LABEL, LANG_STORAGE_KEY } from "../../i18n";
 import { useAppState } from "../../state/AppState";
@@ -8,7 +8,7 @@ import { dueCards } from "../../lib/srs";
 import overlay from "../overlays/Overlays.module.css";
 import styles from "./Header.module.css";
 
-export default function Header({ title, subtitle, onProfileClick, onOpenCharacter }) {
+export default function Header({ title, subtitle, onProfileClick, onOpenCharacter, onHelpClick }) {
   const { t, i18n } = useTranslation();
   const { state, toggleTheme } = useAppState();
   const currentLang = CODE_TO_LABEL[i18n.resolvedLanguage] || CODE_TO_LABEL[i18n.language] || "RU";
@@ -41,6 +41,17 @@ export default function Header({ title, subtitle, onProfileClick, onOpenCharacte
       </div>
 
       <div className={styles.actionsWrapper}>
+        <button 
+          className={styles.iconButton} 
+          aria-label={t("header.help", "Руководство")} 
+          onClick={onHelpClick}
+          title="Руководство по сайту"
+        >
+          <HelpCircle size={16} color="var(--muted-foreground)" strokeWidth={1.8} />
+        </button>
+
+        <div className={styles.divider} />
+
         <div className={styles.langSelector}>
           {["EN", "RU", "PL"].map((lang) => (
             <button

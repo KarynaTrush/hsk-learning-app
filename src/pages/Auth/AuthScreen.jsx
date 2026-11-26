@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Sun, Moon } from "lucide-react";
 import { useAppState } from "../../state/AppState";
+import { LANG_CODES, LANG_STORAGE_KEY } from "../../i18n";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import styles from "./Auth.module.css";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+const LANG_ITEMS = Array.isArray(LANG_CODES)
+  ? LANG_CODES.map((code) => ({ label: code.toUpperCase(), code }))
+  : LANG_CODES instanceof Set
+    ? Array.from(LANG_CODES).map((code) => ({ label: code.toUpperCase(), code }))
+    : Object.entries(LANG_CODES || {}).map(([label, code]) => ({ label, code }));
+
 export default function AuthScreen({ onAuth }) {
-  const { t } = useTranslation();
-  const { register, signIn, login } = useAppState();
+  const { t, i18n } = useTranslation();
+  const { register, signIn, login, toggleTheme, state } = useAppState();
+  const currentLang = i18n.resolvedLanguage || i18n.language || "ru";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +27,11 @@ export default function AuthScreen({ onAuth }) {
   const [detail, setDetail] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
+
+  function changeLanguage(code) {
+    i18n.changeLanguage(code);
+    localStorage.setItem(LANG_STORAGE_KEY, code);
+  }
 
   const handleInputFocus = (e) => {
     e.target.style.borderColor = "var(--primary)";
@@ -71,10 +86,10 @@ export default function AuthScreen({ onAuth }) {
     <div className={styles.container}>
       <div className={styles.leftPanel}>
         <div className={styles.bgCharacterXue}>
-          <span>學</span>
+          <span>爱</span>
         </div>
         <div className={styles.bgCharacterYu}>
-          <span>語</span>
+          <span>星河</span>
         </div>
         <div className={styles.bgCharacterDao}>
           <span>道</span>
@@ -117,6 +132,29 @@ export default function AuthScreen({ onAuth }) {
       </div>
 
       <div className={styles.rightPanel}>
+        <div className={styles.authTopBar}>
+          <div className={styles.authLangSelector}>
+            {LANG_ITEMS.map(({ label, code }) => (
+              <button
+                key={code}
+                type="button"
+                className={`${styles.authLangBtn} ${currentLang.toLowerCase().startsWith(code.toLowerCase()) ? styles.authLangBtnActive : ""}`}
+                onClick={() => changeLanguage(code)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className={styles.authThemeBtn}
+            onClick={toggleTheme}
+            aria-label={t("account.theme")}
+          >
+            {state?.theme === "dark" ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
+          </button>
+        </div>
+
         <div className="lg:hidden flex items-center gap-3 mb-10">
           <div className={styles.mobileLogoBox}>
             <span className={styles.mobileLogoHanzi}>漢</span>
