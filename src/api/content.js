@@ -25,25 +25,24 @@ async function fetchAll(build) {
 async function fetchRaw() {
   if (!supabase) throw new Error("Supabase не настроен (.env.local)");
   const [lessons, lessonWords, texts, sentences, textVocab, lessonNotes, lessonSentences, lessonQuiz, grammar, dictionary, lessonSlides] = await Promise.all([
-    fetchAll(() => supabase.from("lessons").select("*").order("hsk_level").order("position")),
+    fetchAll(() => supabase.from("lessons").select("*").order("hsk_level").order("position").order("id")),
     fetchAll(() =>
       supabase
         .from("lesson_words")
         .select("lesson_id, position, words(id, hanzi, pinyin, hsk_level, meaning_en, meaning_ru, meaning_pl)")
         .order("lesson_id")
         .order("position")
+        .order("word_id")
     ),
     fetchAll(() => supabase.from("texts").select("*").order("id")),
     fetchAll(() => supabase.from("text_sentences").select("*").order("text_id").order("position")),
     fetchAll(() => supabase.from("text_vocab").select("*").order("text_id").order("position")),
-    fetchAll(() => supabase.from("lesson_notes").select("*").order("lesson_id").order("position")),
-    fetchAll(() => supabase.from("lesson_sentences").select("*").order("lesson_id").order("position")),
-    fetchAll(() => supabase.from("lesson_quiz").select("*").order("lesson_id").order("position")),
-    fetchAll(() => supabase.from("grammar_points").select("*").order("hsk_level").order("position")).catch(() => []),
-    fetchAll(() =>
-      supabase.from("words").select("hanzi, pinyin, hsk_level, meaning_en, meaning_ru, meaning_pl").order("id")
-    ).catch(() => []),
-    fetchAll(() => supabase.from("lesson_slides").select("*").order("lesson_id").order("position")).catch(() => []),
+    fetchAll(() => supabase.from("lesson_notes").select("*").order("lesson_id").order("position").order("id")),
+    fetchAll(() => supabase.from("lesson_sentences").select("*").order("lesson_id").order("position").order("id")),
+    fetchAll(() => supabase.from("lesson_quiz").select("*").order("lesson_id").order("position").order("id")),
+    fetchAll(() => supabase.from("grammar_points").select("*").order("hsk_level").order("position").order("id")),
+    fetchAll(() => supabase.from("words").select("hanzi, pinyin, hsk_level, meaning_en, meaning_ru, meaning_pl").order("id")),
+    fetchAll(() => supabase.from("lesson_slides").select("*").order("lesson_id").order("position").order("id")),
   ]);
   return { lessons, lessonWords, texts, sentences, textVocab, lessonNotes, lessonSentences, lessonQuiz, grammar, dictionary, lessonSlides };
 }

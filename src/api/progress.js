@@ -10,10 +10,10 @@ export async function loadProgress(userId) {
 }
 
 export async function saveProgress(userId, state) {
-  const { error } = await supabase
-    .from("user_progress")
-    .upsert({ user_id: userId, state, updated_at: new Date().toISOString() });
+  const stamp = new Date().toISOString();
+  const { error } = await supabase.from("user_progress").upsert({ user_id: userId, state, updated_at: stamp });
   if (error) throw error;
+  return stamp;
 }
 export async function logRecommendations(userId, items) {
   if (!items.length) return;
@@ -29,6 +29,24 @@ export async function logRecommendations(userId, items) {
       policy: "rules-v1",
     }))
   );
+  if (error) throw error;
+}
+
+export async function logAnswers(userId, events) {
+  if (!events.length) return;
+  const rows = events.map((e) => ({
+    user_id: userId,
+    hanzi: e.hanzi,
+    correct: e.correct,
+    response_ms: e.responseMs ?? null,
+    source: e.source ?? null,
+    exercise_type: e.type ?? null,
+    skill: e.skill ?? null,
+    lesson_id: e.lessonId ?? null,
+    policy: e.policy ?? null,
+    ...(e.createdAt ? { created_at: e.createdAt } : {}),
+  }));
+  const { error } = await supabase.from("answer_events").insert(rows);
   if (error) throw error;
 }
 

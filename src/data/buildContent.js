@@ -225,7 +225,7 @@ export function buildContent(raw) {
       body: { ru: g.body_ru, pl: g.body_pl, en: g.body_en },
       theory: { ru: g.theory_ru, pl: g.theory_pl, en: g.theory_en },
       mistake: { ru: g.mistake_ru, pl: g.mistake_pl, en: g.mistake_en },
-      examples: g.examples || [],
+      examples: Array.isArray(g.examples) ? g.examples : [],
     }));
 
   return { nodes, vocab: [...vocabMap.values()], stories, grammar, dictionary: [...dictMap.values()] };

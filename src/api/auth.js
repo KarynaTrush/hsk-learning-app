@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { removeAvatar } from "./avatar";
 
 export class AuthError extends Error {
   constructor(code) {
@@ -105,6 +106,8 @@ export async function setNewPassword(newPassword) {
 
 export async function deleteAccount() {
   try {
+    const { data } = await client().auth.getUser();
+    await removeAvatar(data?.user?.id);
     const { error } = await client().rpc("delete_my_account");
     if (error) throw error;
     await signOut();

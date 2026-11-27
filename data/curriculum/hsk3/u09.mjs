@@ -5,7 +5,7 @@ export const B9 = [9, T("Урок 9", "Lekcja 9", "Lesson 9")];
 export default [
   lesson({
     slug: "hsk3-09-1",
-    position: 41,
+    position: 42,
     icon: "学",
     block: B9,
     title: T("9.1 Подурок 1", "9.1 Podlekcja 1", "9.1 Sub-lesson 1"),
@@ -15,7 +15,7 @@ export default [
   }),
   lesson({
     slug: "hsk3-09-2",
-    position: 42,
+    position: 43,
     icon: "学",
     block: B9,
     title: T("9.2 Подурок 2", "9.2 Podlekcja 2", "9.2 Sub-lesson 2"),
@@ -25,7 +25,7 @@ export default [
   }),
   lesson({
     slug: "hsk3-09-3",
-    position: 43,
+    position: 44,
     icon: "学",
     block: B9,
     title: T("9.3 Подурок 3", "9.3 Podlekcja 3", "9.3 Sub-lesson 3"),
@@ -35,7 +35,7 @@ export default [
   }),
   lesson({
     slug: "hsk3-09-4",
-    position: 44,
+    position: 45,
     icon: "学",
     block: B9,
     title: T("9.4 Подурок 4", "9.4 Podlekcja 4", "9.4 Sub-lesson 4"),
@@ -45,7 +45,7 @@ export default [
   }),
   lesson({
     slug: "hsk3-09-5",
-    position: 45,
+    position: 46,
     icon: "学",
     block: B9,
     title: T("9.5 Подурок 5", "9.5 Podlekcja 5", "9.5 Sub-lesson 5"),

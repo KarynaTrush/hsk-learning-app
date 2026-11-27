@@ -39,7 +39,8 @@ export default function GrammarTopic({ topic, onBack }) {
   }
 
   const step = exercises && exercises[index];
-  const finished = exercises && index >= exercises.length;
+  const noExercises = exercises && exercises.length === 0;
+  const finished = exercises && exercises.length > 0 && index >= exercises.length;
 
   return (
     <div className={styles.container}>
@@ -112,6 +113,12 @@ export default function GrammarTopic({ topic, onBack }) {
               ) : (
                 <ChoiceStep key={step.id} step={step} lang={lang} t={t} onAnswered={answered} onNext={() => setIndex((i) => i + 1)} />
               )}
+            </div>
+          )}
+          {noExercises && (
+            <div className={styles.result}>
+              <p className={styles.practiceText}>{t("grammarPage.noExercises")}</p>
+              <button type="button" className={styles.startBtn} onClick={onBack}>{t("grammarPage.backToList")}</button>
             </div>
           )}
           {finished && (

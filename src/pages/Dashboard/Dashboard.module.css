@@ -73,3 +73,16 @@
 .modalCancel { border: 2px solid var(--border); background: var(--card); color: var(--foreground); box-shadow: 0 3px 0 var(--border); }
 .modalSave { border: none; background: var(--primary); color: #fff; box-shadow: 0 4px 0 rgba(150, 40, 33, 0.55); }
 .tasksCard { justify-content: space-between; }
+
+@media (max-width: 640px) {
+  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
+  .card { padding: 1.1rem 1.15rem; border-radius: 1.4rem; }
+  .heroSeal { width: 3.75rem; height: 3.75rem; font-size: 28px; }
+  .heroTitle { font-size: 19px; }
+  .heroCta { padding: 0.95rem 1.1rem; font-size: 14.5px; }
+  .phraseZh { font-size: 26px; }
+  .modalBackdrop { padding: 0.75rem; align-items: flex-end; }
+  .modal { max-height: calc(100dvh - 1.5rem); overflow-y: auto; border-radius: 1.5rem; padding: 1.25rem; }
+  .modalCancel, .modalSave { flex: 1; text-align: center; }
+  .stepper button { width: 2.5rem; height: 2.5rem; }
+}

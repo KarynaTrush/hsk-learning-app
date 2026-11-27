@@ -39,10 +39,17 @@ export default function ReadingScreen({ initialStoryId }) {
   const currentLevel = learnerLevel(state);
   const readSet = useMemo(() => new Set(state.readStories || []), [state.readStories]);
 
+  const storiesWithImages = useMemo(() => {
+    return STORIES.map((s, idx) => ({
+      ...s,
+      imageUrl: s.imageUrl || `/Stories/${idx + 1}.jpg`,
+    }));
+  }, []);
+
   const filtered = useMemo(() => {
     const f = FILTERS.find((x) => x.id === filter);
-    return f?.test ? STORIES.filter(f.test) : STORIES;
-  }, [filter]);
+    return f?.test ? storiesWithImages.filter(f.test) : storiesWithImages;
+  }, [filter, storiesWithImages]);
 
   const filterLabel = (id) => {
     if (id === "all") return t("stories.all");
@@ -51,7 +58,7 @@ export default function ReadingScreen({ initialStoryId }) {
     return t(`reading.topic.${id}`);
   };
 
-  const opened = STORIES.find((s) => s.id === openId);
+  const opened = storiesWithImages.find((s) => s.id === openId);
   if (opened) {
     return (
       <StoryReader
@@ -63,7 +70,7 @@ export default function ReadingScreen({ initialStoryId }) {
     );
   }
 
-  const openCount = STORIES.filter((s) => UNLOCK_ALL || s.hsk <= currentLevel).length;
+  const openCount = storiesWithImages.filter((s) => UNLOCK_ALL || s.hsk <= currentLevel).length;
 
   return (
     <div className={styles.container}>
@@ -72,7 +79,7 @@ export default function ReadingScreen({ initialStoryId }) {
         hanzi="书"
         kicker={t("reading.bannerKicker", { level: currentLevel })}
         title={t("nav.stories")}
-        subtitle={t("reading.bannerSubtitle", { open: openCount, total: STORIES.length })}
+        subtitle={t("reading.bannerSubtitle", { open: openCount, total: storiesWithImages.length })}
       />
 
       <div className={styles.filters}>

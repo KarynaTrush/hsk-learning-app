@@ -12,6 +12,7 @@
 .panel {
   width: min(420px, 100%);
   max-height: calc(100vh - 110px);
+  max-height: calc(100dvh - 110px);
   overflow: auto;
   background: var(--card);
   border: 1px solid var(--border);
@@ -82,4 +83,14 @@
   font-size: 13px;
   color: var(--muted-foreground);
   padding: 12px 4px;
+}
+
+@media (max-width: 640px) {
+  .backdrop {
+    justify-content: center;
+    padding: calc(4.5rem + env(safe-area-inset-top, 0px)) 0.75rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+  .panel {
+    max-height: calc(100dvh - 6rem - env(safe-area-inset-top, 0px));
+  }
 }

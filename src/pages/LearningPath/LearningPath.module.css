@@ -75,3 +75,19 @@
 }
 
 .seal_available .sealInner { background: color-mix(in srgb, var(--tone) 8%, var(--card)); }
+
+@media (max-width: 640px) {
+  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
+  .topStrip { gap: 0.55rem; }
+  .chip { padding: 0.5rem 0.8rem; border-radius: 0.85rem; gap: 0.55rem; }
+  .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.45rem; }
+  .tab { min-width: 0; padding: 0.5rem 0.25rem; font-size: 13px; border-radius: 0.85rem; }
+  .banner { gap: 0.9rem; padding: 1.1rem; min-height: 0; border-radius: 1.4rem; }
+  .bannerHanzi, .bannerRing { width: 3.75rem; height: 3.75rem; }
+  .bannerHanzi { font-size: 28px; border-width: 2px; }
+  .bannerRing { font-size: 13px; }
+  .bannerTitle { font-size: 20px; }
+  .block { border-radius: 1.4rem; padding: 0.9rem 0.5rem 0.4rem; background-size: 18px 18px; }
+  .blockHeader { gap: 0.65rem; padding: 0 0.35rem; }
+  .blockTitle { font-size: 17px; }
+}

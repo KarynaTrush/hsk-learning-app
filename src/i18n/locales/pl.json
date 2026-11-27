@@ -1285,6 +1285,7 @@
     }
   },
   "grammarPage": {
+    "noExercises": "Dla tej zasady nie ma jeszcze ćwiczeń.",
     "backToList": "Do listy tematów",
     "theory": "Teoria",
     "mistake": "Typowy błąd",

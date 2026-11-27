@@ -7,10 +7,11 @@ export async function fetchProfile(userId) {
 }
  
 export async function updateProfile(userId, patch) {
-  const { error } = await supabase
-    .from("profiles")
-    .update({ ...patch, updated_at: new Date().toISOString() })
-    .eq("id", userId);
+  const stamped = { ...patch, updated_at: new Date().toISOString() };
+  const { data, error } = await supabase.from("profiles").update(stamped).eq("id", userId).select("id");
   if (error) throw error;
+  if (data && data.length) return;
+  const { error: insertError } = await supabase.from("profiles").insert({ id: userId, ...stamped });
+  if (insertError) throw insertError;
 }
  

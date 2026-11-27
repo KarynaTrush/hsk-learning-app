@@ -15,6 +15,15 @@ async function toSquareBlob(file, size = 256) {
   });
 }
 
+export async function removeAvatar(userId) {
+  if (!supabase || !userId) return;
+  try {
+    await supabase.storage.from("avatars").remove([`${userId}/avatar.jpg`]);
+  } catch (e) {
+    console.warn("Не удалось удалить аватар:", e);
+  }
+}
+
 export async function uploadAvatar(userId, file) {
   if (!supabase) throw new Error("not_configured");
   if (!file.type.startsWith("image/")) throw new Error("avatar_type");

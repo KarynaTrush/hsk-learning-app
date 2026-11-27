@@ -156,7 +156,7 @@ function AppInner() {
 
   if (!authReady) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "var(--background)", color: "var(--muted-foreground)" }}>
+      <div className="min-h-dvh flex items-center justify-center" style={{ backgroundColor: "var(--background)", color: "var(--muted-foreground)" }}>
         {t("auth.loading")}
       </div>
     );
@@ -170,7 +170,7 @@ function AppInner() {
 
   if (isAuth) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-dvh bg-background flex flex-col">
         {screen === "auth" && (
           <div className="flex-1 flex">
             <AuthScreen onAuth={() => saveAndSetScreen(needsPlacement ? "placement" : "main")} />
@@ -209,7 +209,7 @@ function AppInner() {
   const footer = <Footer onNavigateTab={goMain} onOpenSub={openSub} />;
 
   return (
-    <div className="min-h-screen flex flex-col w-full overflow-x-clip" style={{ backgroundColor: "var(--background)" }}>
+    <div className="min-h-dvh flex flex-col w-full overflow-x-clip" style={{ backgroundColor: "var(--background)" }}>
       <div className="flex-1 flex w-full items-stretch">
         <Sidebar isMain={isMain} activeTab={activeTab} goMain={goMain} />
         <div className="flex-1 flex flex-col min-w-0 w-full">

@@ -39,7 +39,7 @@
   --sidebar-accent-foreground: #1A1A1A;
   --sidebar-border: rgba(26, 26, 26, 0.1);
   --sidebar-ring: rgba(200, 62, 52, 0.3);
-  --bottom-nav-height: 4.5rem;
+  --bottom-nav-height: calc(4.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .dark {
@@ -131,7 +131,20 @@
   html,
   body {
     max-width: 100vw;
-    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  button,
+  a,
+  select,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
   }
 
   body {
@@ -146,5 +159,24 @@
   html {
     font-size: var(--font-size, 16px);
     scroll-behavior: smooth;
+  }
+}
+
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

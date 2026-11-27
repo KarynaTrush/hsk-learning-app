@@ -3,6 +3,7 @@ import { createCard, reviewCard } from "../lib/srs";
 import { vocabByHanzi, vocabByNode } from "../data/vocab";
 import { PATH_NODES, nodesBeforeLevel, firstNodeOfLevel } from "../data/path";
 import { NODE_SCHEME, migrateProgress, frontierNodeId } from "../lib/progress";
+import { enqueueAnswer, enqueueRecommendations, flushQueue } from "../api/eventQueue";
 import { supabase } from "../api/supabase";
 import * as authApi from "../api/auth";
 import * as profileApi from "../api/profile";
@@ -126,8 +127,11 @@ export function AppStateProvider({ children }) {
   const lastPushed = useRef("");
   const lastProfileSync = useRef("");
   const syncBlocked = useRef(false);
+  const lastCloudAt = useRef(0);
   const userRef = useRef(state.user);
   userRef.current = state.user;
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -156,6 +160,7 @@ export function AppStateProvider({ children }) {
     ]);
     const cloudState = progress?.state && Object.keys(progress.state).length ? migrateProgress(progress.state) : null;
     const cloudAt = progress?.updated_at ? new Date(progress.updated_at).getTime() : 0;
+    lastCloudAt.current = cloudAt;
     const local = loadState();
 
     const useLocal = preferLocalAt > 0 && local.user?.id === authUser.id && preferLocalAt > cloudAt;
@@ -239,7 +244,8 @@ export function AppStateProvider({ children }) {
     const timer = setTimeout(async () => {
       setSyncStatus("saving");
       try {
-        await progressApi.saveProgress(u.id, rest);
+        const savedAt = await progressApi.saveProgress(u.id, rest);
+        lastCloudAt.current = new Date(savedAt).getTime();
         lastPushed.current = json;
         const meta = JSON.stringify([rest.hskLevel, rest.targetHsk, rest.placementDone]);
         if (meta !== lastProfileSync.current) {
@@ -260,10 +266,60 @@ export function AppStateProvider({ children }) {
     return () => clearTimeout(timer);
   }, [state, authReady, retryTick]);
 
+  useEffect(() => {
+    const id = state.user?.id;
+    if (!supabase || !id || state.user?.guest) return undefined;
+    let busy = false;
+    const isClean = () => {
+      const { user, ...rest } = stateRef.current;
+      return JSON.stringify(rest) === lastPushed.current;
+    };
+    const check = async () => {
+      if (busy || document.visibilityState !== "visible" || syncBlocked.current || !isClean()) return;
+      busy = true;
+      try {
+        const progress = await progressApi.loadProgress(id);
+        const at = progress?.updated_at ? new Date(progress.updated_at).getTime() : 0;
+        if (!progress?.state || !Object.keys(progress.state).length || at <= lastCloudAt.current) return;
+        if (!isClean()) return;
+        const adopted = { ...defaultState(), ...migrateProgress(progress.state), user: stateRef.current.user };
+        adopted.daily = ensureDaily(adopted);
+        const { user, ...adoptedRest } = adopted;
+        lastPushed.current = JSON.stringify(adoptedRest);
+        lastCloudAt.current = at;
+        setState(adopted);
+      } catch (e) {
+        console.warn("Не удалось обновить прогресс из облака:", e);
+      } finally {
+        busy = false;
+      }
+    };
+    document.addEventListener("visibilitychange", check);
+    window.addEventListener("focus", check);
+    return () => {
+      document.removeEventListener("visibilitychange", check);
+      window.removeEventListener("focus", check);
+    };
+  }, [state.user?.id, state.user?.guest]);
+
+  useEffect(() => {
+    const id = state.user?.id;
+    if (!supabase || !id || state.user?.guest) return undefined;
+    const run = () => flushQueue(id).catch(() => {});
+    run();
+    const timer = setInterval(run, 30000);
+    window.addEventListener("online", run);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("online", run);
+    };
+  }, [state.user?.id, state.user?.guest]);
+
   function logEvent(hanzi, correct, source, responseMs = null, meta = {}) {
     const u = userRef.current;
     if (!supabase || !u?.id || u.guest || syncBlocked.current) return;
-    progressApi.logAnswer(u.id, { hanzi, correct, source, responseMs, type: meta.type, skill: meta.skill, lessonId: meta.lessonId, policy: meta.policy }).catch((e) => console.warn("answer_events:", e));
+    enqueueAnswer(u.id, { hanzi, correct, source, responseMs, type: meta.type, skill: meta.skill, lessonId: meta.lessonId, policy: meta.policy, createdAt: new Date().toISOString() });
+    flushQueue(u.id).catch((e) => console.warn("event queue:", e));
   }
 
   const api = useMemo(() => ({
@@ -534,9 +590,8 @@ export function AppStateProvider({ children }) {
     logRecommendations(items, action) {
       const u = userRef.current;
       if (!supabase || !u?.id || u.guest || syncBlocked.current) return;
-      progressApi
-        .logRecommendations(u.id, items.map((r) => ({ ...r, action })))
-        .catch((e) => console.warn("recommendation_events:", e));
+      enqueueRecommendations(u.id, items.map((r) => ({ ...r, action })));
+      flushQueue(u.id).catch((e) => console.warn("event queue:", e));
     },
     addStudySeconds(sec) {
       setState((s) => {
