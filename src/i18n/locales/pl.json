@@ -192,6 +192,7 @@
     "empty": "W tej lekcji nie ma jeszcze słów"
   },
   "profile": {
+    "sectionLessons": "{{done}} z {{total}} lekcji",
     "meta": "Uczy się od 14 tygodni · HSK 3 → 4 · 5-dniowa passa 🔥",
     "certified": "HSK 3 Certyfik.",
     "aiming": "Celuje w HSK 4",
@@ -1017,6 +1018,8 @@
     "allGood": "Na razie nie ma innych rekomendacji. Tak trzymaj!"
   },
   "toneLab": {
+    "shapeHint": "Oceniany jest kształt melodii, a nie wysokość Twojego głosu: mów tak, jak Ci wygodnie.",
+    "autoHint": "Nagrywanie zatrzyma się samo, gdy skończysz mówić.",
     "wordsTitle": "Słowa do ćwiczeń",
     "wordsSub": "Jednosylabowe słowa na Twoim poziomie (HSK {{level}} i niżej). Kliknij słowo, aby posłuchać i powtórzyć.",
     "wordsMore": "Pokaż inne słowa",
@@ -1123,6 +1126,7 @@
     }
   },
   "writing": {
+    "emptyList": "Na razie pusto",
     "fromMistakes": "Moje błędy",
     "kicker": "Kaligrafia",
     "subtitle": "Obejrzyj kolejność kresek, a potem napisz znak myszką lub palcem. Aplikacja sprawdza każdą kreskę.",
@@ -1152,9 +1156,11 @@
     "rule3": "Najpierw w lewo w dół, potem w prawo w dół (人).",
     "rule4": "Ramkę zamyka się na końcu (日).",
     "result": {
-      "1": "Niezła próba. Spróbuj jeszcze raz!",
-      "2": "Dobrze!",
-      "3": "Idealnie!"
+      "1": "Udało się dokończyć. Poćwicz jeszcze!",
+      "2": "Nieźle, tak trzymaj!",
+      "3": "Dobrze!",
+      "4": "Świetnie!",
+      "5": "Idealnie!"
     },
     "mistakesTotal": "Błędów: {{count}}"
   },

@@ -6,10 +6,9 @@ import { useAppState } from "../../state/AppState";
 import { dueCards } from "../../lib/srs";
 import { dateKey } from "../../lib/dates";
 import { DATE_LOCALES } from "../../i18n";
-import { PATH_NODES, nodeTitle } from "../../data/path";
+import { HSK_LEVELS, blockTitle } from "../../data/path";
 import { frontierLevel } from "../../lib/progress";
 import { evaluateAchievements } from "../../lib/achievements";
-import { vocabByNode } from "../../data/vocab";
 import { GRAMMAR } from "../../data/grammar";
 import PageBanner from "../../components/ui/PageBanner";
 import styles from "./Profile.module.css";
@@ -51,7 +50,7 @@ function barColor(pct) {
 export default function ProfileScreen({ onMenuSelect }) {
   const { t, i18n } = useTranslation();
   const { state } = useAppState();
-  const [activeHsk, setActiveHsk] = useState(Math.min(Math.max(state.hskLevel || 1, 1), 6));
+  const [activeHsk, setActiveHsk] = useState(() => frontierLevel(state.completedNodeIds) ?? Math.min(Math.max(state.hskLevel || 1, 1), 6));
 
   const lang = i18n.resolvedLanguage || "ru";
   const locale = DATE_LOCALES[lang] || "ru-RU";
@@ -77,16 +76,15 @@ export default function ProfileScreen({ onMenuSelect }) {
 
   const dynamics = useMemo(() => monthlySeries(state.wordsLog, wordsCount, locale), [state.wordsLog, wordsCount, locale]);
 
-  const categoryRows = useMemo(
-    () =>
-      PATH_NODES.filter((n) => n.level === activeHsk).map((n) => {
-        const lessonWords = vocabByNode(n.id);
-        const learned = lessonWords.filter((w) => state.words?.[w.hanzi]).length;
-        const pct = lessonWords.length ? Math.round((learned / lessonWords.length) * 100) : 0;
-        return { id: n.id, label: nodeTitle(n, lang), pct };
-      }),
-    [activeHsk, state.words, lang]
-  );
+  const categoryRows = useMemo(() => {
+    const done = new Set(state.completedNodeIds || []);
+    return (HSK_LEVELS[String(activeHsk)]?.groups || []).map((group) => {
+      const total = group.nodes.length;
+      const finished = group.nodes.filter((n) => done.has(n.id)).length;
+      const pct = total ? Math.round((finished / total) * 100) : 0;
+      return { id: group.position, label: blockTitle(group, lang), finished, total, pct };
+    });
+  }, [activeHsk, state.completedNodeIds, lang]);
 
   const actions = [
     { key: "errors", icon: <AlertCircle size={20} color="var(--primary)" strokeWidth={1.5} />, iconBg: "rgba(200,62,52,0.08)", label: t("profile.errors"), sublabel: t("profile.errorsSub"), badge: mistakesCount, badgeColor: "var(--primary)", badgeBg: "rgba(200,62,52,0.1)" },
@@ -171,7 +169,7 @@ export default function ProfileScreen({ onMenuSelect }) {
           <div className={styles.chartHeaderColumn}>
             <p className={styles.chartTitle}>{t("profile.progressByCategory")}</p>
             <div className={styles.hskTabsWrapper}>
-              {[1, 2, 3, 4, 5, 6].map((level) => (
+              {[0, 1, 2, 3, 4, 5, 6].map((level) => (
                 <button
                   key={level}
                   onClick={() => setActiveHsk(level)}
@@ -186,7 +184,10 @@ export default function ProfileScreen({ onMenuSelect }) {
             {categoryRows.length === 0 && <p className={styles.statSubLabel}>{t("path.comingSoon")}</p>}
             {categoryRows.map((item) => (
               <div key={item.id} className={styles.categoryRow}>
-                <span className={styles.categoryLabel}>{item.label}</span>
+                <div className={styles.categoryInfo}>
+                  <span className={styles.categoryLabel} title={item.label}>{item.label}</span>
+                  <span className={styles.categorySub}>{t("profile.sectionLessons", { done: item.finished, total: item.total })}</span>
+                </div>
                 <div className={styles.categoryBarTrack}>
                   <div className={styles.categoryBarFill} style={{ width: `${item.pct}%`, backgroundColor: barColor(item.pct), transition: "width 0.3s ease" }} />
                 </div>

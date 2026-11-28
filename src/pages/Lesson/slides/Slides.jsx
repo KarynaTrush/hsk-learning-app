@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { speakZh, ttsSupported } from "../../../lib/tts";
 import { isCjk } from "../../../lib/segment";
 import { useAppState } from "../../../state/AppState";
+import { starsFor, isPass, MAX_STARS } from "../../../lib/writingScore";
 import { buildRecallQuestions, matchesShort, normalizeQuestion, shuffle } from "../../../lib/slideLogic";
 import styles from "./Slides.module.css";
 
@@ -439,7 +440,7 @@ function WriteSlide({ payload, onReady, onWrite }) {
       drawingWidth: 16,
       showHintAfterMisses: 2,
       highlightOnComplete: true,
-      leniency: 1.1,
+      leniency: 1.3,
       onLoadCharDataError: () => {
         if (!cancelled) setFailed(true);
       },
@@ -460,10 +461,10 @@ function WriteSlide({ payload, onReady, onWrite }) {
           strokes = 1;
         }
         if (cancelled) return;
-        const stars = total === 0 ? 3 : total <= Math.max(2, Math.round(strokes * 0.3)) ? 2 : 1;
+        const stars = starsFor(total, strokes);
         setCharResult({ stars, mistakes: total });
         onWrite?.({ kind: "char", char, mistakes: total, stars, ms: Date.now() - startedAt.current });
-        wordOk.current[active] = (wordOk.current[active] ?? true) && stars >= 2;
+        wordOk.current[active] = (wordOk.current[active] ?? true) && isPass(stars);
         if (charIdx + 1 >= chars.length) {
           onWrite?.({ kind: "word", hanzi: item.hanzi, correct: wordOk.current[active] });
           setDoneWords((d) => ({ ...d, [active]: true }));
@@ -538,7 +539,7 @@ function WriteSlide({ payload, onReady, onWrite }) {
           </div>
           {charResult ? (
             <p className={styles.writeStatus}>
-              {t(`writing.result.${charResult.stars}`)} · {t("writing.mistakesTotal", { count: charResult.mistakes })}
+              {"★".repeat(charResult.stars)}{"☆".repeat(MAX_STARS - charResult.stars)} {t(`writing.result.${charResult.stars}`)} · {t("writing.mistakesTotal", { count: charResult.mistakes })}
             </p>
           ) : (
             <p className={styles.writeStatus}>

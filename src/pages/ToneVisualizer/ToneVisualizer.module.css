@@ -1,73 +1,87 @@
-.container { padding: 1.75rem 2.5rem 4rem; width: 100%; max-width: 1480px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
-.grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.5rem; align-items: start; }
-.col { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
-.card { padding: 1.5rem; border-radius: 1.75rem; border: 1px solid var(--border); background: var(--card); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.03); background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 22px 22px; display: flex; flex-direction: column; gap: 0.75rem; }
+.container { padding: 0.9rem 1.5rem 1.25rem; width: 100%; max-width: 1280px; margin: 0 auto; }
+.layout { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr); gap: 1rem; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 0.85rem; min-width: 0; }
+.card { padding: 1rem 1.15rem; border-radius: 1.4rem; border: 1px solid var(--border); background: var(--card); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.03); background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 22px 22px; display: flex; flex-direction: column; gap: 0.6rem; }
 .kicker { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
-.syllableRow { display: flex; align-items: center; gap: 1.25rem; }
-.syllable { font-family: 'Noto Serif SC', serif; font-size: 78px; font-weight: 700; line-height: 1; }
-.audioBtn { width: 3.25rem; height: 3.25rem; border-radius: 9999px; border: 2px solid rgba(200, 62, 52, 0.25); background: rgba(200, 62, 52, 0.06); color: var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
-.audioBtn:hover { transform: scale(1.06); }
-.pill { align-self: flex-start; padding: 0.45rem 1rem; border-radius: 9999px; font-family: "Inter", sans-serif; font-size: 13px; font-weight: 700; }
-.example { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted-foreground); }
-.toneGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
-.toneBtn { padding: 0.9rem 0.75rem; border-radius: 1.25rem; border: 2px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; transition: transform 0.15s; }
+.toneRow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.6rem; }
+.toneBtn { padding: 0.5rem 0.3rem 0.55rem; border-radius: 1rem; border: 2px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0; transition: transform 0.15s; }
 .toneBtn:hover { transform: translateY(-2px); }
-.toneMark { font-family: 'Noto Serif SC', serif; font-size: 30px; font-weight: 700; line-height: 1.1; }
-.toneName { font-family: "Inter", sans-serif; font-size: 12.5px; font-weight: 700; }
-.toneDesc { font-family: "Inter", sans-serif; font-size: 11px; color: var(--muted-foreground); text-align: center; }
-.micWrap { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; padding: 0.5rem 0 0; }
-.micBtn { width: 6rem; height: 6rem; border-radius: 9999px; border: none; cursor: pointer; color: #fff; background: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 7px 0 rgba(150, 40, 33, 0.55), 0 14px 30px rgba(200, 62, 52, 0.3); transition: transform 0.15s; }
-.micBtn:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(150, 40, 33, 0.55); }
+.toneMark { font-family: 'Noto Serif SC', serif; font-size: 26px; font-weight: 700; line-height: 1.15; }
+.toneName { font-family: "Inter", sans-serif; font-size: 11.5px; font-weight: 700; }
+.targetHead { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+.pill { padding: 0.3rem 0.8rem; border-radius: 9999px; font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; }
+.targetBody { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.targetInfo { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.syllableRow { display: flex; align-items: center; gap: 0.9rem; }
+.syllable { font-family: 'Noto Serif SC', serif; font-size: 64px; font-weight: 700; line-height: 1.05; }
+.audioBtn { width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: 9999px; border: 2px solid rgba(200, 62, 52, 0.25); background: rgba(200, 62, 52, 0.06); color: var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
+.audioBtn:hover { transform: scale(1.06); }
+.example { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted-foreground); }
+.micWrap { display: flex; flex-direction: column; align-items: center; gap: 0.45rem; flex-shrink: 0; max-width: 9.5rem; }
+.micBtn { width: 5rem; height: 5rem; border-radius: 9999px; border: none; cursor: pointer; color: #fff; background: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 0 rgba(150, 40, 33, 0.55), 0 10px 22px rgba(200, 62, 52, 0.28); transition: transform 0.15s; }
+.micBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(150, 40, 33, 0.55); }
 .micRecording { animation: micPulse 1.2s ease-in-out infinite; }
-.micStatus { font-family: "Inter", sans-serif; font-size: 13.5px; color: var(--muted-foreground); }
-.errorText { max-width: 20rem; text-align: center; font-family: "Inter", sans-serif; font-size: 13px; color: var(--primary); }
+.micStatus { font-family: "Inter", sans-serif; font-size: 12px; line-height: 1.3; text-align: center; color: var(--muted-foreground); }
+.autoHint { font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted-foreground); }
+.errorText { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--primary); }
+.wordsHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+.wordsSub { font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
+.wordsMore { width: 2.1rem; height: 2.1rem; border-radius: 9999px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted-foreground); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: transform 0.15s; }
+.wordsMore:hover { transform: rotate(45deg); }
+.wordGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+.wordBtn { padding: 0.5rem 0.55rem; border-radius: 0.9rem; border: 2px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 0; text-align: left; min-width: 0; transition: transform 0.15s; }
+.wordBtn:hover { transform: translateY(-2px); }
+.wordHanzi { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 700; line-height: 1.15; }
+.wordPinyin { font-family: "Inter", sans-serif; font-size: 12.5px; font-weight: 700; color: var(--foreground); }
+.wordMeaning { max-width: 100%; font-family: "Inter", sans-serif; font-size: 10.5px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vizHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-.vizTitle { font-family: 'Noto Serif SC', serif; font-size: 19px; font-weight: 700; color: var(--foreground); }
-.vizSub { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); margin-top: 2px; }
+.vizTitle { font-family: 'Noto Serif SC', serif; font-size: 18px; font-weight: 700; color: var(--foreground); }
+.vizSub { font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
 .score { font-family: "Inter", sans-serif; font-size: 15px; font-weight: 800; white-space: nowrap; }
 .rec { display: inline-flex; align-items: center; gap: 0.45rem; font-family: "Inter", sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--primary); }
 .rec i { width: 0.55rem; height: 0.55rem; border-radius: 9999px; background: var(--primary); animation: micPulse 0.9s ease-in-out infinite; }
-.svg { width: 100%; height: auto; background: var(--secondary); border-radius: 1.25rem; }
-.legend { display: flex; flex-wrap: wrap; gap: 1.1rem; font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted-foreground); }
+.svg { width: 100%; height: auto; background: var(--secondary); border-radius: 1.1rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted-foreground); }
 .legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
 .legend i { width: 1.6rem; height: 3px; border-radius: 9999px; display: inline-block; }
-.feedback { display: flex; gap: 0.85rem; align-items: flex-start; padding: 1rem 1.25rem; border-radius: 1.25rem; }
+.shapeHint { font-family: "Inter", sans-serif; font-size: 12px; line-height: 1.45; color: var(--muted-foreground); }
+.feedback { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.75rem 1rem; border-radius: 1.1rem; }
 .feedbackOk { background: rgba(79, 121, 66, 0.1); border: 1.5px solid var(--accent); }
 .feedbackBad { background: rgba(200, 62, 52, 0.07); border: 1.5px solid var(--primary); }
-.feedbackIcon { width: 2rem; height: 2rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+.feedbackIcon { width: 1.9rem; height: 1.9rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
 .feedbackOk .feedbackIcon { background: var(--accent); }
 .feedbackBad .feedbackIcon { background: var(--primary); }
-.feedbackTitle { font-family: "Inter", sans-serif; font-size: 14.5px; font-weight: 700; color: var(--foreground); }
-.feedbackText { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted-foreground); margin-top: 2px; line-height: 1.5; }
-.accList { display: flex; flex-direction: column; gap: 0.8rem; }
-.accRow { display: flex; align-items: center; gap: 0.9rem; }
-.accMark { width: 1.6rem; font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; text-align: center; }
-.accTrack { flex: 1; height: 0.65rem; border-radius: 9999px; background: var(--muted); overflow: hidden; }
+.feedbackTitle { font-family: "Inter", sans-serif; font-size: 14px; font-weight: 700; color: var(--foreground); }
+.feedbackText { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); margin-top: 2px; line-height: 1.45; }
+.accGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.6rem; }
+.accTile { display: flex; flex-direction: column; gap: 0.4rem; padding: 0.55rem 0.65rem; border-radius: 0.9rem; background: var(--secondary); }
+.accTop { display: flex; align-items: baseline; justify-content: space-between; gap: 0.4rem; }
+.accMark { font-family: 'Noto Serif SC', serif; font-size: 19px; font-weight: 700; line-height: 1; }
+.accValue { font-family: "Inter", sans-serif; font-size: 13px; font-weight: 800; }
+.accTrack { height: 0.45rem; border-radius: 9999px; background: var(--muted); overflow: hidden; }
 .accFill { height: 100%; border-radius: 9999px; transition: width 0.5s ease; }
-.accValue { width: 3rem; text-align: right; font-family: "Inter", sans-serif; font-size: 13.5px; font-weight: 800; }
 @keyframes micPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
-@media (max-width: 1000px) { .container { padding: 1.25rem 1rem 3rem; } .grid { grid-template-columns: 1fr; } }
-@media (max-width: 640px) {
-  .container { padding: 1rem 0.75rem 2.5rem; gap: 1rem; }
-  .card { padding: 1.15rem; border-radius: 1.35rem; gap: 0.6rem; }
-  .syllable { font-size: 62px; }
-  .audioBtn { width: 2.75rem; height: 2.75rem; }
-  .toneGrid { gap: 0.6rem; }
-  .toneBtn { padding: 0.75rem 0.5rem; border-radius: 1rem; }
-  .toneMark { font-size: 26px; }
-  .micBtn { width: 5rem; height: 5rem; }
-  .vizHeader { flex-wrap: wrap; gap: 0.5rem; }
-  .vizTitle { font-size: 17px; }
-  .legend { gap: 0.75rem; font-size: 11px; }
-  .feedback { padding: 0.85rem 1rem; gap: 0.65rem; }
+
+@media (max-width: 1000px) {
+  .container { padding: 0.9rem 1rem 2.5rem; }
+  .layout { display: flex; flex-direction: column; gap: 0.85rem; }
+  .col { display: contents; }
+  .toneRow { order: 1; }
+  .targetCard { order: 2; }
+  .vizCard { order: 3; }
+  .feedback { order: 4; }
+  .wordsCard { order: 5; }
+  .accCard { order: 6; }
 }
-.wordsHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-.wordsSub { font-family: "Inter", sans-serif; font-size: 12.5px; color: var(--muted-foreground); margin-top: 2px; }
-.wordsMore { width: 2.25rem; height: 2.25rem; border-radius: 9999px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted-foreground); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: transform 0.15s; }
-.wordsMore:hover { transform: rotate(45deg); }
-.wordGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
-.wordBtn { padding: 0.65rem 0.75rem; border-radius: 1rem; border: 2px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left; transition: transform 0.15s; }
-.wordBtn:hover { transform: translateY(-2px); }
-.wordHanzi { font-family: 'Noto Serif SC', serif; font-size: 26px; font-weight: 700; line-height: 1.15; }
-.wordPinyin { font-family: "Inter", sans-serif; font-size: 13px; font-weight: 700; color: var(--foreground); }
-.wordMeaning { font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--muted-foreground); line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+@media (max-width: 640px) {
+  .container { padding: 0.75rem 0.75rem 2.5rem; }
+  .card { padding: 0.9rem 1rem; border-radius: 1.25rem; }
+  .syllable { font-size: 52px; }
+  .micBtn { width: 4.25rem; height: 4.25rem; }
+  .micWrap { max-width: 7.5rem; }
+  .wordMeaning { display: none; }
+  .wordBtn { align-items: center; padding: 0.45rem 0.3rem; }
+  .accMark { font-size: 17px; }
+  .vizTitle { font-size: 16.5px; }
+}

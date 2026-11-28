@@ -2,7 +2,8 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { createCard, reviewCard } from "../lib/srs";
 import { vocabByHanzi, vocabByNode } from "../data/vocab";
 import { PATH_NODES, nodesBeforeLevel, firstNodeOfLevel } from "../data/path";
-import { NODE_SCHEME, migrateProgress, frontierNodeId } from "../lib/progress";
+import { NODE_SCHEME, STAR_SCALE, migrateProgress, frontierNodeId } from "../lib/progress";
+import { isPass } from "../lib/writingScore";
 import { enqueueAnswer, enqueueRecommendations, flushQueue } from "../api/eventQueue";
 import { supabase } from "../api/supabase";
 import * as authApi from "../api/auth";
@@ -41,6 +42,7 @@ export function defaultState() {
     streak: { count: 0, lastDate: null },
     daily: { date: todayKey(), lesson: false, srs: false, tones: false },
     nodeScheme: NODE_SCHEME,
+    starScale: STAR_SCALE,
     completedNodeIds: [],
     activeNodeId: 1,
     practiceHanzis: null,
@@ -552,13 +554,13 @@ export function AppStateProvider({ children }) {
             ...(s.writingStats || {}),
             [char]: { attempts: prev.attempts + 1, mistakes: prev.mistakes + mistakes, bestStars: Math.max(prev.bestStars, stars) },
           },
-          stats: bumpStats(s.stats, stars >= 2),
-          skills: bumpSkill(s.skills, "writing", stars >= 2),
+          stats: bumpStats(s.stats, isPass(stars)),
+          skills: bumpSkill(s.skills, "writing", isPass(stars)),
           activityLog: addActivity(s.activityLog, "writes"),
           streak: bumpStreak(s),
         };
       });
-      logEvent(`write:${char}`, stars >= 2, "lesson", ms, { type: "write", skill: "writing" });
+      logEvent(`write:${char}`, isPass(stars), "lesson", ms, { type: "write", skill: "writing" });
     },
     recordGrammar({ topicId, correct, ms, type }) {
       setState((s) => {

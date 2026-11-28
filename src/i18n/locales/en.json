@@ -192,6 +192,7 @@
     "empty": "This lesson has no words yet"
   },
   "profile": {
+    "sectionLessons": "{{done}} of {{total}} lessons",
     "meta": "Learning for 14 weeks · HSK 3 → 4 · 5-day streak 🔥",
     "certified": "HSK 3 certified",
     "aiming": "Aiming for HSK 4",
@@ -1017,6 +1018,8 @@
     "allGood": "No other recommendations for now. Keep it up!"
   },
   "toneLab": {
+    "shapeHint": "Only the shape of the melody is scored, not how high your voice is: speak at whatever pitch is comfortable.",
+    "autoHint": "Recording stops by itself when you finish.",
     "wordsTitle": "Practice words",
     "wordsSub": "One-syllable words at your level (HSK {{level}} and below). Tap a word to hear it and repeat.",
     "wordsMore": "Show other words",
@@ -1123,6 +1126,7 @@
     }
   },
   "writing": {
+    "emptyList": "Nothing here yet",
     "fromMistakes": "My mistakes",
     "kicker": "Calligraphy",
     "subtitle": "Watch the stroke order, then write the character with your mouse or finger. The app checks every stroke.",
@@ -1152,9 +1156,11 @@
     "rule3": "Falling left before falling right (人).",
     "rule4": "Close the frame last (日).",
     "result": {
-      "1": "Good try. Give it another go!",
-      "2": "Well done!",
-      "3": "Perfect!"
+      "1": "You finished it. Keep practising!",
+      "2": "Not bad, keep going!",
+      "3": "Good!",
+      "4": "Great!",
+      "5": "Perfect!"
     },
     "mistakesTotal": "Mistakes: {{count}}"
   },

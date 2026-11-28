@@ -1,3 +1,4 @@
+import { isPass } from "../../../lib/writingScore";
 import React, { useCallback, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -41,7 +42,7 @@ export default function SlideLesson({ node, onExit }) {
       return;
     }
     recordWriting({ char: info.char, mistakes: info.mistakes, stars: info.stars, ms: info.ms });
-    setResults((r) => [...r, { correct: info.stars >= 2, type: "write", skill: "writing" }]);
+    setResults((r) => [...r, { correct: isPass(info.stars), type: "write", skill: "writing" }]);
   }
 
   function next() {

@@ -2,11 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Mic, Square, Volume2, Info, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
-import PageBanner from "../../components/ui/PageBanner";
 import { DICT } from "../../data/dictionary";
 import { learnerLevel } from "../../lib/progress";
 import { speakZh } from "../../lib/tts";
-import { detectPitch, contourFromPoints, scoreContour, toSemitones } from "../../lib/pitch";
+import { detectPitch, contourFromFrames, scoreContour, chartTemplate, alignToTemplate } from "../../lib/pitch";
 import styles from "./ToneVisualizer.module.css";
 
 const TONES = [
@@ -37,33 +36,22 @@ function isSingleHanzi(hanzi) {
 }
 
 const W = 560;
-const H = 200;
-const PAD = 30;
-const MAX_MS = 3500;
+const H = 230;
+const PAD_X = 34;
+const PAD_Y = 28;
+const MAX_MS = 4500;
+const SILENCE_MS = 700;
 
-function getTonePath(tone, w, h) {
-  const bottom = h - PAD;
-  const top = PAD;
-  const mid = h / 2;
-  const x0 = PAD;
-  const x1 = w - PAD;
-  switch (tone) {
-    case 1: return `M ${x0} ${top + 15} L ${x1} ${top + 15}`;
-    case 2: return `M ${x0} ${mid + 20} C ${x0 + (x1 - x0) * 0.3} ${mid + 10}, ${x0 + (x1 - x0) * 0.7} ${top + 20}, ${x1} ${top + 10}`;
-    case 3: return `M ${x0} ${mid - 10} C ${x0 + (x1 - x0) * 0.25} ${mid + 35}, ${x0 + (x1 - x0) * 0.55} ${bottom - 10}, ${x0 + (x1 - x0) * 0.75} ${bottom - 10} S ${x1 - PAD} ${mid - 5}, ${x1} ${mid - 25}`;
-    case 4: return `M ${x0} ${top + 12} C ${x0 + (x1 - x0) * 0.3} ${top + 25}, ${x0 + (x1 - x0) * 0.7} ${bottom - 30}, ${x1} ${bottom - 10}`;
-    default: return "";
-  }
+function levelY(level) {
+  return PAD_Y + ((5.6 - level) / 5.2) * (H - PAD_Y * 2);
 }
 
-function userPath(semitones) {
-  if (!semitones || semitones.length < 2) return "";
-  const mid = H / 2;
-  const scale = 13;
-  return semitones
-    .map((s, i) => {
-      const x = PAD + (i / (semitones.length - 1)) * (W - PAD * 2);
-      const y = Math.max(PAD - 10, Math.min(H - PAD + 10, mid - s * scale));
+function linePath(levels) {
+  if (!levels || levels.length < 2) return "";
+  return levels
+    .map((level, i) => {
+      const x = PAD_X + (i / (levels.length - 1)) * (W - PAD_X * 2);
+      const y = Math.max(PAD_Y - 14, Math.min(H - PAD_Y + 14, levelY(level)));
       return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
     })
     .join(" ");
@@ -124,15 +112,15 @@ export default function ToneVisualizerScreen({ initialTone }) {
   }
 
   function finish(s) {
-    const contour = contourFromPoints(s.points);
-    if (!contour) {
+    const extracted = contourFromFrames(s.frames);
+    if (!extracted) {
       setError("noVoice");
       setPhase("idle");
       return;
     }
     const target = toneRef.current;
-    const scored = scoreContour(contour, target);
-    setResult({ ...scored, contour, target });
+    const scored = scoreContour(extracted.contour, target);
+    setResult({ ...scored, contour: extracted.contour, target });
     setLive([]);
     setPhase("done");
     recordTone(target, scored.score);
@@ -155,7 +143,7 @@ export default function ToneVisualizerScreen({ initialTone }) {
     let stream;
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true },
       });
     } catch {
       setError("micDenied");
@@ -167,7 +155,7 @@ export default function ToneVisualizerScreen({ initialTone }) {
     analyser.fftSize = 2048;
     ctx.createMediaStreamSource(stream).connect(analyser);
     const buffer = new Float32Array(analyser.fftSize);
-    const s = { stream, ctx, points: [], raf: 0, startedAt: performance.now() };
+    const s = { stream, ctx, frames: [], raf: 0, startedAt: performance.now(), peak: 0, voiced: 0, lastVoiced: 0 };
     session.current = s;
     let last = 0;
 
@@ -177,9 +165,21 @@ export default function ToneVisualizerScreen({ initialTone }) {
         last = now;
         analyser.getFloatTimeDomainData(buffer);
         const r = detectPitch(buffer, ctx.sampleRate);
-        if (r && r.clarity >= 0.85) {
-          s.points.push({ freq: r.freq, clarity: r.clarity });
-          if (s.points.length > 1 && s.points.length % 3 === 0) setLive(toSemitones(s.points.map((p) => p.freq)));
+        if (r) {
+          s.peak = Math.max(s.peak, r.rms);
+          s.frames.push({ t: now - s.startedAt, freq: r.freq, clarity: r.clarity, rms: r.rms });
+          if (r.clarity >= 0.75 && r.rms >= Math.max(0.004, s.peak * 0.2)) {
+            s.voiced += 1;
+            s.lastVoiced = now;
+          }
+          if (s.frames.length % 4 === 0) {
+            const partial = contourFromFrames(s.frames);
+            if (partial) setLive(alignToTemplate(partial.contour, toneRef.current));
+          }
+        }
+        if (s.voiced >= 8 && now - s.lastVoiced > SILENCE_MS) {
+          stop();
+          return;
         }
       }
       if (now - s.startedAt > MAX_MS) {
@@ -204,32 +204,16 @@ export default function ToneVisualizerScreen({ initialTone }) {
   }
 
   const recording = phase === "recording";
-  const shown = recording ? live : result?.contour;
+  const shown = recording ? live : result ? alignToTemplate(result.contour, result.target) : null;
   const score = result?.score;
   const good = score !== undefined && score >= 80;
-  const bestOther = result && result.best.tone !== result.target ? result.best.tone : null;
+  const bestOther = result && result.best.tone !== result.target && result.best.score >= 50 ? result.best.tone : null;
 
   return (
     <div className={styles.container}>
-      <PageBanner color="#3C8D93" hanzi="声" kicker={t("toneLab.kicker")} title={t("nav.tones")} subtitle={t("toneLab.subtitle")} />
-
-      <div className={styles.grid}>
+      <div className={styles.layout}>
         <div className={styles.col}>
-          <div className={styles.card}>
-            <p className={styles.kicker}>{t("toneLab.target")}</p>
-            <div className={styles.syllableRow}>
-              <span className={styles.syllable} style={{ color: tone.color }}>{targetSyllable}</span>
-              <button type="button" className={styles.audioBtn} onClick={() => speakZh(targetHanzi, 0.8)} aria-label={t("toneLab.hear")}>
-                <Volume2 size={20} strokeWidth={1.7} />
-              </button>
-            </div>
-            <div className={styles.pill} style={{ backgroundColor: `${tone.color}14`, border: `1px solid ${tone.color}40`, color: tone.color }}>
-              {t(`toneLab.tone.${tone.number}.name`)} · {t(`toneLab.tone.${tone.number}.desc`)}
-            </div>
-            <p className={styles.example}>{t("toneLab.example")}: <em>{t(`toneLab.tone.${tone.number}.example`)}</em></p>
-          </div>
-
-          <div className={styles.toneGrid}>
+          <div className={styles.toneRow}>
             {TONES.map((item) => {
               const active = activeTone === item.number;
               return (
@@ -241,20 +225,51 @@ export default function ToneVisualizerScreen({ initialTone }) {
                   style={{
                     borderColor: active ? item.color : "var(--border)",
                     backgroundColor: active ? `${item.color}12` : "var(--card)",
-                    boxShadow: active ? `0 4px 0 ${item.color}55` : "0 4px 0 var(--border)",
+                    boxShadow: active ? `0 3px 0 ${item.color}55` : "0 3px 0 var(--border)",
                   }}
                 >
                   <span className={styles.toneMark} style={{ color: active ? item.color : "var(--foreground)" }}>{item.mark}</span>
                   <span className={styles.toneName} style={{ color: active ? item.color : "var(--muted-foreground)" }}>
                     {t(`toneLab.tone.${item.number}.name`)}
                   </span>
-                  <span className={styles.toneDesc}>{t(`toneLab.tone.${item.number}.desc`)}</span>
                 </button>
               );
             })}
           </div>
 
-          <div className={styles.card}>
+          <div className={`${styles.card} ${styles.targetCard}`}>
+            <div className={styles.targetHead}>
+              <p className={styles.kicker}>{t("toneLab.target")}</p>
+              <div className={styles.pill} style={{ backgroundColor: `${tone.color}14`, border: `1px solid ${tone.color}40`, color: tone.color }}>
+                {t(`toneLab.tone.${tone.number}.desc`)}
+              </div>
+            </div>
+            <div className={styles.targetBody}>
+              <div className={styles.targetInfo}>
+                <div className={styles.syllableRow}>
+                  <span className={styles.syllable} style={{ color: tone.color }}>{targetSyllable}</span>
+                  <button type="button" className={styles.audioBtn} onClick={() => speakZh(targetHanzi, 0.8)} aria-label={t("toneLab.hear")}>
+                    <Volume2 size={20} strokeWidth={1.7} />
+                  </button>
+                </div>
+                <p className={styles.example}>{t("toneLab.example")}: <em>{t(`toneLab.tone.${tone.number}.example`)}</em></p>
+              </div>
+              <div className={styles.micWrap}>
+                <button
+                  type="button"
+                  className={`${styles.micBtn} ${recording ? styles.micRecording : ""}`}
+                  onClick={recording ? stop : start}
+                  aria-label={recording ? t("toneLab.recording") : t("toneLab.press")}
+                >
+                  {recording ? <Square size={26} fill="currentColor" /> : <Mic size={32} strokeWidth={1.6} />}
+                </button>
+                <span className={styles.micStatus}>{recording ? t("toneLab.recording") : t("toneLab.press")}</span>
+              </div>
+            </div>
+            {error ? <p className={styles.errorText}>{t(`toneLab.errors.${error}`)}</p> : <p className={styles.autoHint}>{t("toneLab.autoHint")}</p>}
+          </div>
+
+          <div className={`${styles.card} ${styles.wordsCard}`}>
             <div className={styles.wordsHeader}>
               <div>
                 <p className={styles.kicker}>{t("toneLab.wordsTitle")}</p>
@@ -276,6 +291,8 @@ export default function ToneVisualizerScreen({ initialTone }) {
                     type="button"
                     className={styles.wordBtn}
                     onClick={() => {
+                      if (phase === "recording") release();
+                      setPhase("idle");
                       setPickedWord(w);
                       setResult(null);
                       setLive([]);
@@ -292,22 +309,10 @@ export default function ToneVisualizerScreen({ initialTone }) {
               })}
             </div>
           </div>
-
-          <div className={styles.micWrap}>
-            <button
-              type="button"
-              className={`${styles.micBtn} ${recording ? styles.micRecording : ""}`}
-              onClick={recording ? stop : start}
-            >
-              {recording ? <Square size={30} fill="currentColor" /> : <Mic size={36} strokeWidth={1.6} />}
-            </button>
-            <span className={styles.micStatus}>{recording ? t("toneLab.recording") : t("toneLab.press")}</span>
-            {error && <p className={styles.errorText}>{t(`toneLab.errors.${error}`)}</p>}
-          </div>
         </div>
 
         <div className={styles.col}>
-          <div className={styles.card}>
+          <div className={`${styles.card} ${styles.vizCard}`}>
             <div className={styles.vizHeader}>
               <div>
                 <p className={styles.vizTitle}>{t("toneLab.vizTitle")}</p>
@@ -321,25 +326,26 @@ export default function ToneVisualizerScreen({ initialTone }) {
               {recording && <span className={styles.rec}><i />{t("toneLab.live")}</span>}
             </div>
             <svg viewBox={`0 0 ${W} ${H}`} className={styles.svg} preserveAspectRatio="xMidYMid meet">
-              {[0.25, 0.5, 0.75].map((f) => (
-                <line key={f} x1={PAD} y1={H * f} x2={W - PAD} y2={H * f} stroke="var(--border)" strokeWidth={0.6} opacity={0.7} />
+              {[1, 2, 3, 4, 5].map((l) => (
+                <line key={l} x1={PAD_X} y1={levelY(l)} x2={W - PAD_X} y2={levelY(l)} stroke="var(--border)" strokeWidth={0.6} opacity={0.7} />
               ))}
-              <text x={8} y={36} fontSize={9} fill="var(--muted-foreground)">{t("toneLab.high")}</text>
-              <text x={8} y={H - 18} fontSize={9} fill="var(--muted-foreground)">{t("toneLab.low")}</text>
+              <text x={8} y={levelY(5) + 3} fontSize={9} fill="var(--muted-foreground)">{t("toneLab.high")}</text>
+              <text x={8} y={levelY(1) + 3} fontSize={9} fill="var(--muted-foreground)">{t("toneLab.low")}</text>
               {TONES.map((item) => (
                 <path
                   key={item.number}
-                  d={getTonePath(item.number, W, H)}
+                  d={linePath(chartTemplate(item.number, 40))}
                   stroke={item.color}
                   fill="none"
                   strokeLinecap="round"
-                  strokeWidth={activeTone === item.number ? 3 : 1.2}
+                  strokeLinejoin="round"
+                  strokeWidth={activeTone === item.number ? 4 : 1.2}
                   strokeDasharray={activeTone === item.number ? "none" : "6 4"}
-                  opacity={activeTone === item.number ? 0.7 : 0.2}
+                  opacity={activeTone === item.number ? 0.45 : 0.2}
                 />
               ))}
               {shown && shown.length > 1 && (
-                <path d={userPath(shown)} stroke="var(--foreground)" strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={recording ? 0.55 : 0.9} />
+                <path d={linePath(shown)} stroke="var(--foreground)" strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={recording ? 0.6 : 0.95} />
               )}
             </svg>
             <div className={styles.legend}>
@@ -347,6 +353,7 @@ export default function ToneVisualizerScreen({ initialTone }) {
               <span><i style={{ background: "var(--muted-foreground)", opacity: 0.5 }} />{t("toneLab.legendOthers")}</span>
               <span><i style={{ background: "var(--foreground)" }} />{t("toneLab.legendYou")}</span>
             </div>
+            <p className={styles.shapeHint}>{t("toneLab.shapeHint")}</p>
           </div>
 
           {result && !recording && (
@@ -363,20 +370,22 @@ export default function ToneVisualizerScreen({ initialTone }) {
             </div>
           )}
 
-          <div className={styles.card}>
+          <div className={`${styles.card} ${styles.accCard}`}>
             <p className={styles.kicker}>{t("toneLab.accuracy")}</p>
-            <div className={styles.accList}>
+            <div className={styles.accGrid}>
               {TONES.map((item) => {
                 const avg = average(state.toneScores?.[item.number]);
                 return (
-                  <div key={item.number} className={styles.accRow}>
-                    <span className={styles.accMark} style={{ color: item.color }}>{item.mark}</span>
+                  <div key={item.number} className={styles.accTile}>
+                    <div className={styles.accTop}>
+                      <span className={styles.accMark} style={{ color: item.color }}>{item.mark}</span>
+                      <span className={styles.accValue} style={{ color: avg !== null && avg >= 80 ? "var(--accent)" : "var(--primary)" }}>
+                        {avg === null ? "—" : `${avg}%`}
+                      </span>
+                    </div>
                     <div className={styles.accTrack}>
                       <div className={styles.accFill} style={{ width: `${avg || 0}%`, backgroundColor: item.color }} />
                     </div>
-                    <span className={styles.accValue} style={{ color: avg !== null && avg >= 80 ? "var(--accent)" : "var(--primary)" }}>
-                      {avg === null ? "—" : `${avg}%`}
-                    </span>
                   </div>
                 );
               })}

@@ -147,7 +147,7 @@ export default function MistakesScreen({ onPractice, onOpenTarget }) {
                 <p className={styles.time}>{t("mistakes.writeAttempts", { count: r.attempts })}</p>
               </div>
               <span className={styles.stars}>
-                {[1, 2, 3].map((n) => <Star key={n} size={16} fill={n <= r.bestStars ? "#D4A843" : "none"} color={n <= r.bestStars ? "#D4A843" : "var(--border)"} />)}
+                {[1, 2, 3, 4, 5].map((n) => <Star key={n} size={14} fill={n <= r.bestStars ? "#D4A843" : "none"} color={n <= r.bestStars ? "#D4A843" : "var(--border)"} />)}
               </span>
               <button type="button" className={styles.action} onClick={() => onOpenTarget({ type: "writing", target: { char: r.char } })}>
                 {t("mistakes.write")}

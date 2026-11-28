@@ -9,7 +9,7 @@ const toneMasters = (s) =>
     const list = s.toneScores?.[n] || [];
     return list.length >= 3 && list.reduce((a, b) => a + b, 0) / list.length >= 80;
   }).length;
-const writers = (s) => Object.values(s.writingStats || {}).filter((v) => (v.bestStars || 0) >= 2).length;
+const writers = (s) => Object.values(s.writingStats || {}).filter((v) => (v.bestStars || 0) >= 3).length;
 const readers = (s) => (s.readStories || []).length;
 const grammarRight = (s) => Object.values(s.grammarStats || {}).reduce((a, v) => a + (v.correct || 0), 0);
 const sharp = (s) => ((s.stats?.answers || 0) >= 50 ? Math.round((s.stats.correct / s.stats.answers) * 100) : 0);

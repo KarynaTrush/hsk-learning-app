@@ -50,7 +50,7 @@ export function buildRecommendations(input) {
 
   const writeRows = Object.entries(writingStats)
     .map(([char, v]) => ({ char, ...v }))
-    .filter((r) => r.mistakes >= 2 && (r.bestStars || 0) < 3)
+    .filter((r) => r.mistakes >= 2 && (r.bestStars || 0) < 4)
     .sort((a, b) => b.mistakes - a.mistakes);
   if (writeRows.length) {
     recs.push({

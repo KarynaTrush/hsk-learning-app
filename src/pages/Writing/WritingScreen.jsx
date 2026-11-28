@@ -3,15 +3,23 @@ import HanziWriter from "hanzi-writer";
 import { Play, RotateCcw, PenLine, Eye, ChevronRight, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../state/AppState";
-import PageBanner from "../../components/ui/PageBanner";
 import { HSK_LEVELS } from "../../data/path";
 import { frontierLevel } from "../../lib/progress";
 import { VOCAB, vocabByNode, wordMeaning } from "../../data/vocab";
 import { DICT } from "../../data/dictionary";
 import { isCjk } from "../../lib/segment";
+import { starsFor, isPass, MAX_STARS } from "../../lib/writingScore";
 import styles from "./Writing.module.css";
 
-const SIZE = 340;
+const MIN_SIZE = 240;
+const MAX_SIZE = 360;
+
+function pickSize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  if (w < 1000) return Math.max(MIN_SIZE, Math.min(MAX_SIZE, w - 56));
+  return Math.max(MIN_SIZE, Math.min(MAX_SIZE, h - 350));
+}
 const MODES = ["watch", "trace", "free"];
 
 function charsOf(words) {
@@ -22,7 +30,7 @@ function charsOf(words) {
 
 function writingMark(stat) {
   if (!stat) return "";
-  if ((stat.bestStars || 0) >= 2) return "done";
+  if (isPass(stat.bestStars || 0)) return "done";
   if (stat.mistakes > 0) return "warn";
   return "";
 }
@@ -62,6 +70,7 @@ export default function WritingScreen({ initialChar }) {
   const [result, setResult] = useState(null);
   const [charData, setCharData] = useState(null);
   const [loadError, setLoadError] = useState(false);
+  const [size, setSize] = useState(pickSize);
   const boxRef = useRef(null);
   const writerRef = useRef(null);
   const startedAt = useRef(Date.now());
@@ -85,6 +94,19 @@ export default function WritingScreen({ initialChar }) {
     const nodes = Object.values(HSK_LEVELS[String(level)]?.groups || []).flatMap((g) => g.nodes);
     return charsOf(nodes.flatMap((n) => vocabByNode(n.id)));
   }, [source, state.activeNodeId, state.words, state.mistakes, state.writingStats]);
+
+  useEffect(() => {
+    let timer = 0;
+    const onResize = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => setSize(pickSize()), 150);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (!chars.length) return;
@@ -122,8 +144,8 @@ export default function WritingScreen({ initialChar }) {
     startedAt.current = Date.now();
     const colors = themeColors(state.theme);
     const writer = HanziWriter.create(box, char, {
-      width: SIZE,
-      height: SIZE,
+      width: size,
+      height: size,
       padding: 14,
       showCharacter: mode === "watch",
       showOutline: mode !== "free",
@@ -137,7 +159,7 @@ export default function WritingScreen({ initialChar }) {
       delayBetweenStrokes: 280,
       showHintAfterMisses: mode === "free" ? 3 : 2,
       highlightOnComplete: true,
-      leniency: 1.1,
+      leniency: 1.3,
     });
     writerRef.current = writer;
 
@@ -155,7 +177,7 @@ export default function WritingScreen({ initialChar }) {
           } catch {
             strokes = 1;
           }
-          const stars = total === 0 ? 3 : total <= Math.max(2, Math.round(strokes * 0.3)) ? 2 : 1;
+          const stars = starsFor(total, strokes);
           setResult({ mistakes: total, stars });
           recordWriting({ char, mistakes: total, stars, ms: Date.now() - startedAt.current });
         },
@@ -166,12 +188,11 @@ export default function WritingScreen({ initialChar }) {
       try {
         writer.cancelQuiz();
       } catch {
-        /* quiz was not started */
+        box.innerHTML = "";
       }
       box.innerHTML = "";
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [char, mode, attempt, state.theme, loadError]);
+  }, [char, mode, attempt, state.theme, loadError, size]);
 
   function nextChar() {
     const i = chars.indexOf(char);
@@ -203,24 +224,44 @@ export default function WritingScreen({ initialChar }) {
     ...levelsWithLessons.map((k) => ({ id: `level-${k}`, label: k === "0" ? t("path.level0") : `HSK ${k}` })),
   ];
 
+  const footer = loadError ? (
+    <p className={styles.error}>{t("writing.unsupported")}</p>
+  ) : result ? (
+    <>
+      <div className={styles.starRow}>
+        {Array.from({ length: MAX_STARS }, (_, i) => i + 1).map((n) => (
+          <Star key={n} size={20} fill={n <= result.stars ? "#D4A843" : "none"} color={n <= result.stars ? "#D4A843" : "var(--border)"} strokeWidth={1.8} />
+        ))}
+      </div>
+      <span className={styles.resultTitle}>{t(`writing.result.${result.stars}`)}</span>
+      <span className={styles.status}>{t("writing.mistakesTotal", { count: result.mistakes })}</span>
+    </>
+  ) : mode === "watch" ? (
+    <p className={styles.status}>{t("writing.watchHint")}</p>
+  ) : (
+    <p className={styles.status}>
+      {t("writing.progress", { done: progress, total })} · {t("writing.mistakes", { count: mistakes })}
+    </p>
+  );
+
   return (
     <div className={styles.container}>
-      <PageBanner color="#8A4F9E" hanzi="写" kicker={t("writing.kicker")} title={t("nav.writing")} subtitle={t("writing.subtitle")} />
-
-      <div className={styles.sourceRow}>
-        {sourceTabs.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            className={`${styles.tab} ${source === s.id ? styles.tabActive : ""}`}
-            onClick={() => {
-              setSource(s.id);
-              setPinned("");
-            }}
-          >
-            {s.label}
-          </button>
-        ))}
+      <div className={styles.topRow}>
+        <div className={styles.tabs}>
+          {sourceTabs.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              className={`${styles.tab} ${source === s.id ? styles.tabActive : ""}`}
+              onClick={() => {
+                setSource(s.id);
+                setPinned("");
+              }}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
         <form className={styles.customForm} onSubmit={submitCustom}>
           <input
             className={styles.customInput}
@@ -233,24 +274,27 @@ export default function WritingScreen({ initialChar }) {
         </form>
       </div>
 
-      <div className={styles.charRow}>
-        {chars.map((c) => (
-          <button
-            key={c}
-            type="button"
-            className={`${styles.charChip} ${c === char ? styles.charChipActive : ""} ${writingMark(state.writingStats?.[c]) === "done" ? styles.charChipDone : ""} ${writingMark(state.writingStats?.[c]) === "warn" ? styles.charChipWarn : ""}`}
-            onClick={() => {
-              setChar(c);
-              setPinned("");
-            }}
-          >
-            {c}
-          </button>
-        ))}
-      </div>
+      <div className={styles.main}>
+        <aside className={styles.charPanel}>
+          <div className={styles.charScroll}>
+            {chars.length === 0 && <p className={styles.emptyList}>{t("writing.emptyList")}</p>}
+            {chars.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className={`${styles.charChip} ${c === char ? styles.charChipActive : ""} ${writingMark(state.writingStats?.[c]) === "done" ? styles.charChipDone : ""} ${writingMark(state.writingStats?.[c]) === "warn" ? styles.charChipWarn : ""}`}
+                onClick={() => {
+                  setChar(c);
+                  setPinned("");
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </aside>
 
-      <div className={styles.grid}>
-        <div className={styles.stageCard}>
+        <section className={styles.stageCard}>
           <div className={styles.modeRow}>
             {MODES.map((m) => (
               <button
@@ -265,7 +309,7 @@ export default function WritingScreen({ initialChar }) {
             ))}
           </div>
 
-          <div className={styles.stage} style={{ width: SIZE, height: SIZE }}>
+          <div className={styles.stage} style={{ width: size, height: size }}>
             <svg className={styles.gridLines} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
               <rect x="0.5" y="0.5" width="99" height="99" className={styles.gridFrame} />
               <line x1="50" y1="0" x2="50" y2="100" className={styles.gridLine} />
@@ -276,25 +320,7 @@ export default function WritingScreen({ initialChar }) {
             <div ref={boxRef} className={styles.writer} />
           </div>
 
-          {loadError && <p className={styles.error}>{t("writing.unsupported")}</p>}
-          {!loadError && mode !== "watch" && (
-            <p className={styles.status}>
-              {t("writing.progress", { done: progress, total })} · {t("writing.mistakes", { count: mistakes })}
-            </p>
-          )}
-          {!loadError && mode === "watch" && <p className={styles.status}>{t("writing.watchHint")}</p>}
-
-          {result && (
-            <div className={styles.result}>
-              <div className={styles.stars}>
-                {[1, 2, 3].map((n) => (
-                  <Star key={n} size={30} fill={n <= result.stars ? "#D4A843" : "none"} color={n <= result.stars ? "#D4A843" : "var(--border)"} strokeWidth={1.8} />
-                ))}
-              </div>
-              <p className={styles.resultTitle}>{t(`writing.result.${result.stars}`)}</p>
-              <p className={styles.resultText}>{t("writing.mistakesTotal", { count: result.mistakes })}</p>
-            </div>
-          )}
+          <div className={styles.footer}>{footer}</div>
 
           <div className={styles.actions}>
             <button type="button" className={styles.secondary} onClick={() => setAttempt((a) => a + 1)}>
@@ -310,7 +336,7 @@ export default function WritingScreen({ initialChar }) {
               </button>
             )}
           </div>
-        </div>
+        </section>
 
         <div className={styles.side}>
           <section className={styles.card}>
@@ -321,10 +347,10 @@ export default function WritingScreen({ initialChar }) {
                 {related.length > 0 && <p className={styles.relatedHint}>{t("writing.inWords")}</p>}
               </div>
             </div>
-            {related.map((w) => (
+            {related.slice(0, 3).map((w) => (
               <div key={w.hanzi} className={styles.related}>
                 <span className={styles.relatedZh}>{w.hanzi}</span>
-                <div>
+                <div className={styles.relatedText}>
                   <p className={styles.relatedPy}>{w.pinyin}</p>
                   <p className={styles.relatedMeaning}>{wordMeaning(w, lang)}</p>
                 </div>
@@ -348,14 +374,14 @@ export default function WritingScreen({ initialChar }) {
             )}
           </section>
 
-          <section className={styles.card}>
-            <p className={styles.kicker}>{t("writing.rulesTitle")}</p>
+          <details className={styles.rulesBox}>
+            <summary className={styles.rulesSummary}>{t("writing.rulesTitle")}</summary>
             <ul className={styles.rules}>
               {[1, 2, 3, 4].map((n) => (
                 <li key={n}>{t(`writing.rule${n}`)}</li>
               ))}
             </ul>
-          </section>
+          </details>
         </div>
       </div>
     </div>
